@@ -1,0 +1,8 @@
+ChangeLog for Webilder !
+
+3-Mar-2006: Updated login url to new webshots scheme
+3-Mar-2006: Released version 0.2
+6-Sep-2006: Updated URLs to new webshots template.
+6-Sep-2006: Fixed support for 64-bit Python.
+6-Sep-2006: Released version 0.3 
+12-Sep-2006: Added Flickr module, lots of code reorganization

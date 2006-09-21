@@ -1,0 +1,27 @@
+<oaf_info>
+        <oaf_server iid="OAFIID:GNOME_WebilderApplet_Factory"
+                    type="exe" location="@bindir@/webilder">
+
+                <oaf_attribute name="repo_ids" type="stringv">
+                        <item value="IDL:Bonobo/GenericFactory:1.0"/>
+                        <item value="IDL:Bonobo/Unknown:1.0"/>
+                </oaf_attribute>
+                <oaf_attribute name="name" type="string" value="Webilder Applet Factory"/>
+                <oaf_attribute name="description" type="string" value="Webilder Applet Factory"/>
+        </oaf_server>
+
+        <oaf_server iid="OAFIID:GNOME_WebShotsApplet"
+                    type="factory" location="OAFIID:GNOME_WebilderApplet_Factory">
+
+                <oaf_attribute name="repo_ids" type="stringv">
+                        <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+                        <item value="IDL:Bonobo/Control:1.0"/>
+                        <item value="IDL:Bonobo/Unknown:1.0"/>
+                </oaf_attribute>
+                <oaf_attribute name="name" type="string" value="Webilder Webshots Applet"/>
+                <oaf_attribute name="description" type="string" value="Downloads and displays Webshots photos on 
+your desktop."/>
+                <oaf_attribute name="panel:category" type="string" value="Utility"/>
+                <oaf_attribute name="panel:icon" type="string" value="@pixmapsdir@/camera48.png"/>
+        </oaf_server>
+</oaf_info>
