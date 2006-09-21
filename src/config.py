@@ -2,13 +2,13 @@ import os
 
 class ConfigObject:
     def __init__(self, file=None):
+        self._dict = dict(DEFAULT_CONFIG)
         if file:
             if os.path.exists(file):
                 self.load_config(file)
             else:
                 self._filename = file
 
-        self._dict = dict(DEFAULT_CONFIG)
 
     def get(self, key):
         return self._dict[key]
@@ -49,8 +49,8 @@ DEFAULT_CONFIG = [
 
     ('webshots.enabled', True),
     ('webshots.auto_download', True),
-    ('webshots.username', 'thesamet'),
-    ('webshots.password', 'clarinet'),
+    ('webshots.username', ''),
+    ('webshots.password', ''),
     ('webshots.quality', 'low'),
     ('webshots.cookie', ''),
 

@@ -10,7 +10,7 @@ def ShowAboutDialog(name):
     about.set_website('http://www.thesamet.com/webilder')
     about.set_authors(['Nadav Samet <thesamet@gmail.com>'])
     icon = gtk.gdk.pixbuf_new_from_file(
-        os.path.join(aglobals.images_dir, 'camera48.png'))
+        os.path.join(aglobals.glade_dir, 'camera48.png'))
     about.set_logo(icon),
     about.set_icon(icon),
     about.run()

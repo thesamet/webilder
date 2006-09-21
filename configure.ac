@@ -24,7 +24,7 @@ PKG_CHECK_MODULES(PYGTK, pygtk-2.0 >= 2.6)
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile
-                 images/Makefile
+                 ui/Makefile
                  servers/Makefile
                  src/Makefile])
 

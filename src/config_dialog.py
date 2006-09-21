@@ -1,6 +1,8 @@
 import pygtk
 import gtk
 import gtk.glade
+import os
+import webilder_globals as aglobals
 
 from uitricks import UITricks
 
@@ -21,7 +23,7 @@ quality_names = ['high', 'wide', 'low']
 
 class ConfigDialog(UITricks):
     def __init__(self):
-        UITricks.__init__(self, 'config.glade', 'config_dialog')
+        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'config.glade'), 'config_dialog')
         self.on_flickr_enabled__clicked()
         self.on_webshots_enabled__clicked()
         self.on_autodownload_bool__clicked()

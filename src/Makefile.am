@@ -1,21 +1,22 @@
 globalsfile = webilder_globals.py
 globalsfile_in = webilder_globals.py.in
 
-pkgpython_SCRIPTS = 
+pkgpython_SCRIPTS = \
 	AboutDialog.py      WebilderFullscreen.py  plugins.py    uitricks.py \
 	DownloadDialog.py   config.py              test.py       wbz_handler.py \
 	WebilderApplet.py   config_dialog.py       thumblist.py  \
-	WebilderDesktop.py  downloader.py          thumbs.py     \
+	WebilderDesktop.py  downloader.py          thumbs.py \
+	$(globalsfile)
+
+nobase_pkgpython_SCRIPTS = \
 	webshots/__init__.py  webshots/utils.py  webshots/wbz.py \
 	webshots/fileutil.py  webshots/wbp.py         \
-	flickr/__init__.py \
-	$(globalsfile)
+	flickr/__init__.py 
 
 uidir = $(pkgdatadir)
 
 $(globalsfile): $(globalsfile_in) Makefile
 	sed -e "s|\@uidir\@|$(uidir)|g"       \
-	    -e "s|\@pixmapsdir\@|$(pixmapsdir)|g" \
 	    -e "s|\@VERSION\@|$(VERSION)|g" \
                 < $< > $@
 
@@ -31,4 +32,5 @@ install-exec-hook:
 	$(LN_S) $(pkgpythondir)/wbz_handler.py wbz_handler
 
 EXTRA_DIST =                    \
-        $(pkgpython_SCRIPTS) $(globalsfile_in)
+    $(pkgpython_SCRIPTS) $(nobase_pkgpython_SCRIPTS) $(globalsfile_in)
+

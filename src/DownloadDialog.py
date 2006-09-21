@@ -12,7 +12,7 @@ class DownloadProgressDialog(UITricks):
 
     def __init__(self, config):
         self.config = config
-        UITricks.__init__(self, 'webilder.glade', 'DownloadProgressDialog')
+        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder.glade'), 'DownloadProgressDialog')
         self.start_leech()
                 
     def on_DownloadProgressDialog__destroy(self, *args):
