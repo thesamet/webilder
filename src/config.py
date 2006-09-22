@@ -9,6 +9,12 @@ class ConfigObject:
             else:
                 self._filename = file
 
+        if not os.path.exists(os.path.dirname(file)):
+            os.mkdir(os.path.dirname(file))
+            os.mkdir(self.get('collection.dir'))
+
+        if not os.path.isdir(self.get('collection.dir')):
+            raise ValueError, "collection.dir is set to a non-directory, check your config file."
 
     def get(self, key):
         return self._dict[key]
@@ -43,7 +49,7 @@ class ConfigObject:
             file.write('%s = %r\n' % (key, self._dict[key]))
 
 DEFAULT_CONFIG = [
-    ('collection.dir', '/home/thesamet/.webilder/Collection'),
+    ('collection.dir', os.path.expanduser('~/.webilder/Collection')),
     ('rotate.enabled', True),
     ('rotate.interval', 5),
 
@@ -61,21 +67,26 @@ DEFAULT_CONFIG = [
     ('autodownload.enabled', True),
     ('autodownload.interval', 24),
     ('autodownload.last_time', None),
-    ('webilder.layout', {})]
+    ('webilder.layout', {}),
+    ('webilder.wallpaper_set_method', 'gnome'),
+    ('webilder.wallpaper_script', '')]
 
 
 config = ConfigObject(os.path.expanduser('~/.webilder/webilder.conf'))
 
 def set_wallpaper(filename):
-    use = 'gnome' # config.get('webilder.wallpaper_method')
-
+    use = config.get('webilder.wallpaper_set_method')
     if use=="gnome":
         import gconf
         conf_client = gconf.client_get_default()
         conf_client.set_string('/desktop/gnome/background/picture_filename', 
             filename)
+    elif use=="kde":
+        script = 'dcop kdesktop KBackgroundIface setWallpaper "%f" 4'
+        script = script.replace('%f', filename)
+        os.popen2(script)
     elif use=="script":
-        script = GetWallpaperScript()
+        script = config.get('webilder.wallpaper_script')
         script = script.replace('%f', filename)
         os.popen2(script)
         

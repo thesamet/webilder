@@ -23,20 +23,22 @@ def get_download_list(config):
                 'title': title,
                 'data': {
                     'entry': entry,
-                    'img_url': img_url,
+                    'image_link': entry.links[0]['href'],
+                    'image_url': img_url,
                     'rule': rule
                 }});
     return images
 
 def get_photo_stream(config, photo):
-    stream = urllib.urlopen(photo['data']['img_url'])
+    stream = urllib.urlopen(photo['data']['image_url'])
     return stream
 
 def process_photo(config, photo, f):
     metadata = {
             'albumTitle': photo['data']['rule']['album'],
             'title': photo['title'],
-            'credit': photo['data']['entry']['author']
+            'credit': photo['data']['entry']['author'],
+            'image_link': photo['data']['image_link'],
             }
     return f.read(), metadata
 

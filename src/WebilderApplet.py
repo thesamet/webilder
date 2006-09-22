@@ -89,6 +89,7 @@ pixname="gtk-preferences"/>
             if rotate_interval:
                 # check if we have to rotate
                 if now-self.last_rotate>=rotate_interval:
+                    print "Rotating..."
                     self.next_photo()
             
             if CHECK_FOR_UPDATES and now-self.last_version_check>=8*3600:

@@ -20,16 +20,11 @@ class FullscreenViewer(gtk.Window):
 
     def __init__(self, data):
         gtk.Window.__init__(self)
-        inf_file = data['info_file']
         self.W, self.H = gtk.gdk.screen_width(), gtk.gdk.screen_height()
-        self.p_title = data['filename']
-        self.p_album=''
-        self.p_credit=''
-        if os.path.exists(inf_file):
-            inf = wbz.parse_metadata(open(inf_file,'r').read())
-            self.p_title = "<b>%s</b>" % inf['title']
-            self.p_album = inf['albumTitle']
-            self.p_credit = "%s" % inf['credit']
+        self.p_title = data['title']
+        self.p_album = data['album']
+        self.p_credit= data['credit']
+
         drawing_area = gtk.DrawingArea()
 
         evt_box = gtk.EventBox()

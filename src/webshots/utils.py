@@ -32,12 +32,12 @@ def get_cookie(user, password):
 def get_download_list(config):
     if not config.get('webshots.enabled'):
         return []
-    DAILYPIC_RE = r'http://www.webshots.com/g/d.*/.*/([0-9]*).html'
+    DAILYPIC_RE = r'(http://www.webshots.com/g/d.*/.*/([0-9]*).html)'
     PHOTO_DESCRIPTION = r'alt="([^"]+)" src="http://p.webshots.com/ProThumbs/[0-9]+/%s_wallpaper150.jpg.*\n.*<em(.*)\n'
     page = urllib.urlopen('http://www.webshots.com').read()
     photos = re.findall(DAILYPIC_RE, page)
     l = []
-    for photo in photos:
+    for image_link, photo in photos:
         match = re.search(PHOTO_DESCRIPTION % photo, page)
         if match:
             title, nextline = match.groups()
@@ -49,6 +49,7 @@ def get_download_list(config):
             'title': title, 
             'data': {
                 'photo': photo,
+                'image_link': image_link,
                 'is_premium': is_premium,
                 }
             });
@@ -93,6 +94,7 @@ def get_photo_stream(config, photo):
 def process_photo(config, photo, f):
     img = wbz.open(f, 'r')
     metadata = img.get_metadata()
+    metadata['image_link'] = phone['data']['image_link']
     data = img.get_image_data()
     return data, metadata
  

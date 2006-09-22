@@ -125,6 +125,10 @@ class WebilderDesktopWindow(UITricks):
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             credit = inf.get('credit', 'Not available')
+            title = html_escape(title)
+            album = html_escape(album)
+            credit= html_escape(credit)
+            
 
             data = dict(title=title,
                         filename=image,
@@ -338,8 +342,24 @@ class ImagePopup(UITricks):
                         except:
                             pass
             
+html_escape_table = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+    }
+
+def html_escape(text):
+    """Produce entities within text."""
+    L=[]
+    for c in text:
+        L.append(html_escape_table.get(c,c))
+    return "".join(L)
+
 if __name__ == "__main__":
     gtk.threads_init()
     main_window = WebilderDesktopWindow()
     main_window._top.connect("destroy", gtk.main_quit)
     gtk.main()
+
