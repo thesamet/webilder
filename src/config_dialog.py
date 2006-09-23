@@ -30,7 +30,7 @@ class ConfigDialog(UITricks):
         self.on_rotate_bool__toggled()
         self.on_wallpaper_use_script__toggled()
 
-        for index, value in enumerate(['Album', 'Tags']):
+        for index, value in enumerate(['Album', 'Tags', 'User']):
             cell = gtk.CellRendererText()
             cell.set_property('editable', True)
             column = gtk.TreeViewColumn(value, cell, text=index)
@@ -93,10 +93,11 @@ class ConfigDialog(UITricks):
 
         # flickr tab
         self.flickr_enabled.set_active(config.get('flickr.enabled'))
-        model = gtk.ListStore(str, str)
+        model = gtk.ListStore(str, str, str)
         for rule in config.get('flickr.rules'):
-            model.append([rule['album'], rule['tags']])
+            model.append([rule['album'], rule['tags'], rule['user_id']])
         self.flickr_rules.set_model(model)
+        self.flickr_download_interesting.set_active(config.get('flickr.download_interesting'))
 
         # webshots tab
         self.webshots_enabled.set_active(config.get('webshots.enabled'))
@@ -113,6 +114,7 @@ class ConfigDialog(UITricks):
                 config.get('webilder.wallpaper_set_method'), self.wallpaper_use_gnome)
         wallpaper_active_widget.set_active(True)
         self.script.set_text(config.get('webilder.wallpaper_script'))
+        self.only_landscape.set_active(config.get('filter.only_landscape'))
 
 
     def update_config(self, config):
@@ -128,8 +130,9 @@ class ConfigDialog(UITricks):
         config.set('flickr.enabled', self.flickr_enabled.get_active())
         rules = []
         for rule in self.flickr_rules.get_model():
-            rules.append({'album': rule[0], 'tags': rule[1], 'tagmode': 'ALL'})
+            rules.append({'album': rule[0], 'tags': rule[1], 'user_id': rule[2]})
         config.set('flickr.rules', rules)
+        config.set('flickr.download_interesting', self.flickr_download_interesting.get_active())
 
         # webshots tab
         config.set('webshots.enabled', self.webshots_enabled.get_active())
@@ -151,6 +154,7 @@ class ConfigDialog(UITricks):
                 use = name
         config.set('webilder.wallpaper_set_method', use)
         config.set('webilder.wallpaper_script', self.script.get_text())
+        config.set('filter.only_landscape', self.only_landscape.get_active())
         
 
     def on_rotate_bool__toggled(self, *args):
@@ -160,7 +164,8 @@ class ConfigDialog(UITricks):
         self.autodownload_interval.set_sensitive(self.autodownload_bool.get_active())
 
     def on_flickr_enabled__toggled(self, *args):
-        self.flickr_frame.set_sensitive(self.flickr_enabled.get_active())
+        for frame in (self.flickr_interestingness_frame, self.flickr_tags_frame):
+            frame.set_sensitive(self.flickr_enabled.get_active())
 
     def on_webshots_enabled__toggled(self, *args):
         self.webshots_login_frame.set_sensitive(self.webshots_enabled.get_active())
@@ -170,7 +175,7 @@ class ConfigDialog(UITricks):
         self.script.set_sensitive(self.wallpaper_use_script.get_active())
 
     def on_add__clicked(self, widget):
-        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2'])
+        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2',''])
         # self.flickr_rules.scroll_to_cell(path)
         
     def on_remove__clicked(self, widget):
@@ -184,9 +189,9 @@ class ConfigDialog(UITricks):
 
     def on_cell_edited(self, cell, path, new_text, data):
         if data==1:
-            new_text = new_text.split(',')
-            new_text = [tag.strip() for tag in new_text]
-            new_text = ','.join(new_text)
+            terms = new_text.split(';')
+            terms = [[tag.strip() for tag in term.split(',')] for term in terms]
+            new_text = ';'.join([', '.join([tag for tag in term]) for term in terms])
 
         self.flickr_rules.get_model()[path][data] = new_text
 

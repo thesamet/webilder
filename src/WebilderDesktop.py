@@ -125,9 +125,11 @@ class WebilderDesktopWindow(UITricks):
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             credit = inf.get('credit', 'Not available')
+            tags = inf.get('tags', '')
             title = html_escape(title)
             album = html_escape(album)
             credit= html_escape(credit)
+            tags = html_escape(tags)
             
 
             data = dict(title=title,
@@ -135,6 +137,7 @@ class WebilderDesktopWindow(UITricks):
                         thumb=thumb,
                         info_file=info_file,
                         album = album,
+                        tags = tags,
                         credit = credit)
             if len(title)>24:
                 title=title[:21]+'...'
@@ -205,17 +208,19 @@ class WebilderDesktopWindow(UITricks):
         selection = icon_view.get_selected_items()
         if len(selection)>0:
             selection=selection[-1]
-        title = album = credit = ""
+        title = album = credit = tags = ""
         if selection:
             iter = icon_view.get_model().get_iter(selection)
             data = icon_view.get_model().get_value(iter, IV_DATA_COLUMN)
             title = "<b>%s</b>" % data['title']
             album = data['album']
             credit = data['credit']
+            tags = data['tags']
                     
         self.photo_title.set_markup(title)
         self.photo_album.set_markup(album)
         self.photo_credit.set_markup(credit)
+        self.photo_tags.set_markup(tags)
 
     def collection_directory_changed(self, *args):
         self.on_tree__selection_changed(self.tree.get_selection())

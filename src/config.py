@@ -47,6 +47,9 @@ class ConfigObject:
         file = open(file, 'w')
         for key,v in DEFAULT_CONFIG:
             file.write('%s = %r\n' % (key, self._dict[key]))
+        # yes, should not be here...
+        import downloader
+        downloader.clear_recently_filtered()
 
 DEFAULT_CONFIG = [
     ('collection.dir', os.path.expanduser('~/.webilder/Collection')),
@@ -63,13 +66,15 @@ DEFAULT_CONFIG = [
     ('flickr.enabled', True),
     ('flickr.auto_download', True),
     ('flickr.rules', []),
+    ('flickr.download_interesting', True),
 
     ('autodownload.enabled', True),
     ('autodownload.interval', 24),
     ('autodownload.last_time', None),
     ('webilder.layout', {}),
     ('webilder.wallpaper_set_method', 'gnome'),
-    ('webilder.wallpaper_script', '')]
+    ('webilder.wallpaper_script', ''),
+    ('filter.only_landscape', False)]
 
 
 config = ConfigObject(os.path.expanduser('~/.webilder/webilder.conf'))

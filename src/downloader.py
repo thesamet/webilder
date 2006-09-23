@@ -2,6 +2,9 @@ import os.path
 import glob
 import cStringIO
 import plugins
+import time
+
+_recently_filtered = {}
 
 def get_full_download_list(config):
     # get list of all photos    
@@ -13,18 +16,45 @@ def get_full_download_list(config):
         all_photos.extend(photos)
     return all_photos
 
-def remove_existing_photos(config, photos):
+def clear_recently_filtered():
+    _recently_filtered.clear()
+
+def clear_old_filtered():
+    now = time.time()
+    clear = [] 
+    for name, block_time in _recently_filtered.iteritems():
+        if now-block_time>24*3600:
+            clear.append(name)
+    for name in clear:
+        del _recently_filtered[name]
+
+def filter_photos(config, photos):
+    clear_old_filtered()
     # check if we already have any of the photos
+
     files = glob.glob(os.path.join(config.get('collection.dir'), '*', '*'))
     files=[os.path.basename(file) for file in files]
     
-    existing_photos = []
+    filtered_photos = []
     for photo in photos:
         if photo['name'] in files:
-            existing_photos.append(photo)
+            filtered_photos.append(photo)
+            print "Skipping already existing photo '%s'" % photo['title']
+            continue
+        if photo['name'] in _recently_filtered:
+            filtered_photos.append(photo)
+            print "Skipping previously filtered photo '%s'." % photo['title']
+            continue
+
+        photo['_plugin']['module'].fetch_photo_info(config, photo)
+        if config.get('filter.only_landscape'):
+            if 'aspect_ratio' in photo['data'] and photo['data']['aspect_ratio']<1.1:
+                filtered_photos.append(photo)
+                print "Skipping non-landscape photo '%s'" % photo['title']
+                _recently_filtered[photo['name']] = time.time()
+                continue
     
-    for photo in existing_photos:
-        print "Skipping already existing photo '%s'" % photo['title']
+    for photo in filtered_photos:
         photos.remove(photo)
 
 def download_photo(config, photo, notify):
@@ -70,11 +100,12 @@ def save_photo(config, photo, image, metadata):
     finf.close()
  
 def download_all(config, notify=lambda *args: None, terminate=lambda: False):
-    notify(0, '', 'Downloading list of photos')
+    notify(0, '', 'Downloading list of photos (may take some time)')
     photos = get_full_download_list(config)
     if terminate():
         return
-    remove_existing_photos(config, photos)
+    notify(0, '', 'Filtering photos (may take some time)')
+    filter_photos(config, photos)
     if terminate():
         return
     for index, photo in enumerate(photos):
