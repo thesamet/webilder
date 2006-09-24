@@ -56,8 +56,9 @@ class DownloadProgressDialog(UITricks):
                 gtk.threads_leave()
             except (IOError, ValueError), e:
                 gtk.threads_enter()
+                markup="<b>Error occured while downloading images</b>\n\n%s" % html_escape(str(e))
                 mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-                mb.set_markup("<b>Error occured while downloading images</b>\n\n%s" % e)
+                mb.set_markup(markup)
                 mbval = mb.run()
                 mb.destroy()
                 gtk.threads_leave()
@@ -78,4 +79,19 @@ class DownloadProgressDialog(UITricks):
                 self.statustext.set_markup('<i>%s</i>' % status_text)                
         finally:
             gtk.threads_leave()
+
+def html_escape(text):
+    """Produce entities within text."""
+    L=[]
+    for c in text:
+        L.append(html_escape_table.get(c,c))
+    return "".join(L)
+
+html_escape_table = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+    }
 

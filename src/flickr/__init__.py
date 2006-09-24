@@ -2,6 +2,9 @@ import flickrapi
 import re
 import urllib
 from datetime import date
+from PIL import Image
+import cStringIO
+import gc
 
 API_KEY = '045379bc5368502f749af23d95a17c83'
 
@@ -16,7 +19,7 @@ def get_download_list(config):
     for rule in rules:
         for tag_term in rule['tags'].split(';'):
             tag_term = ','.join([tag.strip() for tag in tag_term.split(',')])
-            params_dict = dict(per_page=25)
+            params_dict = dict(per_page=20)
             if tag_term:
                 params_dict['tags'] = tag_term
                 params_dict['tag_mode'] = 'all'
@@ -34,7 +37,7 @@ def get_download_list(config):
             all_photos.extend(photos)
 
     if config.get('flickr.download_interesting'):
-        photos = flickr.interestingness_search(per_page=25)
+        photos = flickr.interestingness_search(per_page=20)
         for photo in photos:
             photo._album = 'Interestingness - '+date.today().strftime('%B %Y')
         all_photos.extend(photos)
@@ -70,5 +73,16 @@ def process_photo(config, photo, f):
             'url': info['url'],
             'tags': ' '.join(info['tags'])
             }
-    return f.read(), metadata
+
+    data = f.read()
+    if config.get('flickr.scale_down'):
+        scale_size = config.get('flickr.scale_down')
+        im = Image.open(cStringIO.StringIO(data))
+        size = im.size
+        if size[0]>scale_size[0] or size[1]>scale_size[1]:
+            im.thumbnail(scale_size, Image.ANTIALIAS)
+            data = im.tostring('jpeg', im.mode)
+
+    gc.collect()
+    return data, metadata
 

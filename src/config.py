@@ -67,6 +67,7 @@ DEFAULT_CONFIG = [
     ('flickr.auto_download', True),
     ('flickr.rules', []),
     ('flickr.download_interesting', True),
+    ('flickr.scale_down', (1600, 1200)),
 
     ('autodownload.enabled', True),
     ('autodownload.interval', 24),
