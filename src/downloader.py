@@ -34,7 +34,7 @@ def filter_photos(config, photos):
 
     files = glob.glob(os.path.join(config.get('collection.dir'), '*', '*'))
     files=[os.path.basename(file) for file in files]
-    
+
     filtered_photos = []
     for photo in photos:
         if photo['name'] in files:
@@ -53,7 +53,8 @@ def filter_photos(config, photos):
                 print "Skipping non-landscape photo '%s'" % photo['title']
                 _recently_filtered[photo['name']] = time.time()
                 continue
-    
+        files.append(photo['name'])
+
     for photo in filtered_photos:
         photos.remove(photo)
 
