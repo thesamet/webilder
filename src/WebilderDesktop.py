@@ -307,7 +307,7 @@ class WebilderDesktopWindow(UITricks):
                 if os.path.isfile(exe):
                     return True
             return False
-        donate_url = 'http://www.thesamet.com/webilder/donate'
+        donate_url = 'http://www.thesamet.com/webilder/donate.html'
         if _iscommand('gnome-open'):
             os.system('gnome-open %s' % donate_url)
         elif _iscommand('kfmclient'):

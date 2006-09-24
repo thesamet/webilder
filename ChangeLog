@@ -6,3 +6,5 @@ ChangeLog for Webilder !
 6-Sep-2006: Fixed support for 64-bit Python.
 6-Sep-2006: Released version 0.3 
 12-Sep-2006: Added Flickr module, lots of code reorganization
+22-Sep-2006: Added KDE wallpaper setting method (patch by behanw)
+23-Sep-2006: Added flickr interestingness, and user_id support

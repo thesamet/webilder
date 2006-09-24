@@ -2,7 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!-- Generated with glade3
 	Version: 3.0.1
-	Date: Sat Sep 23 19:32:07 2006
+	Date: Sun Sep 24 18:25:07 2006
 	User: thesamet
 	Host: nadav
 -->
@@ -252,35 +252,60 @@ Future versions will add more options here, such as selecting which collections 
                         <property name="visible">True</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <widget class="GtkHBox" id="hbox9">
+                          <widget class="GtkVBox" id="vbox2">
                             <property name="visible">True</property>
-                            <property name="border_width">6</property>
-                            <property name="spacing">12</property>
                             <child>
-                              <widget class="GtkTreeView" id="flickr_rules">
+                              <widget class="GtkHBox" id="hbox1">
                                 <property name="visible">True</property>
-                                <property name="rules_hint">True</property>
-                              </widget>
-                            </child>
-                            <child>
-                              <widget class="GtkVBox" id="vbox18">
-                                <property name="visible">True</property>
+                                <property name="border_width">6</property>
                                 <property name="spacing">12</property>
                                 <child>
-                                  <widget class="GtkButton" id="add">
+                                  <widget class="GtkTreeView" id="flickr_rules">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes" context="yes">Add</property>
+                                    <property name="rules_hint">True</property>
                                   </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkButton" id="remove">
+                                  <widget class="GtkVBox" id="vbox3">
                                     <property name="visible">True</property>
-                                    <property name="is_focus">True</property>
-                                    <property name="label" translatable="yes" context="yes">Remove</property>
+                                    <property name="spacing">12</property>
+                                    <child>
+                                      <widget class="GtkButton" id="add">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes" context="yes">Add</property>
+                                        <property name="tooltip">Add new flickr tags</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkButton" id="remove">
+                                        <property name="visible">True</property>
+                                        <property name="is_focus">True</property>
+                                        <property name="label" translatable="yes" context="yes">Remove</property>
+                                        <property name="tooltip">Remove selected tags</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkButton" id="tips">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Tips...</property>
+                                        <property name="tooltip">Some tips on using Flickr with Webilder</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="pack_type">GTK_PACK_END</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -289,11 +314,6 @@ Future versions will add more options here, such as selecting which collections 
                                   </packing>
                                 </child>
                               </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </widget>
                         </child>
@@ -330,7 +350,7 @@ Future versions will add more options here, such as selecting which collections 
                             <child>
                               <widget class="GtkCheckButton" id="flickr_download_interesting">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Download interesting photos</property>
+                                <property name="label" translatable="yes" context="yes">Download interesting photos</property>
                                 <property name="draw_indicator">True</property>
                               </widget>
                             </child>
@@ -341,7 +361,7 @@ Future versions will add more options here, such as selecting which collections 
                     <child>
                       <widget class="GtkLabel" id="label4">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Interestingness&lt;/b&gt;</property>
+                        <property name="label" translatable="yes" context="yes">&lt;b&gt;Interestingness&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
@@ -409,14 +429,27 @@ Future versions will add more options here, such as selecting which collections 
                                 <property name="column_spacing">24</property>
                                 <property name="row_spacing">12</property>
                                 <child>
-                                  <widget class="GtkLabel" id="label52">
+                                  <widget class="GtkEntry" id="webshots_password">
                                     <property name="visible">True</property>
-                                    <property name="xalign">0.000000</property>
-                                    <property name="label" translatable="yes" context="yes">_Username:</property>
-                                    <property name="use_underline">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="visibility">False</property>
                                   </widget>
                                   <packing>
-                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkEntry" id="webshots_username">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
                                     <property name="y_options"></property>
                                   </packing>
                                 </child>
@@ -435,27 +468,14 @@ Future versions will add more options here, such as selecting which collections 
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkEntry" id="webshots_username">
+                                  <widget class="GtkLabel" id="label52">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="xalign">0.000000</property>
+                                    <property name="label" translatable="yes" context="yes">_Username:</property>
+                                    <property name="use_underline">True</property>
                                   </widget>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkEntry" id="webshots_password">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="visibility">False</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                     <property name="y_options"></property>
                                   </packing>
                                 </child>
@@ -853,7 +873,7 @@ sign up for a free basic account. </property>
                         <child>
                           <widget class="GtkCheckButton" id="only_landscape">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Download only _Landscape photos.</property>
+                            <property name="label" translatable="yes" context="yes">Download only _Landscape photos.</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </widget>
@@ -863,7 +883,7 @@ sign up for a free basic account. </property>
                     <child>
                       <widget class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Download Filters&lt;/b&gt;</property>
+                        <property name="label" translatable="yes" context="yes">&lt;b&gt;Download Filters&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
