@@ -56,7 +56,7 @@ DEFAULT_CONFIG = [
     ('rotate.enabled', True),
     ('rotate.interval', 5),
 
-    ('webshots.enabled', True),
+    ('webshots.enabled', False),
     ('webshots.auto_download', True),
     ('webshots.username', ''),
     ('webshots.password', ''),

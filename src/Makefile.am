@@ -11,7 +11,7 @@ pkgpython_SCRIPTS = \
 nobase_pkgpython_SCRIPTS = \
 	webshots/__init__.py  webshots/utils.py  webshots/wbz.py \
 	webshots/fileutil.py  webshots/wbp.py         \
-	flickr/__init__.py flickr/flickrapy.py
+	flickr/__init__.py flickr/flickrapi.py
 
 uidir = $(pkgdatadir)
 

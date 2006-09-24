@@ -192,6 +192,10 @@ class ConfigDialog(UITricks):
             terms = new_text.split(';')
             terms = [[tag.strip() for tag in term.split(',')] for term in terms]
             new_text = ';'.join([', '.join([tag for tag in term]) for term in terms])
+        if data==0:
+            new_text = new_text.strip()
+            if not new_text:
+                new_text = 'Untitled Album'
 
         self.flickr_rules.get_model()[path][data] = new_text
 
@@ -201,3 +205,30 @@ class ConfigDialog(UITricks):
         if fs.run()==gtk.RESPONSE_OK:
             self.collection_dir.set_text(fs.get_filename())
         fs.destroy()
+
+    def on_tips__clicked(self, widget):
+        text = """
+        Getting started with flickr is easy.
+
+        Press the 'Add' button. Changing the tags to
+        <b>party,beach</b> (or anything that you want).
+        will bring you photos that are tagged with both
+        <b>party</b> and <b>beach</b>.
+
+        You can write: <b>party,beach;swimsuit</b>
+        if you want photos tagged with both 
+        <b>party</b> and <b>beach</b>, or with <b>swimsuit</b>
+        
+        If you want to get photos of a specific flickr user, 
+        just write his username in the <i>User</i> column, 
+        otherwise leave this column blank.
+
+        The album name can be anything meaningful to you, 
+        for example "Beach Parties".
+        """
+        mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+        
+        mb.set_markup(text)
+        mbval = mb.run()
+        mb.destroy()
+

@@ -48,7 +48,7 @@ class WebilderDesktopWindow(UITricks):
             'WebilderDesktopWindow')
         renderer = gtk.CellRendererText()        
         self.tree.append_column(
-            column=gtk.TreeViewColumn("Collection", renderer, markup=0))
+            column=gtk.TreeViewColumn("Album", renderer, markup=0))
         self.tree.columns_autosize()
         self.load_collection_tree(config.get('collection.dir'))
         self.iconview.set_pixbuf_column(IV_PIXBUF_COLUMN)

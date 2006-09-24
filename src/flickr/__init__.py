@@ -18,7 +18,6 @@ def get_download_list(config):
             tag_term = ','.join([tag.strip() for tag in tag_term.split(',')])
             params_dict = dict(per_page=25)
             if tag_term:
-                print "==== Fetching tagterm: %s =====" % tag_term
                 params_dict['tags'] = tag_term
                 params_dict['tag_mode'] = 'all'
 

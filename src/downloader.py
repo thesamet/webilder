@@ -111,8 +111,8 @@ def download_all(config, notify=lambda *args: None, terminate=lambda: False):
     for index, photo in enumerate(photos):
         download_notifier = lambda fraction: notify(
                 (float(index+1)+fraction)/(len(photos)+1),
-                    photo['title'], 
-                    'Downloading photo %d of %d from %s.' % (index+1, len(photos), photo['_plugin']['name']))
+                    'Downloading photo %d of %d from %s.' % (index+1, len(photos), photo['_plugin']['name']),
+                    'Downloading <b><i>"%s"</i></b>' % photo['title'])
         memfile = download_photo(config, photo, download_notifier)
         if terminate():
             return
@@ -122,3 +122,8 @@ def download_all(config, notify=lambda *args: None, terminate=lambda: False):
 import socket
 socket.setdefaulttimeout(120)
 
+if __name__=="__main__":
+    import config
+    def notify(fraction, status, message):
+        print status
+    download_all(config.config, notify)

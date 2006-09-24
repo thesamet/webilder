@@ -94,7 +94,7 @@ def get_photo_stream(config, photo):
 def process_photo(config, photo, f):
     img = wbz.open(f, 'r')
     metadata = img.get_metadata()
-    metadata['image_link'] = phone['data']['image_link']
+    metadata['url'] = photo['data']['image_link']
     data = img.get_image_data()
     return data, metadata
  
