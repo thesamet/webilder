@@ -3,6 +3,7 @@ import glob
 import cStringIO
 import plugins
 import time
+import os
 
 _recently_filtered = {}
 
@@ -81,7 +82,8 @@ def download_photo(config, photo, notify):
     return memfile
 
 def save_photo(config, photo, image, metadata):
-    dest_dir = os.path.join(config.get('collection.dir'), metadata['albumTitle'])
+    album_dirname = metadata['albumTitle'].replace(os.sep, '_')
+    dest_dir = os.path.join(config.get('collection.dir'), album_dirname)
     dest_thumb_dir = os.path.join(dest_dir, '.thumbs')
     dest_img = os.path.join(dest_dir, photo['name'])
     dest_inf = os.path.splitext(dest_img)[0]+'.inf'
