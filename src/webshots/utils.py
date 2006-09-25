@@ -1,5 +1,5 @@
 import httplib
-import urllib
+import urllib, urllib2
 import re
 import wbz
 
@@ -78,17 +78,17 @@ def get_photo_stream(config, photo):
 
     if 'text/html' in resp.info().getheader('content-type'):
         r = resp.read()
-        if 'PremiumOnly' in r or 'Only Webshots Premium' in r:
+        if 'r/Premium/Popup/Exclusive' in r:
             raise LeechPremiumOnlyPhotoError, "Only Webshots premium members can download this photo."
-        if ('Promos/HighQDL' in r) or ('Promos/WideDL' in r):
+        if ('r/Premium/Popup/Wide' in r) or ('r/Premium/Popup/High' in r):
             raise LeechHighQualityForPremiumOnlyError, "Only Webshots Premium members can download highest quality or wide photos."
         match = re.search("document.location.href='([^']+)'", r)
         if match:
-            opener = urllib.FancyURLopener()
-            opener.addheader('Cookie',headers['Cookie'])
-            resp = opener.open('http://www.webshost.com'+match.groups()[0])
+            req = urllib2.Request('http://www.webshots.com' +
+                    match.groups()[0], '', headers)
+            resp = urllib2.urlopen(req)
         else:
-            raise ValueError, "Unable to download photo %s" % photo.name
+            raise ValueError, "Unable to download photo %s" % photo['name']
     return resp
 
 def process_photo(config, photo, f):

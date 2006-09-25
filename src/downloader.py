@@ -5,6 +5,8 @@ import plugins
 import time
 import os
 
+from webshots.utils import LeechPremiumOnlyPhotoError
+
 _recently_filtered = {}
 
 def get_full_download_list(config):
@@ -116,7 +118,12 @@ def download_all(config, notify=lambda *args: None, terminate=lambda: False):
                 (float(index+1)+fraction)/(len(photos)+1),
                     'Downloading photo %d of %d from %s.' % (index+1, len(photos), photo['_plugin']['name']),
                     'Downloading <b><i>"%s"</i></b>' % photo['title'])
-        memfile = download_photo(config, photo, download_notifier)
+        try:
+            memfile = download_photo(config, photo, download_notifier)
+        except LeechPremiumOnlyPhotoError:
+            print "   Photo is available only to premium members. Skipping."
+            continue # skip this photo (goes back to for)
+
         if terminate():
             return
         image, metadata = photo['_plugin']['module'].process_photo(config, photo, memfile)
