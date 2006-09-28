@@ -2,7 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!-- Generated with glade3
 	Version: 3.0.1
-	Date: Sat Sep 23 20:00:01 2006
+	Date: Thu Sep 28 16:31:01 2006
 	User: thesamet
 	Host: nadav
 -->
@@ -80,6 +80,24 @@
                         <accelerator key="F" modifiers="" signal="activate"/>
                       </widget>
                     </child>
+                    <child>
+                      <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
+                        <property name="visible">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="photo_properties">
+                        <property name="visible">True</property>
+                        <property name="label">_Properties...</property>
+                        <property name="use_underline">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image5">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -146,6 +164,18 @@
                         <signal name="activate" handler="on_about_activate"/>
                       </widget>
                     </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="donate">
+                        <property name="visible">True</property>
+                        <property name="label">_Donate to this project...</property>
+                        <property name="use_underline">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image3">
+                            <property name="visible">True</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -208,21 +238,6 @@
                     <property name="visible">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkEventBox" id="donate_button_box">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkImage" id="donate_button">
-                            <property name="visible">True</property>
-                            <property name="xalign">0.000000</property>
-                            <property name="pixbuf">webilder_paypal.png</property>
-                          </widget>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                      </packing>
-                    </child>
-                    <child>
                       <widget class="GtkTable" id="table1">
                         <property name="visible">True</property>
                         <property name="border_width">6</property>
@@ -231,29 +246,73 @@
                         <property name="column_spacing">6</property>
                         <property name="row_spacing">6</property>
                         <child>
-                          <widget class="GtkLabel" id="label1">
+                          <widget class="GtkLabel" id="photo_tags">
+                            <property name="visible">True</property>
+                            <property name="xalign">0.000000</property>
+                            <property name="label" translatable="yes">tags</property>
+                            <property name="use_markup">True</property>
+                            <property name="wrap">True</property>
+                            <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="xalign">0.000000</property>
                             <property name="yalign">0.000000</property>
-                            <property name="label" translatable="yes">Credit:</property>
+                            <property name="label" translatable="yes">Tags:</property>
                           </widget>
                           <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label2">
+                          <widget class="GtkLabel" id="photo_credit">
                             <property name="visible">True</property>
                             <property name="xalign">0.000000</property>
                             <property name="yalign">0.000000</property>
-                            <property name="label" translatable="yes">Album:</property>
+                            <property name="label" translatable="yes">credit</property>
+                            <property name="wrap">True</property>
                           </widget>
                           <packing>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="photo_title">
+                            <property name="visible">True</property>
+                            <property name="xalign">0.000000</property>
+                            <property name="yalign">0.000000</property>
+                            <property name="label" translatable="yes">title</property>
+                            <property name="wrap">True</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label3">
+                            <property name="visible">True</property>
+                            <property name="xalign">0.000000</property>
+                            <property name="yalign">0.000000</property>
+                            <property name="label" translatable="yes">Title:</property>
+                          </widget>
+                          <packing>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
@@ -275,81 +334,34 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label3">
+                          <widget class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="xalign">0.000000</property>
                             <property name="yalign">0.000000</property>
-                            <property name="label" translatable="yes">Title:</property>
+                            <property name="label" translatable="yes">Album:</property>
                           </widget>
                           <packing>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="photo_title">
+                          <widget class="GtkLabel" id="label1">
                             <property name="visible">True</property>
                             <property name="xalign">0.000000</property>
                             <property name="yalign">0.000000</property>
-                            <property name="label" translatable="yes">title</property>
-                            <property name="wrap">True</property>
+                            <property name="label" translatable="yes">Credit:</property>
                           </widget>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="photo_credit">
-                            <property name="visible">True</property>
-                            <property name="xalign">0.000000</property>
-                            <property name="yalign">0.000000</property>
-                            <property name="label" translatable="yes">credit</property>
-                            <property name="wrap">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label6">
-                            <property name="visible">True</property>
-                            <property name="xalign">0.000000</property>
-                            <property name="yalign">0.000000</property>
-                            <property name="label" translatable="yes">Tags:</property>
-                          </widget>
-                          <packing>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="photo_tags">
-                            <property name="visible">True</property>
-                            <property name="xalign">0.000000</property>
-                            <property name="label" translatable="yes">tags</property>
-                            <property name="use_markup">True</property>
-                            <property name="wrap">True</property>
-                            <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
                           </packing>
                         </child>
                       </widget>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </widget>
                   <packing>
@@ -397,6 +409,23 @@
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
         <signal name="activate" handler="on_delete_images_activate"/>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="seperator3">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="photo_properties">
+        <property name="visible">True</property>
+        <property name="label">_Properties...</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image4">
+            <property name="visible">True</property>
+          </widget>
+        </child>
       </widget>
     </child>
   </widget>

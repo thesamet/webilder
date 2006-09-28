@@ -1,4 +1,4 @@
-import os
+import os, time
 
 class ConfigObject:
     def __init__(self, file=None):
@@ -75,6 +75,8 @@ DEFAULT_CONFIG = [
     ('webilder.layout', {}),
     ('webilder.wallpaper_set_method', 'gnome'),
     ('webilder.wallpaper_script', ''),
+    ('webilder.installation_date', time.localtime()),
+    ('webilder.stats', dict(downloads=0, rotations=0)),
     ('filter.only_landscape', False)]
 
 
@@ -95,4 +97,7 @@ def set_wallpaper(filename):
         script = config.get('webilder.wallpaper_script')
         script = script.replace('%f', filename)
         os.popen2(script)
-        
+    stats = config.get('webilder.stats')
+    stats['rotations'] += 1
+    config.save_config()
+

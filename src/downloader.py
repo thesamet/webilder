@@ -113,6 +113,7 @@ def download_all(config, notify=lambda *args: None, terminate=lambda: False):
     filter_photos(config, photos)
     if terminate():
         return
+    completed = 0
     for index, photo in enumerate(photos):
         download_notifier = lambda fraction: notify(
                 (float(index+1)+fraction)/(len(photos)+1),
@@ -125,9 +126,15 @@ def download_all(config, notify=lambda *args: None, terminate=lambda: False):
             continue # skip this photo (goes back to for)
 
         if terminate():
-            return
+            break
         image, metadata = photo['_plugin']['module'].process_photo(config, photo, memfile)
         save_photo(config, photo, image, metadata)
+        completed += 1
+   
+    stats = config.get('webilder.stats')
+    stats['downloads'] += completed
+    config.save_config()
+
 
 import socket
 socket.setdefaulttimeout(120)

@@ -1,14 +1,8 @@
 #!/usr/bin/env python
 
-import sys
-import os
-import time
-import glob
-import gc
+import sys, os, time, glob, gc
 
-import gtk
-import gtk.glade
-import gobject
+import gtk, gtk.glade, gobject
 
 from uitricks import UITricks
 from thumbs import ThumbLoader
@@ -67,7 +61,7 @@ class WebilderDesktopWindow(UITricks):
         self._top.show_all()
 
         self.hand_cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
-        self.donate_button_box.window.set_cursor(self.hand_cursor)
+        # self.donate_button_box.window.set_cursor(self.hand_cursor)
 
     def load_collection_tree(self, root):                
         model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -136,6 +130,7 @@ class WebilderDesktopWindow(UITricks):
                         filename=image,
                         thumb=thumb,
                         info_file=info_file,
+                        inf = inf,
                         album = album,
                         tags = tags,
                         credit = credit)
@@ -296,35 +291,39 @@ class WebilderDesktopWindow(UITricks):
         for afile in files:
             wbz_handler.handle_file(afile)
 
-    def on_donate_button_box__button_press_event(self, button, event):
-        def _iscommand(cmd):
-            """Return True if cmd can be found on the executable search path."""
-            path = os.environ.get("PATH")
-            if not path:
-                return False
-            for d in path.split(os.pathsep):
-                exe = os.path.join(d, cmd)
-                if os.path.isfile(exe):
-                    return True
-            return False
-        donate_url = 'http://www.thesamet.com/webilder/donate.html'
-        if _iscommand('gnome-open'):
-            os.system('gnome-open %s' % donate_url)
-        elif _iscommand('kfmclient'):
-            os.system('kfmclient openURL %s' % donate_url)
-        else:
-            mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-            mb.set_title('Thank You!')
-            mb.set_markup("<b>Thanks for your interest in supporting Webilder.</b>\n\n"
-                    'Please follow this link to send us a donation:\n\n%s' % donate_url)
-            mbval = mb.run()
-            mb.destroy()
+    def on_donate__activate(self, widget):
+        donate_dialog = DonateDialog()
+        val = donate_dialog.run()
+        donate_dialog.destroy()
+
+    def on_photo_properties__activate(self, event):
+        selected = self.iconview.get_selected_items()
+        if not selected:
+            return
+
+        win = UITricks(os.path.join(aglobals.glade_dir, 'webilder.glade'), 'PhotoPropertiesDialog')
+        selected=selected[-1]            
+        path = selected;
+        iter = self.iconview.get_model().get_iter(path)
+        data = self.iconview.get_model().get_value(iter,
+            IV_DATA_COLUMN)
+        win.title.set_markup('<b>%s</b>' % data['title'])
+        win.album.set_markup(data['album'])
+        win.file.set_text(data['filename'])
+        win.tags.set_text(data['tags'])
+        win.size.set_text('%d bytes' % os.path.getsize(data['filename']))
+        win.date.set_text(time.strftime('%c', time.localtime(os.path.getctime(data['filename']))))
+        win.url.set_text(data['inf'].get('url', ''))
+        
+        win.closebutton.connect('clicked', lambda *args: win.destroy())
+        win.show()
 
 class ImagePopup(UITricks):
     def __init__(self, main_window):
         self.main_window = main_window
         self.on_view_full_screen__activate = main_window.on_view_fullscreen__activate
         self.on_set_as_wallpaper__activate = main_window.on_set_as_wallpaper__activate
+        self.on_photo_properties__activate = main_window.on_photo_properties__activate
         UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder_desktop.glade'), 'WebilderImagePopup')
 
     def on_delete_images__activate(self, event):
@@ -346,7 +345,8 @@ class ImagePopup(UITricks):
                             os.remove(fname)
                         except:
                             pass
-            
+
+        
 html_escape_table = {
     "&": "&amp;",
     '"': "&quot;",
@@ -362,9 +362,72 @@ def html_escape(text):
         L.append(html_escape_table.get(c,c))
     return "".join(L)
 
+class DonateDialog(UITricks):
+    def __init__(self):
+        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder.glade'), 
+            'DonateDialog')
+        text = '''
+Webilder is trying hard to make your desktop the coolest in town.
+
+Since you installed it on %(inst_date)s, it downloaded <b>%(downloads)d photos</b>
+for you%(rotations)s
+
+It takes a lot of time and hard work to develop and maintain Webilder.
+
+If you'd like to see Webilder becomes even better, you can help us 
+a lot by making a small donation. 
+
+Any donation will be GREATLY appreciated. You can even donate $5.
+
+After clicking on the <i>Yes</i> button below you'll be taken to 
+the donation page. If the page does not appear, please visit:
+%(url)s
+
+Would you like to donate to Webilder?
+'''
+    
+        stats = config.get('webilder.stats')
+        self.url = 'http://www.thesamet.com/webilder/donate.html'
+        context = dict(
+                downloads = stats['downloads'],
+                rotations = ' and changed your wallpaper <b>%d times</b>.' % 
+                    stats['rotations'],
+                inst_date = time.strftime('%B %Y'),
+                url = self.url
+                )
+
+        self.donate_copy.set_markup(text % context)
+
+    def run(self):
+        def _iscommand(cmd):
+            """Return True if cmd can be found on the executable search path."""
+            path = os.environ.get("PATH")
+            if not path:
+                return False
+            for d in path.split(os.pathsep):
+                exe = os.path.join(d, cmd)
+                if os.path.isfile(exe):
+                    return True
+            return False
+
+        val = UITricks.run(self)
+        if val==0:
+            if _iscommand('gnome-open'):
+                os.system('gnome-open %s' % self.url)
+            elif _iscommand('kfmclient'):
+                os.system('kfmclient openURL %s' % self.url)
+            else:
+                mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+                mb.set_title('Thank You!')
+                mb.set_markup("<b>Thanks for your interest in supporting Webilder.</b>\n\n"
+                        'Please follow this link to send us a donation:\n\n%s' % self.url)
+                mbval = mb.run()
+                mb.destroy()
+
 if __name__ == "__main__":
     gtk.threads_init()
     main_window = WebilderDesktopWindow()
     main_window._top.connect("destroy", gtk.main_quit)
     gtk.main()
+
 
