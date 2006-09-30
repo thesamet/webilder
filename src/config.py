@@ -79,9 +79,13 @@ DEFAULT_CONFIG = [
     ('webilder.stats', dict(downloads=0, rotations=0)),
     ('filter.only_landscape', False)]
 
+DEFAULT_CONFIG_FILE = os.path.expanduser('~/.webilder/webilder.conf')
 
-config = ConfigObject(os.path.expanduser('~/.webilder/webilder.conf'))
+config = ConfigObject(DEFAULT_CONFIG_FILE)
 
+def reload_config():
+    config.load_config(DEFAULT_CONFIG_FILE)
+     
 def set_wallpaper(filename):
     use = config.get('webilder.wallpaper_set_method')
     if use=="gnome":

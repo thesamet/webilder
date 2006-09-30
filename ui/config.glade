@@ -2,7 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!-- Generated with glade3
 	Version: 3.0.1
-	Date: Sun Sep 24 18:25:07 2006
+	Date: Thu Sep 28 18:12:29 2006
 	User: thesamet
 	Host: nadav
 -->
@@ -243,6 +243,46 @@ Future versions will add more options here, such as selecting which collections 
                   </packing>
                 </child>
                 <child>
+                  <widget class="GtkFrame" id="flickr_interestingness_frame">
+                    <property name="visible">True</property>
+                    <property name="label_xalign">0.000000</property>
+                    <property name="shadow_type">GTK_SHADOW_NONE</property>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment2">
+                        <property name="visible">True</property>
+                        <property name="border_width">6</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkVBox" id="vbox1">
+                            <property name="visible">True</property>
+                            <child>
+                              <widget class="GtkCheckButton" id="flickr_download_interesting">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes" context="yes">Download interesting photos</property>
+                                <property name="draw_indicator">True</property>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes" context="yes">&lt;b&gt;Interestingness&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="GtkFrame" id="flickr_tags_frame">
                     <property name="visible">True</property>
                     <property name="label_xalign">0.000000</property>
@@ -296,7 +336,7 @@ Future versions will add more options here, such as selecting which collections 
                                     <child>
                                       <widget class="GtkButton" id="tips">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Tips...</property>
+                                        <property name="label" translatable="yes" context="yes">Tips...</property>
                                         <property name="tooltip">Some tips on using Flickr with Webilder</property>
                                       </widget>
                                       <packing>
@@ -331,46 +371,6 @@ Future versions will add more options here, such as selecting which collections 
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkFrame" id="flickr_interestingness_frame">
-                    <property name="visible">True</property>
-                    <property name="label_xalign">0.000000</property>
-                    <property name="shadow_type">GTK_SHADOW_NONE</property>
-                    <child>
-                      <widget class="GtkAlignment" id="alignment2">
-                        <property name="visible">True</property>
-                        <property name="border_width">6</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <widget class="GtkVBox" id="vbox1">
-                            <property name="visible">True</property>
-                            <child>
-                              <widget class="GtkCheckButton" id="flickr_download_interesting">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes" context="yes">Download interesting photos</property>
-                                <property name="draw_indicator">True</property>
-                              </widget>
-                            </child>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label4">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes" context="yes">&lt;b&gt;Interestingness&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -429,27 +429,14 @@ Future versions will add more options here, such as selecting which collections 
                                 <property name="column_spacing">24</property>
                                 <property name="row_spacing">12</property>
                                 <child>
-                                  <widget class="GtkEntry" id="webshots_password">
+                                  <widget class="GtkLabel" id="label52">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="visibility">False</property>
+                                    <property name="xalign">0.000000</property>
+                                    <property name="label" translatable="yes" context="yes">_Username:</property>
+                                    <property name="use_underline">True</property>
                                   </widget>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                    <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkEntry" id="webshots_username">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                     <property name="y_options"></property>
                                   </packing>
                                 </child>
@@ -468,14 +455,27 @@ Future versions will add more options here, such as selecting which collections 
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkLabel" id="label52">
+                                  <widget class="GtkEntry" id="webshots_username">
                                     <property name="visible">True</property>
-                                    <property name="xalign">0.000000</property>
-                                    <property name="label" translatable="yes" context="yes">_Username:</property>
-                                    <property name="use_underline">True</property>
+                                    <property name="can_focus">True</property>
                                   </widget>
                                   <packing>
-                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkEntry" id="webshots_password">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="visibility">False</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
                                     <property name="y_options"></property>
                                   </packing>
                                 </child>

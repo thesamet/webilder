@@ -10,22 +10,16 @@ import gtk
 import gnomeapplet
 import gnome
 import gobject
-import random
 import webilder_globals as aglobals
-import urllib
+from base_applet import BaseApplet
 
-from config import config, set_wallpaper
+from config import config, set_wallpaper, reload_config
 
 # Set this to False if you don't want the software to check
 # for updates.
 #
 # No information, except of the version request itself is sent 
 # to Webilder's server.
-
-CHECK_FOR_UPDATES = True
-CHECK_URL = 'http://www.thesamet.com/webilder/latest.html'
-
-random.seed()
 
 class WebilderApplet:
     def __init__(self, applet, iid):
@@ -73,51 +67,14 @@ pixname="gtk-preferences"/>
             ( "Leech", self.leech)]        
         self.applet.setup_menu(self.propxml, self.verbs, None)
         self.applet.show_all()
-        self.wallpaper_list = []
-        self.last_rotate = time.time()
-        self.last_autodownload = config.get('autodownload.last_time') or (time.time() - 50*3600)
         gobject.timeout_add(60*1000, self.timer_event)
         self.photo_browser = None
         self.download_dlg = None 
         self.last_version_check = time.time()-9*3600
         
-    def timer_event(self, *args):
-        try:
-            now = time.time()
-            rotate_interval = config.get('rotate.enabled') and config.get('rotate.interval')*60
-            autodownload_interval = config.get('autodownload.enabled') and config.get('autodownload.interval')*3600
-            if rotate_interval:
-                # check if we have to rotate
-                if now-self.last_rotate>=rotate_interval:
-                    print "Rotating..."
-                    self.next_photo()
-            
-            if CHECK_FOR_UPDATES and now-self.last_version_check>=8*3600:
-                response = urllib.urlopen(CHECK_URL)
-                latest = response.readlines()
-                response.close()
-                if latest[0].strip()!=aglobals.version:
-                    self.tooltips.enable()
-                    self.tooltips.set_tip(self.applet, ''.join(latest[1:]))                    
-                else:
-                    pass
-                self.last_version_check = now
-
-            if autodownload_interval:
-                if now-self.last_autodownload >= autodownload_interval:
-                    print "Time to autodownload."
-                    self.last_autodownload = now
-                    import threading
-                    import downloader
-                    self.leech_thread = threading.Thread(
-                        target=downloader.download_all, args=(config,))
-                    self.leech_thread.setDaemon(True)
-                    self.leech_thread.start()                        
-                    config.set('autodownload.last_time', now)
-                    config.save_config()
-        finally:
-            return True
-        
+    def set_tooltip(self, text):
+        self.tooltips.enable()
+        self.tooltips.set_tip(self.applet, ''.join(latest[1:]))                    
     def preferences(self, object, menu):
         import config_dialog
         config_dialog.ConfigDialog().run_dialog(config)
@@ -163,17 +120,6 @@ pixname="gtk-preferences"/>
         else:
             self.photo_browser._top.show_all()
 
-    def next_photo(self, object=None, menu=None):
-        croot = config.get('collection.dir')
-        if not self.wallpaper_list:
-            self.wallpaper_list = glob.glob(
-                os.path.join(croot, '*', '*.jpg'))
-            random.shuffle(self.wallpaper_list)
-        if self.wallpaper_list:
-            self.last_rotate = time.time()-15 # to ensure next time...
-            wp = self.wallpaper_list.pop()
-            set_wallpaper(os.path.join(croot, wp))        
-
     def photo_browser_destroy(self, event):
         self.photo_browser.destroy()
         self.photo_browser = None
@@ -189,7 +135,7 @@ def toggle_window_visibility(window):
     else:
         window.show_all()
         
-gtk.threads_init()
+gtk.gdk.threads_init()
 
 if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":   
         main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)

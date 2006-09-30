@@ -7,6 +7,7 @@ import gtk, gtk.glade, gobject
 from uitricks import UITricks
 from thumbs import ThumbLoader
 import WebilderFullscreen
+import DownloadDialog
 
 try:
     import gnomevfs
@@ -191,7 +192,6 @@ class WebilderDesktopWindow(UITricks):
         def remove_reference(*args):
             del self.download_dialog
 
-        import DownloadDialog
         if not hasattr(self, 'download_dialog'):
             self.download_dialog = DownloadDialog.DownloadProgressDialog(config)
             self.download_dialog._top.connect('destroy', remove_reference)
@@ -221,8 +221,7 @@ class WebilderDesktopWindow(UITricks):
         self.on_tree__selection_changed(self.tree.get_selection())
 
     def on_preferences__activate(self, menu_item):
-        import config_dialog
-        dlg = config_dialog.ConfigDialog().run_dialog(config)
+        configure()
             
     def on_iconview__button_press_event(self, icon_view, event):
         if event.button==3:
@@ -311,7 +310,7 @@ class WebilderDesktopWindow(UITricks):
         win.album.set_markup(data['album'])
         win.file.set_text(data['filename'])
         win.tags.set_text(data['tags'])
-        win.size.set_text('%d bytes' % os.path.getsize(data['filename']))
+        win.size.set_text('%.1f KB' % (os.path.getsize(data['filename'])/1024.0))
         win.date.set_text(time.strftime('%c', time.localtime(os.path.getctime(data['filename']))))
         win.url.set_text(data['inf'].get('url', ''))
         
@@ -424,10 +423,32 @@ Would you like to donate to Webilder?
                 mbval = mb.run()
                 mb.destroy()
 
+def configure():
+    import config_dialog
+    dlg = config_dialog.ConfigDialog().run_dialog(config)
+
+
+def on_input_available(*args):
+    line = sys.stdin.readline()
+    if 'present' in line:
+        main_window._top.present()
+    return True
+
 if __name__ == "__main__":
-    gtk.threads_init()
-    main_window = WebilderDesktopWindow()
-    main_window._top.connect("destroy", gtk.main_quit)
-    gtk.main()
+    gtk.gdk.threads_init()
+    if '--configure' in sys.argv:
+        configure()
+    elif '--download' in sys.argv:
+        gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
+        download_dialog = DownloadDialog.DownloadProgressDialog(config)
+        main_window = download_dialog
+        download_dialog._top.connect('destroy', gtk.main_quit)
+        download_dialog.show()
+        gtk.main()
+    else:
+        gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
+        main_window = WebilderDesktopWindow()
+        main_window._top.connect("destroy", gtk.main_quit)
+        gtk.main()
 
 
