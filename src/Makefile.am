@@ -5,7 +5,8 @@ pkgpython_SCRIPTS = \
 	AboutDialog.py      WebilderFullscreen.py  plugins.py    uitricks.py \
 	DownloadDialog.py   config.py              		         wbz_handler.py \
 	WebilderApplet.py   config_dialog.py       thumblist.py  \
-	WebilderDesktop.py  downloader.py          thumbs.py \
+	WebilderDesktop.py  downloader.py          thumbs.py     base_applet.py\
+	KWebilder.py
 	$(globalsfile)
 
 nobase_pkgpython_SCRIPTS = \

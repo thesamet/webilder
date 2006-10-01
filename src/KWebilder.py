@@ -17,7 +17,8 @@ class WebilderTray(KSystemTray, BaseApplet):
     def __init__(self):
         BaseApplet.__init__(self)
         KSystemTray.__init__(self, None, 'Webilder')
-        pixmap = QPixmap("/opt/gnome/share/webilder/camera16.png")
+        pixmap = QPixmap(os.path.join(
+            aglobals.glade_dir, 'camera16.png'))
         self.setPixmap (pixmap)
         self.setCaption('Webilder')
         self.launchers = {}
@@ -69,9 +70,11 @@ class WebilderTray(KSystemTray, BaseApplet):
         if event.button() == Qt.LeftButton:
             self.browse()
 
+    def set_tooltip(self, *args):
+        print "tooltips ",args
 
 def launch_webilder(args=''):
-    return popen2.Popen3('/opt/gnome/bin/webilder_desktop '+args)
+    return popen2.Popen3('python '+os.path.join(sys.path[0], 'WebilderDesktop.py') + ' ' +args)
 
 def get_about_data():
     return KAboutData('webilder', 'Webilder', aglobals.version,

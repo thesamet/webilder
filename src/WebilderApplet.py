@@ -70,7 +70,6 @@ pixname="gtk-preferences"/>
         gobject.timeout_add(60*1000, self.timer_event)
         self.photo_browser = None
         self.download_dlg = None 
-        self.last_version_check = time.time()-9*3600
         
     def set_tooltip(self, text):
         self.tooltips.enable()
