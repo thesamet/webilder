@@ -429,7 +429,7 @@ def configure():
 
 
 def on_input_available(*args):
-    line = sys.stdin.read()
+    line = sys.stdin.readline()
     if 'present' in line:
         main_window._top.present()
     return True
