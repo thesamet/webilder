@@ -4,7 +4,7 @@ globalsfile_in = webilder_globals.py.in
 pkgpython_SCRIPTS = \
 	AboutDialog.py      WebilderFullscreen.py  plugins.py    uitricks.py \
 	DownloadDialog.py   config.py              		         wbz_handler.py \
-	WebilderApplet.py   config_dialog.py       thumblist.py  \
+	WebilderApplet.py   config_dialog.py       \
 	WebilderDesktop.py  downloader.py          thumbs.py     base_applet.py\
 	KWebilder.py
 	$(globalsfile)

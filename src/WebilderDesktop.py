@@ -429,7 +429,7 @@ def configure():
 
 
 def on_input_available(*args):
-    line = sys.stdin.readline()
+    line = sys.stdin.read()
     if 'present' in line:
         main_window._top.present()
     return True
@@ -439,14 +439,16 @@ if __name__ == "__main__":
     if '--configure' in sys.argv:
         configure()
     elif '--download' in sys.argv:
-        gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
+        if '--kwebilder' in sys.argv:
+            gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
         download_dialog = DownloadDialog.DownloadProgressDialog(config)
         main_window = download_dialog
         download_dialog._top.connect('destroy', gtk.main_quit)
         download_dialog.show()
         gtk.main()
     else:
-        gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
+        if '--kwebilder' in sys.argv:
+            gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
         main_window = WebilderDesktopWindow()
         main_window._top.connect("destroy", gtk.main_quit)
         gtk.main()

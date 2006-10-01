@@ -74,7 +74,7 @@ class WebilderTray(KSystemTray, BaseApplet):
         print "tooltips ",args
 
 def launch_webilder(args=''):
-    return popen2.Popen3('python '+os.path.join(sys.path[0], 'WebilderDesktop.py') + ' ' +args)
+    return popen2.Popen3('python '+os.path.join(sys.path[0], 'WebilderDesktop.py') + ' --kwebilder ' +args)
 
 def get_about_data():
     return KAboutData('webilder', 'Webilder', aglobals.version,
