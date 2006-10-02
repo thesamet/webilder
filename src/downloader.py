@@ -46,7 +46,7 @@ def filter_photos(config, photos):
             filtered_photos.append(photo)
             print "Skipping already existing photo '%s'" % photo['title']
             continue
-        if photo['name'] in _recently_filtered and config.get('flickr.only_landscape'):
+        if photo['name'] in _recently_filtered and config.get('filter.only_landscape'):
             # currently photos filtered only if only_landscape is set. to prevent
             # photos from being blocked by this cache soon after only_landscape has 
             # set to false, the right term of the 'and' above was added.

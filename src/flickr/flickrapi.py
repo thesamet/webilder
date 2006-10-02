@@ -75,7 +75,7 @@ class FlickrPhoto(object):
     def get_info(self):
         rsp = self._proxy.call('flickr.photos.getInfo', photo_id=self.photo_id)
         photo = rsp.getElementsByTagName('photo')[0]
-        image_url = get_image_url('o', format=photo.getAttribute('originalformat'))
+        image_url = self.get_image_url('o', format=photo.getAttribute('originalformat'))
 
         title = photo.getElementsByTagName('title')[0]
         if title.firstChild:
