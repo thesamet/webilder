@@ -4,7 +4,7 @@ import gtk.glade
 import os
 import webilder_globals as aglobals
 
-from uitricks import UITricks
+from uitricks import UITricks, open_browser
 
 from progress_dialog import *
 
@@ -278,6 +278,13 @@ class ConfigDialog(UITricks):
         thread=RecommendingThread(dialog)
         thread.start()
         dialog.show()
+
+    def on_flickr_get_more_albums__clicked(self, widget):
+        url = 'http://www.webilder.org/world/popular/'
+        open_browser(url = url,
+                no_browser_title = 'Could not open browser',
+                no_browser_markup = 'Webilder was unable to find a browser, please visit: \n'
+                '%s' % url)
 
 def parse_cid_file(data):
     from xml.dom.minidom import parseString

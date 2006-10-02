@@ -4,7 +4,7 @@ import sys, os, time, glob, gc
 
 import gtk, gtk.glade, gobject
 
-from uitricks import UITricks
+from uitricks import UITricks, open_browser
 from thumbs import ThumbLoader
 import WebilderFullscreen
 import DownloadDialog
@@ -419,30 +419,12 @@ Would you like to donate to Webilder?
         self.donate_copy.set_markup(text % context)
 
     def run(self):
-        def _iscommand(cmd):
-            """Return True if cmd can be found on the executable search path."""
-            path = os.environ.get("PATH")
-            if not path:
-                return False
-            for d in path.split(os.pathsep):
-                exe = os.path.join(d, cmd)
-                if os.path.isfile(exe):
-                    return True
-            return False
-
         val = UITricks.run(self)
         if val==0:
-            if _iscommand('gnome-open'):
-                os.system('gnome-open %s' % self.url)
-            elif _iscommand('kfmclient'):
-                os.system('kfmclient openURL %s' % self.url)
-            else:
-                mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-                mb.set_title('Thank You!')
-                mb.set_markup("<b>Thanks for your interest in supporting Webilder.</b>\n\n"
-                        'Please follow this link to send us a donation:\n\n%s' % self.url)
-                mbval = mb.run()
-                mb.destroy()
+            open_browser(self.url,no_browser_title='Thank You!',
+                             no_browser_markup="<b>Thanks for your interest in supporting Webilder.</b>\n\n"
+                            'Please follow this link to send us a donation:\n\n%s' % self.url)
+
 
 def configure():
     import config_dialog

@@ -35,3 +35,30 @@ class UITricks:
     def destroy(self):
         self._top.destroy()
 
+def open_browser(url, no_browser_title, no_browser_markup):
+    import os
+    def _iscommand(cmd):
+        """Return True if cmd can be found on the executable search path."""
+        path = os.environ.get("PATH")
+        if not path:
+            return False
+        for d in path.split(os.pathsep):
+            exe = os.path.join(d, cmd)
+            if os.path.isfile(exe):
+                return True
+        return False
+
+    if _iscommand('gnome-open'):
+        os.system('gnome-open %s' % url)
+    elif _iscommand('kfmclient'):
+        os.system('kfmclient openURL %s' % url)
+    elif _iscommand('firefox'):
+        os.system('firefox %s' % url)
+    elif _iscommand('mozilla-firefox'):
+        os.system('mozilla-firefox %s' % url)
+    else:
+        mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+        mb.set_title(no_browser_title)
+        mb.set_markup(no_browser_markup)
+        mbval = mb.run()
+        mb.destroy()
