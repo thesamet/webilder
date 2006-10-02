@@ -6,6 +6,8 @@ import webilder_globals as aglobals
 
 from uitricks import UITricks
 
+from progress_dialog import *
+
 pygtk.require("2.0")
 
 rotation_consts = {
@@ -48,10 +50,10 @@ class ConfigDialog(UITricks):
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
                 kde=self.wallpaper_use_kde,
                 script=self.wallpaper_use_script)
-        self.flickr_tab.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)], 
+        self.notebook.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)], 
                 gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
 
-    def on_flickr_tab__drag_data_received(self, widget, context, x, y,
+    def on_notebook__drag_data_received(self, widget, context, x, y,
             selection, targetType, time):
         if targetType == 1:
             url = selection.data.split()[0]
@@ -61,6 +63,8 @@ class ConfigDialog(UITricks):
         data = urllib.urlopen(url).read()
         for channel in parse_cid_file(data):
             self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True))
+        flickr_pos = self.notebook.child_get(self.flickr_tab, 'position')[0]
+        self.notebook.set_current_page(flickr_pos)
 
     def run_dialog(self, config):
         self.load_config(config)
@@ -253,17 +257,27 @@ class ConfigDialog(UITricks):
         mb.destroy()
 
     def on_flickr_recommend__clicked(self, widget):
-        import urllib
-        mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_CANCEL)
-        mb.set_markup('Sending recommendation...')
-        mb.show()
-        model = self.flickr_rules.get_model()
-        for rule in model:
-            if rule[2]: 
-                continue
-            album, terms = rule[0], rule[1]
-            data = urllib.urlencode({'name': album, 'terms': terms})
-            urllib.urlopen('http://localhost:8080/api/submit_channel', data)
+        dialog = ProgressDialog(text='Sending recommendations')
+        rules = list(self.flickr_rules.get_model())
+        class RecommendingThread(ProgressThread):
+            @progress_thread_run
+            def run(self):
+                import urllib
+                recommend = [rule for rule in rules if rule[2] or (not rule[3])]
+                size = len(recommend)
+                for index, rule in enumerate(recommend):
+                    album, terms = rule[0], rule[1]
+                    data = urllib.urlencode({'name': album, 'terms': terms})
+                    try:
+                        urllib.urlopen('http://localhost:8080/api/submit_channel', data).read()
+                    except e:
+                        print str(e)
+                    self.status_notify(float(index)/size, 
+                            progress_text='Sending rule %d of %d' % (index+1, size))
+
+        thread=RecommendingThread(dialog)
+        thread.start()
+        dialog.show()
 
 def parse_cid_file(data):
     from xml.dom.minidom import parseString
