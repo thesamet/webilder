@@ -45,12 +45,15 @@ class FlickrProxy(object):
     def _makePhotoList(self, photos):
         return [FlickrPhoto(self, 
             photo_id=photo.getAttribute('id'), 
-            title=photo.getAttribute('title')) for photo in photos]
+            title=photo.getAttribute('title'),
+            secret=photo.getAttribute('secret'),
+            server=photo.getAttribute('server'),
+            ) for photo in photos]
 
 
 class FlickrPhoto(object):
-    def __init__(self, proxy, photo_id, title):
-        self.photo_id, self.title = photo_id, title
+    def __init__(self, proxy, photo_id, title, secret, server):
+        self.photo_id, self.title, self.secret, self.server = photo_id, title, secret, server
         self._proxy = proxy
 
     def get_aspect_ratio(self):
@@ -61,14 +64,18 @@ class FlickrPhoto(object):
                 return float(size.getAttribute('width'))/float(size.getAttribute('height'))
         return None
 
+    def get_image_url(self, size, format='jpg'):
+        return 'http://static.flickr.com/%(server)s/%(id)s_%(secret)s_%(size)s.%(format)s' % dict(
+            id = self.photo_id,
+            server = self.server,
+            secret = self.secret,
+            format = 'jpg', 
+            size = size)
+            
     def get_info(self):
         rsp = self._proxy.call('flickr.photos.getInfo', photo_id=self.photo_id)
         photo = rsp.getElementsByTagName('photo')[0]
-        image_url = 'http://static.flickr.com/%(server)s/%(id)s_%(secret)s_o.%(format)s' % dict(
-            id = self.photo_id,
-            server = photo.getAttribute('server'),
-            secret = photo.getAttribute('secret'),
-            format = photo.getAttribute('originalformat'))
+        image_url = get_image_url('o', format=photo.getAttribute('originalformat'))
 
         title = photo.getElementsByTagName('title')[0]
         if title.firstChild:
