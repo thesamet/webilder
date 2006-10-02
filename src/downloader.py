@@ -20,6 +20,7 @@ def get_full_download_list(config):
     return all_photos
 
 def clear_recently_filtered():
+    print "clearing"
     _recently_filtered.clear()
 
 def clear_old_filtered():
@@ -32,6 +33,7 @@ def clear_old_filtered():
         del _recently_filtered[name]
 
 def filter_photos(config, photos):
+    print _recently_filtered
     clear_old_filtered()
     # check if we already have any of the photos
 
@@ -44,7 +46,10 @@ def filter_photos(config, photos):
             filtered_photos.append(photo)
             print "Skipping already existing photo '%s'" % photo['title']
             continue
-        if photo['name'] in _recently_filtered:
+        if photo['name'] in _recently_filtered and config.get('flickr.only_landscape'):
+            # currently photos filtered only if only_landscape is set. to prevent
+            # photos from being blocked by this cache soon after only_landscape has 
+            # set to false, the right term of the 'and' above was added.
             filtered_photos.append(photo)
             print "Skipping previously filtered photo '%s'." % photo['title']
             continue
@@ -100,8 +105,15 @@ def save_photo(config, photo, image, metadata):
     fjpg.close()
 
     finf = open(dest_inf, 'w')
-    finf.writelines([('%s=%s\n' % (key, value)).encode('utf8') for key, value in 
-    metadata.iteritems()])
+    lines = []
+    for key, value in metadata.iteritems():
+        if isinstance(value, unicode):
+            value = value.encode('utf8')
+        if isinstance(key, unicode):
+            key = key.encode('utf8')
+        lines.append('%s=%s\n' % (key, value))
+
+    finf.writelines(lines)
     finf.close()
  
 def download_all(config, notify=lambda *args: None, terminate=lambda: False):

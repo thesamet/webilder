@@ -47,9 +47,6 @@ class ConfigObject:
         file = open(file, 'w')
         for key,v in DEFAULT_CONFIG:
             file.write('%s = %r\n' % (key, self._dict[key]))
-        # yes, should not be here...
-        import downloader
-        downloader.clear_recently_filtered()
 
 DEFAULT_CONFIG = [
     ('collection.dir', os.path.expanduser('~/.webilder/Collection')),
