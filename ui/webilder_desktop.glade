@@ -2,7 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!-- Generated with glade3
 	Version: 3.0.1
-	Date: Thu Sep 28 16:31:01 2006
+	Date: Tue Oct  3 00:01:57 2006
 	User: thesamet
 	Host: nadav
 -->
@@ -409,6 +409,13 @@
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
         <signal name="activate" handler="on_delete_images_activate"/>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="delete_forever">
+        <property name="visible">True</property>
+        <property name="label">De_lete Forever</property>
+        <property name="use_underline">True</property>
       </widget>
     </child>
     <child>

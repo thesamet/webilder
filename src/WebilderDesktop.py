@@ -327,24 +327,44 @@ class ImagePopup(UITricks):
         UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder_desktop.glade'), 'WebilderImagePopup')
 
     def on_delete_images__activate(self, event):
+        self.delete_files(forever=False)
+
+    def on_delete_forever__activate(self, event):
+        self.delete_files(forever=True)
+
+    def delete_files(self, forever):
         iconview = self.main_window.iconview
         selected = iconview.get_selected_items()
-        if selected:
+        if selected and len(selected)>1:
+            if forever:
+                message = 'Would you like to permanently delete the selected images?'
+            else:
+                message = 'Would you like to delete the selected images?'
+
             dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, 
                 buttons=gtk.BUTTONS_YES_NO, 
-                message_format="Would you like to delete the selected images?")
+                message_format=message)
             response = dlg.run()
             dlg.destroy()
-            if response == gtk.RESPONSE_YES:
-                for path in selected:                
-                    iter = iconview.get_model().get_iter(path)
-                    data = iconview.get_model().get_value(iter,
-                        IV_DATA_COLUMN)
-                    for fname in (data['filename'], data['info_file'], data['thumb']):
-                        try:
-                            os.remove(fname)
-                        except:
-                            pass
+            if response != gtk.RESPONSE_YES:
+                return
+
+        banned = open(os.path.expanduser('~/.webilder/banned_photos'), 'a')
+        model = iconview.get_model()
+        for path in selected:                
+            iter = model.get_iter(path)
+            data = model.get_value(iter,
+                IV_DATA_COLUMN)
+            for fname in (data['filename'], data['info_file'], data['thumb']):
+                try:
+                    os.remove(fname)
+                except:
+                    pass
+            if forever:
+                banned.write(os.path.basename(data['filename'])+'\n')
+            model.remove(iter)
+
+        banned.close()
 
         
 html_escape_table = {

@@ -33,8 +33,11 @@ def clear_old_filtered():
         del _recently_filtered[name]
 
 def filter_photos(config, photos):
-    print _recently_filtered
     clear_old_filtered()
+    # load photo names of permanently deleted photos...
+    banned_photos = open(os.path.expanduser('~/.webilder/banned_photos'), 'r').readlines() 
+    banned_photos = [line.strip() for line in banned_photos]
+
     # check if we already have any of the photos
 
     files = glob.glob(os.path.join(config.get('collection.dir'), '*', '*'))
@@ -45,6 +48,10 @@ def filter_photos(config, photos):
         if photo['name'] in files:
             filtered_photos.append(photo)
             print "Skipping already existing photo '%s'" % photo['title']
+            continue
+        if photo['name'] in banned_photos:
+            print "Skipping banned photo '%s'." % photo['title']
+            filtered_photos.append(photo)
             continue
         if photo['name'] in _recently_filtered and config.get('filter.only_landscape'):
             # currently photos filtered only if only_landscape is set. to prevent
