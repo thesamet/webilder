@@ -50,6 +50,9 @@ class ThumbLoader(object):
         return True
 
 def ThumbnailGenerator(image_dict):
+    thumb_dir = os.path.dirname(image_dict['data']['thumb'])
+    if not os.path.exists(thumb_dir):
+        os.mkdir(thumb_dir)
     loader = gtk.gdk.PixbufLoader()
     try:
         fin = open(image_dict['data']['filename'], 'rb')
