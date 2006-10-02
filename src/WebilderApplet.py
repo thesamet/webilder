@@ -21,8 +21,9 @@ from config import config, set_wallpaper, reload_config
 # No information, except of the version request itself is sent 
 # to Webilder's server.
 
-class WebilderApplet:
+class WebilderApplet(BaseApplet):
     def __init__(self, applet, iid):
+        BaseApplet.__init__(self)
         gnome.init('WebilderApplet', aglobals.version)
         self.applet = applet
         self.tooltips = gtk.Tooltips()
