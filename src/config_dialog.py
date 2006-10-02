@@ -30,6 +30,11 @@ class ConfigDialog(UITricks):
         self.on_rotate_bool__toggled()
         self.on_wallpaper_use_script__toggled()
 
+        cell = gtk.CellRendererToggle()
+        cell.set_property('activatable', True)
+        column = gtk.TreeViewColumn('', cell, active=3)
+        self.flickr_rules.append_column(column)
+        cell.connect('toggled', self.on_rule_toggled, 3)
         for index, value in enumerate(['Album', 'Tags', 'User']):
             cell = gtk.CellRendererText()
             cell.set_property('editable', True)
@@ -43,7 +48,19 @@ class ConfigDialog(UITricks):
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
                 kde=self.wallpaper_use_kde,
                 script=self.wallpaper_use_script)
-             
+        self.flickr_tab.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)], 
+                gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
+
+    def on_flickr_tab__drag_data_received(self, widget, context, x, y,
+            selection, targetType, time):
+        if targetType == 1:
+            url = selection.data.split()[0]
+        else:
+            url = selection.data
+        import urllib
+        data = urllib.urlopen(url).read()
+        for channel in parse_cid_file(data):
+            self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True))
 
     def run_dialog(self, config):
         self.load_config(config)
@@ -93,9 +110,9 @@ class ConfigDialog(UITricks):
 
         # flickr tab
         self.flickr_enabled.set_active(config.get('flickr.enabled'))
-        model = gtk.ListStore(str, str, str)
+        model = gtk.ListStore(str, str, str, bool)
         for rule in config.get('flickr.rules'):
-            model.append([rule['album'], rule['tags'], rule['user_id']])
+            model.append([rule['album'], rule['tags'], rule['user_id'], rule.get('enabled', True)])
         self.flickr_rules.set_model(model)
         self.flickr_download_interesting.set_active(config.get('flickr.download_interesting'))
 
@@ -130,7 +147,7 @@ class ConfigDialog(UITricks):
         config.set('flickr.enabled', self.flickr_enabled.get_active())
         rules = []
         for rule in self.flickr_rules.get_model():
-            rules.append({'album': rule[0], 'tags': rule[1], 'user_id': rule[2]})
+            rules.append({'album': rule[0], 'tags': rule[1], 'user_id': rule[2], 'enabled': rule[3]})
         config.set('flickr.rules', rules)
         config.set('flickr.download_interesting', self.flickr_download_interesting.get_active())
 
@@ -199,6 +216,9 @@ class ConfigDialog(UITricks):
 
         self.flickr_rules.get_model()[path][data] = new_text
 
+    def on_rule_toggled(self, cell, path, column):
+        self.flickr_rules.get_model()[path][column] = not self.flickr_rules.get_model()[path][column]
+
     def on_directory_browse__clicked(self, sender):
         fs = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK))
@@ -217,7 +237,7 @@ class ConfigDialog(UITricks):
 
         You can write: <b>party,beach;swimsuit</b>
         if you want photos tagged with both 
-        <b>party</b> and <b>beach</b>, or with <b>swimsuit</b>
+        <b>party</b> and <b>beach</b>, or with <b>swimsuit</b>.
         
         If you want to get photos of a specific flickr user, 
         just write his username in the <i>User</i> column, 
@@ -231,4 +251,34 @@ class ConfigDialog(UITricks):
         mb.set_markup(text)
         mbval = mb.run()
         mb.destroy()
+
+    def on_flickr_recommend__clicked(self, widget):
+        import urllib
+        mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_CANCEL)
+        mb.set_markup('Sending recommendation...')
+        mb.show()
+        model = self.flickr_rules.get_model()
+        for rule in model:
+            if rule[2]: 
+                continue
+            album, terms = rule[0], rule[1]
+            data = urllib.urlencode({'name': album, 'terms': terms})
+            urllib.urlopen('http://localhost:8080/api/submit_channel', data)
+
+def parse_cid_file(data):
+    from xml.dom.minidom import parseString
+    dom = parseString(data)
+    channel_nodes = dom.getElementsByTagName('channel')
+    channels = []
+    for channel in channel_nodes:
+        terms = []
+        for term in dom.getElementsByTagName('term'):
+            tag_list = []
+            for tag in term.getElementsByTagName('tag'):
+                tag_list.append(tag.attributes['name'].value)
+            terms.append(', '.join(tag_list))
+        terms = '; '.join(terms)
+        name = channel.attributes['name'].value
+        channels.append(dict(name=name, terms=terms))
+    return channels
 

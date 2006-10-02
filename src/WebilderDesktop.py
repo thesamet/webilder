@@ -15,7 +15,7 @@ except ImportError:
     gnomevfs = None
     
 import webilder_globals as aglobals
-from config import config, set_wallpaper
+from config import config, set_wallpaper, reload_config
 
 
 # Iconview column constants
@@ -255,6 +255,7 @@ class WebilderDesktopWindow(UITricks):
         
     def save_window_state(self):
         top = self._top
+        reload_config()
         layout = {'window_position': top.get_position(),
                   'window_size': top.get_size(),
                   'hpaned_position': self.hpaned.get_position()}

@@ -17,6 +17,8 @@ def get_download_list(config):
     images = []
     all_photos = []
     for rule in rules:
+        if not rule.get('enabled', True):
+            continue
         for tag_term in rule['tags'].split(';'):
             tag_term = ','.join([tag.strip() for tag in tag_term.split(',')])
             params_dict = dict(per_page=20)

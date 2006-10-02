@@ -38,7 +38,7 @@ class DownloadProgressDialog(UITricks):
             try:    
                 downloader.download_all(self.config, notify=self.status_notify, terminate = self.leech_thread.terminate.isSet)
             except webshots.utils.LeechHighQualityForPremiumOnlyError:
-                gtk.threads_enter()
+                gtk.gdk.threads_enter()
                 mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
                 mb.set_markup("<b>Only Webshots Premium members can download "
                                 "wide or highest quality photos.</b>\n\n"
@@ -53,32 +53,32 @@ class DownloadProgressDialog(UITricks):
                                 'Please check your username and password in the preferences dialog.')
                 mbval = mb.run()
                 mb.destroy()
-                gtk.threads_leave()
+                gtk.gdk.threads_leave()
             except (IOError, ValueError), e:
-                gtk.threads_enter()
+                gtk.gdk.threads_enter()
                 markup="<b>Error occured while downloading images</b>\n\n%s" % html_escape(str(e))
                 mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
                 mb.set_markup(markup)
                 mbval = mb.run()
                 mb.destroy()
-                gtk.threads_leave()
+                gtk.gdk.threads_leave()
         finally:
-            gtk.threads_enter()
+            gtk.gdk.threads_enter()
             if self._top:
                 self._top.destroy()
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
             print "Thread done"
             
 
     def status_notify(self, fraction, progress_text, status_text=''):
-        gtk.threads_enter()
+        gtk.gdk.threads_enter()
         try:
             if self._top:
                 self.progressbar.set_fraction(fraction)
                 self.progressbar.set_text(progress_text)
                 self.statustext.set_markup('<i>%s</i>' % status_text)                
         finally:
-            gtk.threads_leave()
+            gtk.gdk.threads_leave()
 
 def html_escape(text):
     """Produce entities within text."""
