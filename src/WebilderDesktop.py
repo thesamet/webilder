@@ -41,6 +41,7 @@ class WebilderDesktopWindow(UITricks):
     def __init__(self):
         UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder_desktop.glade'), 
             'WebilderDesktopWindow')
+        self.sort_combo.set_active(1)       # date
         renderer = gtk.CellRendererText()        
         self.tree.append_column(
             column=gtk.TreeViewColumn("Album", renderer, markup=0))
@@ -104,6 +105,7 @@ class WebilderDesktopWindow(UITricks):
         model = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf, gobject.TYPE_PYOBJECT)
         
         image_list = []
+        self.icons = []
         for image in images:
             dirname, filename = os.path.split(image)
             basename, ext = os.path.splitext(filename)
@@ -121,6 +123,7 @@ class WebilderDesktopWindow(UITricks):
             album = inf.get('albumTitle', dirname)
             credit = inf.get('credit', 'Not available')
             tags = inf.get('tags', '')
+            
             title = html_escape(title)
             album = html_escape(album)
             credit= html_escape(credit)
@@ -134,7 +137,9 @@ class WebilderDesktopWindow(UITricks):
                         inf = inf,
                         album = album,
                         tags = tags,
+                        file_time = os.path.getctime(image),
                         credit = credit)
+            
             if len(title)>24:
                 title=title[:21]+'...'
             if 0<=time.time()-os.path.getmtime(image)<24*3600:
@@ -143,10 +148,9 @@ class WebilderDesktopWindow(UITricks):
             image_list.append(dict(
                 position=position,
                 data=data))
-
-        image_list.reverse()
         self.iconview.set_model(model)
-        gobject.idle_add(ThumbLoader(self.iconview, model, image_list))
+        self.sort_photos()
+        gobject.idle_add(ThumbLoader(self.iconview, model, reversed(image_list)))
         self.on_iconview__selection_changed(self.iconview)
         if gnomevfs:
             if self.collection_monitor is not None:
@@ -258,7 +262,8 @@ class WebilderDesktopWindow(UITricks):
         reload_config()
         layout = {'window_position': top.get_position(),
                   'window_size': top.get_size(),
-                  'hpaned_position': self.hpaned.get_position()}
+                  'hpaned_position': self.hpaned.get_position(),
+                  'info_expander': self.photo_info_expander.get_expanded(),}
         config.set('webilder.layout', layout)
         config.save_config()
     
@@ -270,6 +275,8 @@ class WebilderDesktopWindow(UITricks):
             self._top.resize(*d['window_size'])
         if d.has_key('hpaned_position'):
             self.hpaned.set_position(d['hpaned_position'])
+        if d.has_key('info_expander'):
+            self.photo_info_expander.set_expanded(d['info_expander'])
       
     def on_file_webshots_import__activate(self, event):
         dlg = gtk.FileChooserDialog(
@@ -317,6 +324,28 @@ class WebilderDesktopWindow(UITricks):
         
         win.closebutton.connect('clicked', lambda *args: win.destroy())
         win.show()
+
+    def sort_photos(self):
+        model = self.iconview.get_model()
+        if model is None:
+            return
+        print "sorting", model.get_sort_column_id()
+        def sort_by_date(data1, data2):
+            return -cmp(data1['file_time'], data2['file_time'])
+
+        def sort_by_title(data1, data2):
+            return cmp(data1['title'], data2['title'])
+
+        sort_func = {0: sort_by_title, 1: sort_by_date}[self.sort_combo.get_active()]
+        model.set_default_sort_func(lambda model, iter1, iter2:
+                sort_func(
+                    self.iconview.get_model().get_value(iter1, IV_DATA_COLUMN),
+                    self.iconview.get_model().get_value(iter2, IV_DATA_COLUMN),
+                    ))
+        model.set_sort_column_id(-1, gtk.SORT_ASCENDING)
+
+    def on_sort_combo__changed(self, widget):
+        self.sort_photos()
 
 class ImagePopup(UITricks):
     def __init__(self, main_window):

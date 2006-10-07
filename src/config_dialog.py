@@ -196,7 +196,7 @@ class ConfigDialog(UITricks):
         self.script.set_sensitive(self.wallpaper_use_script.get_active())
 
     def on_add__clicked(self, widget):
-        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2',''])
+        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2','', True])
         # self.flickr_rules.scroll_to_cell(path)
         
     def on_remove__clicked(self, widget):
@@ -263,13 +263,14 @@ class ConfigDialog(UITricks):
             @progress_thread_run
             def run(self):
                 import urllib
-                recommend = [rule for rule in rules if rule[2] or (not rule[3])]
+                recommend = [rule for rule in rules if (not rule[2]) or (not rule[3])]
                 size = len(recommend)
                 for index, rule in enumerate(recommend):
                     album, terms = rule[0], rule[1]
                     data = urllib.urlencode({'name': album, 'terms': terms})
                     try:
-                        urllib.urlopen('http://localhost:8080/api/submit_channel', data).read()
+                        print data
+                        print urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
                     except e:
                         print str(e)
                     self.status_notify(float(index)/size, 

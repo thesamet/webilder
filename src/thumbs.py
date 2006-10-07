@@ -4,7 +4,7 @@ import gc
 
 class ThumbLoader(object):
     def __init__(self, iconview, model, image_list):
-        self.iconview, self.model, self.image_list = iconview, model, image_list
+        self.iconview, self.model, self.image_list = iconview, model, list(image_list)
         self.thumbnail_na = []  # list of images with no thumbnail, to be generated.
         self.thumbnail_generator = None
 
