@@ -50,7 +50,7 @@ class WebilderDesktopWindow(UITricks):
         self.iconview.set_pixbuf_column(IV_PIXBUF_COLUMN)
         self.iconview.set_markup_column(IV_TEXT_COLUMN)
         self.on_iconview__selection_changed(self.iconview)
-        self.collection_monitor = None
+        self.collection_monitor = dict(monitor=None, dir=None)
         self.image_popup = ImagePopup(self)
        
         if gnomevfs:
@@ -153,11 +153,12 @@ class WebilderDesktopWindow(UITricks):
         gobject.idle_add(ThumbLoader(self.iconview, model, reversed(image_list)))
         self.on_iconview__selection_changed(self.iconview)
         if gnomevfs:
-            if self.collection_monitor is not None:
-                gobject.idle_add(gnomevfs.monitor_cancel, self.collection_monitor)
-                self.collection_monitor = None        
+            if self.collection_monitor['monitor'] is not None:
+                gobject.idle_add(gnomevfs.monitor_cancel, self.collection_monitor['monitor'])
+                self.collection_monitor = dict(monitor=None, dir=None)
             if monitor_dir:
-                self.collection_monitor = gnomevfs.monitor_add(
+                self.collection_monitor['dir'] = monitor_dir
+                self.collection_monitor['monitor'] = gnomevfs.monitor_add(
                     monitor_dir,
                     gnomevfs.MONITOR_DIRECTORY,
                     self.collection_directory_changed)
@@ -329,7 +330,7 @@ class WebilderDesktopWindow(UITricks):
         model = self.iconview.get_model()
         if model is None:
             return
-        print "sorting", model.get_sort_column_id()
+
         def sort_by_date(data1, data2):
             return -cmp(data1['file_time'], data2['file_time'])
 
@@ -380,6 +381,11 @@ class ImagePopup(UITricks):
 
         banned = open(os.path.expanduser('~/.webilder/banned_photos'), 'a')
         model = iconview.get_model()
+
+        monitor = self.main_window.collection_monitor
+        if monitor['monitor'] is not None:
+            gnomevfs.monitor_cancel(monitor['monitor'])
+
         for path in selected:                
             iter = model.get_iter(path)
             data = model.get_value(iter,
@@ -392,6 +398,12 @@ class ImagePopup(UITricks):
             if forever:
                 banned.write(os.path.basename(data['filename'])+'\n')
             model.remove(iter)
+
+        if monitor['dir']:
+            monitor['monitor'] = gnomevfs.monitor_add(
+                monitor['dir'],
+                gnomevfs.MONITOR_DIRECTORY,
+                self.main_window.collection_directory_changed)
 
         banned.close()
 
