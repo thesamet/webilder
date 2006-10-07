@@ -1,6 +1,6 @@
 <oaf_info>
         <oaf_server iid="OAFIID:GNOME_WebilderApplet_Factory"
-                    type="exe" location="@bindir@/webilder">
+                    type="exe" location="%(bin_dir)s/WebilderApplet">
 
                 <oaf_attribute name="repo_ids" type="stringv">
                         <item value="IDL:Bonobo/GenericFactory:1.0"/>
@@ -22,6 +22,6 @@
                 <oaf_attribute name="description" type="string" value="Downloads and displays Flickr and Webshots photos on 
 your desktop."/>
                 <oaf_attribute name="panel:category" type="string" value="Utility"/>
-                <oaf_attribute name="panel:icon" type="string" value="@pixmapsdir@/camera48.png"/>
+                <oaf_attribute name="panel:icon" type="string" value="%(data_dir)s/camera48.png"/>
         </oaf_server>
 </oaf_info>

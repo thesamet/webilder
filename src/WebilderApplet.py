@@ -74,7 +74,8 @@ pixname="gtk-preferences"/>
         
     def set_tooltip(self, text):
         self.tooltips.enable()
-        self.tooltips.set_tip(self.applet, ''.join(latest[1:]))                    
+        self.tooltips.set_tip(self.applet, text)                    
+
     def preferences(self, object, menu):
         import config_dialog
         config_dialog.ConfigDialog().run_dialog(config)

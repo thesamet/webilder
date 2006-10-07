@@ -1,6 +1,6 @@
 import sys, os
 
-from qt import QPixmap, QLabel, SIGNAL, QIconSet, Qt, QTimer
+from qt import QPixmap, SIGNAL, QIconSet, Qt, QTimer, QToolTip
 
 from kdecore import KApplication, i18n, KAboutData, KCmdLineArgs, KStandardDirs, KShortcut
 from kdeui import KSystemTray, KStdAction, KAction, KAboutDialog
@@ -70,8 +70,8 @@ class WebilderTray(KSystemTray, BaseApplet):
         if event.button() == Qt.LeftButton:
             self.browse()
 
-    def set_tooltip(self, *args):
-        print "tooltips ",args
+    def set_tooltip(self, text):
+        QToolTip.add(self, text)
 
 def launch_webilder(args=''):
     return popen2.Popen3('python '+os.path.join(sys.path[0], 'WebilderDesktop.py') + ' --kwebilder ' +args)

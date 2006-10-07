@@ -158,8 +158,11 @@ def download_all(config, notify=lambda *args: None, terminate=lambda: False):
 import socket
 socket.setdefaulttimeout(120)
 
-if __name__=="__main__":
+def main():
     import config
     def notify(fraction, status, message):
-        print status
+        print message, status
     download_all(config.config, notify)
+
+if __name__=="__main__":
+    main()
