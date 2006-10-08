@@ -84,12 +84,16 @@ def get_about_data():
                 'http://www.thesamet.com/webilder/',
                 'thesamet@gmail.com')
 
-about = get_about_data()
-KCmdLineArgs.init(sys.argv, about)
-app = KApplication()
-webilder_tray = WebilderTray()
-webilder_tray.show()
-app.connect(webilder_tray, SIGNAL("quitSelected ()"), app.quit)
-app.setMainWidget(webilder_tray)
-app.exec_loop()
+def main()
+    about = get_about_data()
+    KCmdLineArgs.init(sys.argv, about)
+    app = KApplication()
+    webilder_tray = WebilderTray()
+    webilder_tray.show()
+    app.connect(webilder_tray, SIGNAL("quitSelected ()"), app.quit)
+    app.setMainWidget(webilder_tray)
+    app.exec_loop()
 
+
+if __name__=="__main__":
+    main()
