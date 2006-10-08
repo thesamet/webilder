@@ -7,7 +7,7 @@ def ShowAboutDialog(name):
     about.set_name(name)
     about.set_version(aglobals.version)
     about.set_copyright('Nadav Samet, 2006')
-    about.set_website('http://www.thesamet.com/webilder')
+    about.set_website('http://www.webilder.org')
     about.set_authors(['Nadav Samet <thesamet@gmail.com>'])
     icon = gtk.gdk.pixbuf_new_from_file(
         os.path.join(aglobals.glade_dir, 'camera48.png'))

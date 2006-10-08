@@ -82,7 +82,7 @@ def get_about_data():
                 'Photo downloader', KAboutData.License_GPL, 
                 '(c) 2005-2006, Nadav Samet',
                 '',
-                'http://www.thesamet.com/webilder/',
+                'http://www.webilder.org/',
                 'thesamet@gmail.com')
 
 def main():

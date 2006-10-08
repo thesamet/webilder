@@ -6,7 +6,7 @@ import webilder_globals as aglobals
 from webshots.wbz import parse_metadata
 
 CHECK_FOR_UPDATES = True
-CHECK_URL = 'http://www.thesamet.com/webilder/latest.html'
+CHECK_URL = 'http://www.webilder.org/latest.html'
 
 random.seed()
 
