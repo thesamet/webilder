@@ -2,6 +2,7 @@
 
 from distutils.core import setup
 from distutils.cmd import Command
+from distutils.util import change_root
 
 from distutils.command.build import build as _build
 from distutils.command.install import install as _install
@@ -28,7 +29,7 @@ class file_build_command(Command):
 
     def run(self):
         dest_dir = self.get_dest_dir()
-        self.mkpath(dest_dir, 1)
+        self.mkpath(dest_dir)
         fc = file(os.path.join(self.dir, self.filename + '.in'), 'r').read()
         fw = file(os.path.join(dest_dir, self.filename), 'w')
         fw.write(fc % dict(
@@ -126,27 +127,37 @@ class install_kde(Command):
 
     def initialize_options(self):
         self.kde_prefix = None
+        self.root = None
 
     def finalize_options(self):
-        self.set_undefined_options('install', ('kde_prefix', 'kde_prefix'))
+        self.set_undefined_options('install', ('kde_prefix', 'kde_prefix'), ('root', 'root'))
+        print "root", self.root
         if self.kde_prefix is None:
             self.announce('Detecting KDE installation directory')
             self.kde_prefix = ask_kde_config('--prefix').strip()
             if not self.kde_prefix:
                 raise DistutilsError, 'Could not detect KDE installation directory. Please provide --kde-prefix argument'
             self.announce('KDE installation directory is '+self.kde_prefix)
+            if self.root is not None:
+                self.kde_prefix = change_root(self.root, self.kde_prefix)
 
     def run(self):
         check_modules('qt', 'kdecore', 'kdeui')
+        dir = os.path.join(self.kde_prefix, 'share', 'applications', 'kde')
+        self.mkpath(dir)
         self.copy_file(
                 'desktop/kwebilder.desktop', 
-                os.path.join(self.kde_prefix, 'share', 'applications', 'kde', 'kwebilder.desktop'))
+                os.path.join(dir, 'kwebilder.desktop'))
 
+        dir = os.path.join(self.kde_prefix, 'share', 'icons', 'hicolor', '48x48', 'apps')
+        self.mkpath(dir)
         self.copy_file(
                 'ui/camera48.png', 
-                os.path.join(self.kde_prefix, 'share', 'icons', 'hicolor', '48x48', 'apps', 'webilder.png'))
+                os.path.join(dir, 'webilder.png'))
 
-        kwebilder = os.path.join(self.kde_prefix, 'bin', 'kwebilder')
+        dir = os.path.join(self.kde_prefix, 'bin')
+        self.mkpath(dir)
+        kwebilder = os.path.join(dir, 'kwebilder')
         self.copy_file(
                 'scripts/kwebilder', 
                 kwebilder
