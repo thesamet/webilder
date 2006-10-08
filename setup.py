@@ -146,6 +146,14 @@ class install_kde(Command):
                 'ui/camera48.png', 
                 os.path.join(self.kde_prefix, 'share', 'icons', 'hicolor', '48x48', 'apps', 'webilder.png'))
 
+        kwebilder = os.path.join(self.kde_prefix, 'bin', 'kwebilder')
+        self.copy_file(
+                'scripts/kwebilder', 
+                kwebilder
+                )
+        os.chmod(kwebilder, 0755)
+
+
 setup(name='Webilder',
       version='0.5',
       description='Webilder Desktop',

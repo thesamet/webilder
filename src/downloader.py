@@ -35,8 +35,12 @@ def clear_old_filtered():
 def filter_photos(config, photos):
     clear_old_filtered()
     # load photo names of permanently deleted photos...
-    banned_photos = open(os.path.expanduser('~/.webilder/banned_photos'), 'r').readlines() 
-    banned_photos = [line.strip() for line in banned_photos]
+    banned_photos_file = os.path.expanduser('~/.webilder/banned_photos') 
+    if os.path.exists(banned_photos_file):
+        banned_photos = open(banned_photos_file, 'r').readlines() 
+        banned_photos = [line.strip() for line in banned_photos]
+    else:
+        banned_photos = []
 
     # check if we already have any of the photos
 

@@ -59,6 +59,7 @@ class BaseApplet:
     
 
     def next_photo(self, *args):
+        reload_config()
         croot = config.get('collection.dir')
         if not self.wallpaper_list:
             self.wallpaper_list = glob.glob(

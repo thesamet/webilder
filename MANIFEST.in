@@ -1,6 +1,6 @@
 include desktop/*.desktop
 include ui/*.png ui/*.glade
 include scripts/webilder_downloader scripts/kwebilder
-include servers/*.in
+include servers/*.in src/*.in
 include ChangeLog COPYING AUTHORS
 
