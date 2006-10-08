@@ -64,9 +64,9 @@ class ProgressThread(threading.Thread):
         finally:
             gtk.gdk.threads_leave()
 
-    def safe_message_dialog(self, markup):
+    def safe_message_dialog(self, markup, type=gtk.MESSAGE_ERROR):
         gtk.gdk.threads_enter()
-        mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+        mb = gtk.MessageDialog(type=type, buttons=gtk.BUTTONS_OK)
         mb.set_markup(markup)
         mbval = mb.run()
         mb.destroy()

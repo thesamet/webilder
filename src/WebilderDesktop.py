@@ -448,7 +448,7 @@ Would you like to donate to Webilder?
 '''
     
         stats = config.get('webilder.stats')
-        self.url = 'http://www.thesamet.com/webilder/donate.html'
+        self.url = 'http://www.webilder.org/donate.html'
         context = dict(
                 downloads = stats['downloads'],
                 rotations = ' and changed your wallpaper <b>%d times</b>.' % 
@@ -469,6 +469,7 @@ Would you like to donate to Webilder?
 
 def configure():
     import config_dialog
+    reload_config()
     dlg = config_dialog.ConfigDialog().run_dialog(config)
 
 

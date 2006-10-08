@@ -268,20 +268,20 @@ class ConfigDialog(UITricks):
                 for index, rule in enumerate(recommend):
                     album, terms = rule[0], rule[1]
                     data = urllib.urlencode({'name': album, 'terms': terms})
+                    self.status_notify(float(index)/size, 
+                            progress_text='Sending rule %d of %d' % (index+1, size))
                     try:
-                        print data
                         print urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
                     except e:
                         print str(e)
-                    self.status_notify(float(index)/size, 
-                            progress_text='Sending rule %d of %d' % (index+1, size))
+                self.safe_message_dialog('Thank you for recommending your albums!', gtk.MESSAGE_INFO)
 
         thread=RecommendingThread(dialog)
         thread.start()
         dialog.show()
 
     def on_flickr_get_more_albums__clicked(self, widget):
-        url = 'http://www.webilder.org/world/popular/'
+        url = 'http://www.webilder.org/channels/'
         open_browser(url = url,
                 no_browser_title = 'Could not open browser',
                 no_browser_markup = 'Webilder was unable to find a browser, please visit: \n'
