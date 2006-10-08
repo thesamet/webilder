@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=KWebilder
+Comment=Automatically downloads and change wallpapers
+
+Encoding=UTF-8
+
+Type=Application
+Categories=Application;Graphics;
+
+Exec=kwebilder
+TryExec=kwebilder
+Terminal=false
+Icon=webilder
+

@@ -74,7 +74,8 @@ class WebilderTray(KSystemTray, BaseApplet):
         QToolTip.add(self, text)
 
 def launch_webilder(args=''):
-    return popen2.Popen3('python '+os.path.join(sys.path[0], 'WebilderDesktop.py') + ' --kwebilder ' +args)
+    webilder_dir = os.path.dirname(__file__)
+    return popen2.Popen3('python '+os.path.join(webilder_dir, 'WebilderDesktop.py') + ' --kwebilder ' +args)
 
 def get_about_data():
     return KAboutData('webilder', 'Webilder', aglobals.version,
@@ -84,7 +85,7 @@ def get_about_data():
                 'http://www.thesamet.com/webilder/',
                 'thesamet@gmail.com')
 
-def main()
+def main():
     about = get_about_data()
     KCmdLineArgs.init(sys.argv, about)
     app = KApplication()

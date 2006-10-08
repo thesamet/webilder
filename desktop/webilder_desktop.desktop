@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Webilder Desktop
+Comment=Download and display photos from Flickr and Webshots
+
+Encoding=UTF-8
+
+Type=Application
+Categories=Application;Graphics;
+
+Exec=webilder_desktop
+TryExec=webilder_desktop
+Terminal=false
+Icon=camera48.png
+

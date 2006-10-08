@@ -8,3 +8,6 @@ ChangeLog for Webilder !
 12-Sep-2006: Added Flickr module, lots of code reorganization
 22-Sep-2006: Added KDE wallpaper setting method (patch by behanw)
 23-Sep-2006: Added flickr interestingness, and user_id support
+07-Oct-2006: Added sort option on webilder_desktop
+07-Oct-2006: Added option to recommend flickr albums
+08-Oct-2006: Switched from autotools to distutils

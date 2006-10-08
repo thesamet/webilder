@@ -5,6 +5,8 @@ from distutils.cmd import Command
 
 from distutils.command.build import build as _build
 from distutils.command.install import install as _install
+from distutils.spawn import find_executable
+from distutils.errors import DistutilsError
 
 import os
 
@@ -48,8 +50,7 @@ class build_globals(file_build_command):
     get_dest_dir = lambda self: os.path.join(self.build_lib, 'webilder')
 
 class build(_build):
-    sub_commands = []
-    sub_commands.extend(_build.sub_commands)
+    sub_commands = _build.sub_commands[:]
     sub_commands.append(('build_server', None))
     sub_commands.append(('build_globals', None))
 
@@ -77,16 +78,73 @@ class install_links(Command):
             os.symlink(src, dest)
             os.chmod(src, 0755)
         
+def ask_kde_config(question):
+    # Look for the kde-config program
+    kdeconfig = find_executable("kde-config", os.environ['PATH'] + os.pathsep + \
+        os.pathsep.join(['/bin','/usr/bin','/opt/kde3/bin','/opt/kde/bin','/usr/local/bin']))
+    if kdeconfig!=None:
+        # Ask the kde-config program for the
+        fhandle = os.popen(kdeconfig+' ' + question,'r')
+        result = fhandle.read()
+        fhandle.close()
+        return result
+    else:
+        return None
+
+def check_modules(*modules):
+    for module in modules:
+        import imp
+        try:
+            imp.find_module(module)
+        except ImportError, e:
+            raise DistutilsError, 'Could not find module %s. Make sure all dependencies are installed.' % e
+
 class install(_install):
-    sub_commands = []
-    sub_commands.extend(_install.sub_commands)
+    user_options = _install.user_options[:]
+    user_options.append(('with-kde', None, 'Install with KDE support'))
+    user_options.append(('kde-prefix=', None, 'Base directory of KDE installation'))
+
+    sub_commands = _install.sub_commands[:]
     sub_commands.append(('install_links', None))
 
+    def initialize_options(self):
+        self.with_kde = False
+        self.kde_prefix = None
+        _install.initialize_options(self)
+
+    def finalize_options(self):
+        _install.finalize_options(self)
+
+    def run(self):
+        check_modules('gtk', 'pygtk', 'gnome', 'gnomeapplet')
+        _install.run(self)
+        if self.with_kde:
+            self.run_command('install_kde')
+
 class install_kde(Command):
-    description = 'Install support for KDE system tray.'
-    sub_commands = [
-        ('install_kde_icons', None), 
-        ('install_kde_script', None)]
+    user_options = []
+
+    def initialize_options(self):
+        self.kde_prefix = None
+
+    def finalize_options(self):
+        self.set_undefined_options('install', ('kde_prefix', 'kde_prefix'))
+        if self.kde_prefix is None:
+            self.announce('Detecting KDE installation directory')
+            self.kde_prefix = ask_kde_config('--prefix').strip()
+            if not self.kde_prefix:
+                raise DistutilsError, 'Could not detect KDE installation directory. Please provide --kde-prefix argument'
+            self.announce('KDE installation directory is '+self.kde_prefix)
+
+    def run(self):
+        check_modules('qt', 'kdecore', 'kdeui')
+        self.copy_file(
+                'desktop/kwebilder.desktop', 
+                os.path.join(self.kde_prefix, 'share', 'applications', 'kde', 'kwebilder.desktop'))
+
+        self.copy_file(
+                'ui/camera48.png', 
+                os.path.join(self.kde_prefix, 'share', 'icons', 'hicolor', '48x48', 'apps', 'webilder.png'))
 
 setup(name='Webilder',
       version='0.5',
@@ -98,9 +156,10 @@ setup(name='Webilder',
       package_dir = {'webilder': 'src'},
       cmdclass = {'build': build, 'build_server': build_server, 'build_globals': build_globals, 'install': install, 'install_links': install_links, 'install_kde': install_kde},
       data_files = [
-        (os.path.join('share', 'webilder'), ['ui/config.glade', 'ui/webilder.glade', 'ui/webilder_desktop.glade', 'ui/camera48.png', 'ui/camera48_g.png', 'ui/camera16.png', 'ui/logo.png']
-        ),
-        (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server'])
+        (os.path.join('share', 'webilder'), ['ui/config.glade', 'ui/webilder.glade', 'ui/webilder_desktop.glade', 'ui/camera48.png', 'ui/camera48_g.png', 'ui/camera16.png', 'ui/logo.png']),
+        (os.path.join('share', 'pixmaps'), ['ui/camera48.png']),
+        (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
+        (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),
       ],
-      scripts= ['scripts/webilder_downloader']
-     )
+      scripts = ['scripts/webilder_downloader']
+)
