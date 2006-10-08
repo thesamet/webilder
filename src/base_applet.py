@@ -36,7 +36,7 @@ class BaseApplet:
                 response = urllib.urlopen(CHECK_URL)
                 latest = response.readlines()
                 response.close()
-                if True: # latest[0].strip()!=aglobals.version:
+                if latest[0].strip()!=aglobals.version:
                     self.set_tooltip_announce(''.join(latest[1:]))
                 else:
                     pass
