@@ -47,7 +47,7 @@ def handle_file(filename):
     else:
         raise IOError, "Unrecognized file type"
         
-if __name__=="__main__":
+def main():
     if len(sys.argv)!=2:
         print """wbz_handler will extract webshots archives into your collection.
 
@@ -59,3 +59,5 @@ Where filename.wbz is a Webshots archive."""
         sys.exit(1)
     handle_file(sys.argv[1])
 
+if __name__=='__main__':
+    main()

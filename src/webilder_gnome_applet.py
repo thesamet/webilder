@@ -136,19 +136,20 @@ def toggle_window_visibility(window):
     else:
         window.show_all()
         
-gtk.gdk.threads_init()
+def main():
+    gtk.gdk.threads_init()
 
-if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":   
-        main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        main_window.set_title("Webilder Applet Window")
-        main_window.connect("destroy", gtk.main_quit) 
-        app = gnomeapplet.Applet()
-        WebilderApplet(app, None)
-        app.reparent(main_window)
-        main_window.show_all()
-        gtk.main()
-        sys.exit()
-else:
-    gnomeapplet.bonobo_factory("OAFIID:GNOME_WebilderApplet_Factory", 
-                             gnomeapplet.Applet.__gtype__, 
-                             "webilder-hello", "0", webilder_applet_factory)
+    if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":   
+            main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+            main_window.set_title("Webilder Applet Window")
+            main_window.connect("destroy", gtk.main_quit) 
+            app = gnomeapplet.Applet()
+            WebilderApplet(app, None)
+            app.reparent(main_window)
+            main_window.show_all()
+            gtk.main()
+            sys.exit()
+    else:
+        gnomeapplet.bonobo_factory("OAFIID:GNOME_WebilderApplet_Factory", 
+                                 gnomeapplet.Applet.__gtype__, 
+                                 "webilder-hello", "0", webilder_applet_factory)

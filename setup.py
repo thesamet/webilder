@@ -58,31 +58,7 @@ class build(_build):
     sub_commands.append(('build_server', None))
     sub_commands.append(('build_globals', None))
 
-class install_links(Command):
-    def initialize_options(self):
-        self.install_scripts = None
-        self.install_lib = None
-
-    def finalize_options(self):
-        self.set_undefined_options('install', 
-                ('install_lib', 'install_lib'),
-                ('install_scripts', 'install_scripts')
-                )
-        
-    def run(self):
-        self.mkpath(self.install_scripts)
-        for src, dest in [('WebilderDesktop.py', 'webilder_desktop'), 
-                ('wbz_handler.py', 'wbz_handler'),
-                ('WebilderApplet.py', 'WebilderApplet')]:
-            src = os.path.join(self.install_lib, 'webilder', src)
-            dest = os.path.join(self.install_scripts, dest)
-            try:
-                os.unlink(dest)
-            except OSError:
-                pass
-            os.symlink(src, dest)
-            os.chmod(src, 0755)
-        
+       
 def ask_kde_config(question):
     # Look for the kde-config program
     kdeconfig = find_executable("kde-config", os.environ['PATH'] + os.pathsep + \
@@ -110,7 +86,6 @@ class install(_install):
     user_options.append(('kde-prefix=', None, 'Base directory of KDE installation'))
 
     sub_commands = _install.sub_commands[:]
-    sub_commands.append(('install_links', None))
 
     def initialize_options(self):
         self.with_kde = False
@@ -144,7 +119,6 @@ class install_kde(Command):
 
     def finalize_options(self):
         self.set_undefined_options('install', ('kde_prefix', 'kde_prefix'), ('root', 'root'))
-        print "root", self.root
         if self.kde_prefix is None:
             self.announce('Detecting KDE installation directory')
             self.kde_prefix = ask_kde_config('--prefix').strip()
@@ -186,12 +160,12 @@ setup(name='Webilder',
       url='http://www.webilder.org',
       packages=['webilder', 'webilder.webshots', 'webilder.flickr'],
       package_dir = {'webilder': 'src'},
-      cmdclass = {'build': build, 'build_server': build_server, 'build_globals': build_globals, 'install': install, 'install_links': install_links, 'install_kde': install_kde},
+      cmdclass = {'build': build, 'build_server': build_server, 'build_globals': build_globals, 'install': install, 'install_kde': install_kde},
       data_files = [
         (os.path.join('share', 'webilder'), ['ui/config.glade', 'ui/webilder.glade', 'ui/webilder_desktop.glade', 'ui/camera48.png', 'ui/camera48_g.png', 'ui/camera16.png', 'ui/logo.png']),
         (os.path.join('share', 'pixmaps'), ['ui/camera48.png']),
         (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
         (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),
       ],
-      scripts = ['scripts/webilder_downloader']
+      scripts = ['scripts/webilder_downloader', 'scripts/webilder_desktop', 'scripts/WebilderApplet', 'scripts/wbz_handler']
 )

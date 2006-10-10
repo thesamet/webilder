@@ -1,0 +1,4 @@
+#!/usr/bin/env python
+from webilder.webilder_gnome_applet import main
+main()
+

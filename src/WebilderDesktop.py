@@ -479,7 +479,7 @@ def on_input_available(*args):
         main_window._top.present()
     return True
 
-if __name__ == "__main__":
+def main():
     gtk.gdk.threads_init()
     if '--configure' in sys.argv:
         configure()
@@ -498,4 +498,6 @@ if __name__ == "__main__":
         main_window._top.connect("destroy", gtk.main_quit)
         gtk.main()
 
+if __name__=="__main__":
+    main()
 
