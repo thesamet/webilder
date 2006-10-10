@@ -148,8 +148,11 @@ class WebilderDesktopWindow(UITricks):
             image_list.append(dict(
                 position=position,
                 data=data))
+        old_model = self.iconview.get_model()
+        if old_model is not None:
+            old_model.clear()
+        self.sort_photos(model)
         self.iconview.set_model(model)
-        self.sort_photos()
         gobject.idle_add(ThumbLoader(self.iconview, model, reversed(image_list)))
         self.on_iconview__selection_changed(self.iconview)
         if gnomevfs:
@@ -163,6 +166,8 @@ class WebilderDesktopWindow(UITricks):
                     gnomevfs.MONITOR_DIRECTORY,
                     self.collection_directory_changed)
         gc.collect()
+        # this proves that pygtk has a memory leak, and it is related to sorting.
+        # print len([x for x in gc.get_objects() if isinstance(x, gtk.ListStore)])
 
     def on_set_as_wallpaper__activate(self, menu_item):
          selected = self.iconview.get_selected_items()
@@ -326,8 +331,7 @@ class WebilderDesktopWindow(UITricks):
         win.closebutton.connect('clicked', lambda *args: win.destroy())
         win.show()
 
-    def sort_photos(self):
-        model = self.iconview.get_model()
+    def sort_photos(self, model):
         if model is None:
             return
 
@@ -338,15 +342,16 @@ class WebilderDesktopWindow(UITricks):
             return cmp(data1['title'], data2['title'])
 
         sort_func = {0: sort_by_title, 1: sort_by_date}[self.sort_combo.get_active()]
-        model.set_default_sort_func(lambda model, iter1, iter2:
+        model.set_default_sort_func(lambda m, iter1, iter2:
                 sort_func(
-                    self.iconview.get_model().get_value(iter1, IV_DATA_COLUMN),
-                    self.iconview.get_model().get_value(iter2, IV_DATA_COLUMN),
+                    m.get_value(iter1, IV_DATA_COLUMN),
+                    m.get_value(iter2, IV_DATA_COLUMN),
                     ))
         model.set_sort_column_id(-1, gtk.SORT_ASCENDING)
+        del model
 
     def on_sort_combo__changed(self, widget):
-        self.sort_photos()
+        self.sort_photos(self.iconview.get_model())
 
 class ImagePopup(UITricks):
     def __init__(self, main_window):

@@ -9,6 +9,7 @@ class ThumbLoader(object):
         self.thumbnail_generator = None
 
     def destroy(self):
+        self.model = None
         gc.collect()
 
     def __call__(self):
