@@ -257,7 +257,7 @@ class ConfigDialog(UITricks):
         mb.destroy()
 
     def on_flickr_recommend__clicked(self, widget):
-        dialog = ProgressDialog(text='Sending recommendations')
+        dialog = ProgressDialog(text='Sending your recommendations...')
         rules = list(self.flickr_rules.get_model())
         class RecommendingThread(ProgressThread):
             @progress_thread_run
@@ -271,9 +271,10 @@ class ConfigDialog(UITricks):
                     self.status_notify(float(index)/size, 
                             progress_text='Sending rule %d of %d' % (index+1, size))
                     try:
-                        print urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
+                        rsp = urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
                     except e:
                         print str(e)
+                self.status_notify(1.0, progress_text='Done')
                 self.safe_message_dialog('Thank you for recommending your albums!', gtk.MESSAGE_INFO)
 
         thread=RecommendingThread(dialog)

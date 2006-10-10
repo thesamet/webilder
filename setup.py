@@ -13,19 +13,22 @@ import os
 
 class file_build_command(Command):
     def initialize_options(self):
-        self.build_base = None
         self.build_lib = None
-        self.install_dir = None
+        self.install_scripts = None
         self.install_data = None
 
     def finalize_options(self):
         self.set_undefined_options('build', 
-                ('build_base', 'build_base'),
                 ('build_lib', 'build_lib'))
         self.set_undefined_options('install', 
-                ('install_scripts', 'install_dir'),
+                ('install_scripts', 'install_scripts'),
                 ('install_data', 'install_data'),
             )
+        inst_cmd = self.get_finalized_command('install')
+        if inst_cmd.root is not None:
+            self.install_scripts = inst_cmd._original_install_scripts
+            self.install_data = inst_cmd._original_install_data
+
 
     def run(self):
         dest_dir = self.get_dest_dir()
@@ -33,7 +36,7 @@ class file_build_command(Command):
         fc = file(os.path.join(self.dir, self.filename + '.in'), 'r').read()
         fw = file(os.path.join(dest_dir, self.filename), 'w')
         fw.write(fc % dict(
-            bin_dir = self.install_dir,
+            bin_dir = self.install_scripts,
             data_dir = os.path.join(self.install_data, 'share', 'webilder'),
             version = self.distribution.get_version()))
         fw.close()
@@ -57,21 +60,22 @@ class build(_build):
 
 class install_links(Command):
     def initialize_options(self):
-        self.install_dir = None
+        self.install_scripts = None
         self.install_lib = None
 
     def finalize_options(self):
         self.set_undefined_options('install', 
                 ('install_lib', 'install_lib'),
-                ('install_scripts', 'install_dir'))
+                ('install_scripts', 'install_scripts')
+                )
         
     def run(self):
-        self.mkpath(self.install_dir)
+        self.mkpath(self.install_scripts)
         for src, dest in [('WebilderDesktop.py', 'webilder_desktop'), 
                 ('wbz_handler.py', 'wbz_handler'),
                 ('WebilderApplet.py', 'WebilderApplet')]:
             src = os.path.join(self.install_lib, 'webilder', src)
-            dest = os.path.join(self.install_dir, dest)
+            dest = os.path.join(self.install_scripts, dest)
             try:
                 os.unlink(dest)
             except OSError:
@@ -121,6 +125,15 @@ class install(_install):
         _install.run(self)
         if self.with_kde:
             self.run_command('install_kde')
+
+    def change_roots(self, *names):
+        # in case we are going to perform a rooted install, store the original
+        # path names, so we can use them in file_build_command's.
+        for name in names:
+            attr = 'install_' + name
+            backup_attr = '_original_install_' + name
+            setattr(self, backup_attr, getattr(self, attr))
+        _install.change_roots(self, *names)
 
 class install_kde(Command):
     user_options = []
