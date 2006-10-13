@@ -298,9 +298,7 @@ class ConfigDialog(UITricks):
                     self.status_notify(float(index)/size, 
                             progress_text='Sending rule %d of %d' % (index+1, size))
                     try:
-                        # rsp = urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
-                        import time
-                        time.sleep(2)
+                        rsp = urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
                     except e:
                         print str(e)
                 else:
