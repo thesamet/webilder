@@ -7,6 +7,8 @@ import os
 
 from webshots.utils import LeechPremiumOnlyPhotoError
 
+from config import config, reload_config
+
 _recently_filtered = {}
 
 def get_full_download_list(config):
@@ -127,7 +129,7 @@ def save_photo(config, photo, image, metadata):
     finf.writelines(lines)
     finf.close()
  
-def download_all(config, notify=lambda *args: None, terminate=lambda: False):
+def download_all(notify=lambda *args: None, terminate=lambda: False):
     notify(0, '', 'Downloading list of photos (may take some time)')
     photos = get_full_download_list(config)
     if terminate():
@@ -166,7 +168,7 @@ def main():
     import config
     def notify(fraction, status, message):
         print message, status
-    download_all(config.config, notify)
+    download_all(notify)
 
 if __name__=="__main__":
     main()

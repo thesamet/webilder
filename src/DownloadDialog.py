@@ -25,7 +25,7 @@ class LeechThread(ProgressThread):
         import downloader
         import webshots
         try:    
-            downloader.download_all(self.config, notify=self.status_notify, terminate = self.should_terminate)
+            downloader.download_all(notify=self.status_notify, terminate = self.should_terminate)
         except webshots.utils.LeechHighQualityForPremiumOnlyError:
             self.safe_message_dialog(
                             "<b>Only Webshots Premium members can download "

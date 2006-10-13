@@ -265,7 +265,6 @@ class WebilderDesktopWindow(UITricks):
         
     def save_window_state(self):
         top = self._top
-        reload_config()
         layout = {'window_position': top.get_position(),
                   'window_size': top.get_size(),
                   'hpaned_position': self.hpaned.get_position(),

@@ -3,6 +3,7 @@ import os, time
 class ConfigObject:
     def __init__(self, file=None):
         self._dict = dict(DEFAULT_CONFIG)
+        self._dirty_keys = set()
         if file:
             if os.path.exists(file):
                 self.load_config(file)
@@ -20,6 +21,7 @@ class ConfigObject:
         return self._dict[key]
 
     def set(self, key, value):
+        self._dirty_keys.add(key)
         self._dict[key] = value
 
     def load_config(self, file):
@@ -44,9 +46,17 @@ class ConfigObject:
     def save_config(self, file=None):
         if not file:
             file = self._filename
+        org_cfg = ConfigObject(file)
+            
         file = open(file, 'w')
         for key,v in DEFAULT_CONFIG:
-            file.write('%s = %r\n' % (key, self._dict[key]))
+            if key in self._dirty_keys:
+                value = self._dict[key]
+            else:
+                value = org_cfg.get(key)
+            file.write('%s = %r\n' % (key, value))
+        file.close()
+        self._dirty_keys.clear()
 
 DEFAULT_CONFIG = [
     ('collection.dir', os.path.expanduser('~/.webilder/Collection')),
@@ -100,5 +110,6 @@ def set_wallpaper(filename):
         os.popen2(script)
     stats = config.get('webilder.stats')
     stats['rotations'] += 1
+    config.set('webilder.stats', stats)
     config.save_config()
 

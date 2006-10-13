@@ -19,9 +19,13 @@ def get_download_list(config):
     for rule in rules:
         if not rule.get('enabled', True):
             continue
+        sort_method = rule.get('sort', 'Interestingness')
+        sort_method = {'Interestingness': 'interestingness-desc',
+                       'Date': 'date-posted-desc'}
+
         for tag_term in rule['tags'].split(';'):
             tag_term = ','.join([tag.strip() for tag in tag_term.split(',')])
-            params_dict = dict(per_page=20)
+            params_dict = dict(per_page=20, sort=sort_method)
             if tag_term:
                 params_dict['tags'] = tag_term
                 params_dict['tag_mode'] = 'all'

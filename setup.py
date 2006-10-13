@@ -10,6 +10,11 @@ from distutils.spawn import find_executable
 from distutils.errors import DistutilsError
 
 import os
+import sys
+
+if sys.argv[-1] == 'setup.py':
+    print "To install, run 'python setup.py install'"
+    print 
 
 class file_build_command(Command):
     def initialize_options(self):
@@ -100,6 +105,22 @@ class install(_install):
         _install.run(self)
         if self.with_kde:
             self.run_command('install_kde')
+        print """
+Installation completed successfully.
+
+  GNOME Users: Right-click on the GNOME panel, choose "Add to panel", 
+               and select "Webilder Webshots Applet".  If it
+               is not in the list - log off and log in again.
+
+  KDE Users:   From the graphics menu, start KWebilder.
+
+If you prefer the command line, you can run webilder_desktop
+to configure Webilder and manage your photos. It is also
+possible to start photo downloading from the command line by
+starting webilder_downloader.  
+
+Please report any problem to thesamet at gmail.com. 
+"""
 
     def change_roots(self, *names):
         # in case we are going to perform a rooted install, store the original
@@ -153,7 +174,7 @@ class install_kde(Command):
 
 
 setup(name='Webilder',
-      version='0.5',
+      version='0.6',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',

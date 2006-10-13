@@ -10,6 +10,8 @@ CHECK_URL = 'http://www.webilder.org/latest.html'
 
 random.seed()
 
+class VersionCheckerOpener(urllib.FancyURLopener):
+    version = 'Webilder/'+aglobals.version
 
 class BaseApplet:
     def __init__(self):
@@ -33,7 +35,7 @@ class BaseApplet:
 
             if CHECK_FOR_UPDATES and now-self.last_version_check>=8*3600:
                 self.last_version_check = now
-                response = urllib.urlopen(CHECK_URL)
+                response = VersionCheckerOpener().open(CHECK_URL)
                 latest = response.readlines()
                 response.close()
                 if latest[0].strip()!=aglobals.version:
@@ -48,10 +50,9 @@ class BaseApplet:
                     import threading
                     import downloader
                     self.leech_thread = threading.Thread(
-                        target=downloader.download_all, args=(config,))
+                        target=downloader.download_all)
                     self.leech_thread.setDaemon(True)
                     self.leech_thread.start()                        
-                    reload_config()
                     config.set('autodownload.last_time', now)
                     config.save_config()
         finally:

@@ -37,6 +37,7 @@ class ConfigDialog(UITricks):
         column = gtk.TreeViewColumn('', cell, active=3)
         self.flickr_rules.append_column(column)
         cell.connect('toggled', self.on_rule_toggled, 3)
+
         for index, value in enumerate(['Album', 'Tags', 'User']):
             cell = gtk.CellRendererText()
             cell.set_property('editable', True)
@@ -44,7 +45,20 @@ class ConfigDialog(UITricks):
             column.set_resizable(True)
             self.flickr_rules.append_column(column)
             cell.connect('edited', self.on_cell_edited, index)
+
+        cell = gtk.CellRendererCombo()
+        cell.set_property('has-entry', False)
+        combo_model = gtk.ListStore(str)
+        combo_model.append(('Interestingness', ))
+        combo_model.append(('Date', ))
+        cell.set_property('model', combo_model)
+        cell.set_property('text-column', 0)
+        cell.set_property('editable', True)
+        column = gtk.TreeViewColumn('Sort', cell, text=4)
+        self.flickr_rules.append_column(column)
+        cell.connect('edited', self.on_cell_edited, 4)
         self.rotate_interval.get_model().clear()
+
         for time in sorted(rotation_consts.keys()):
             self.rotate_interval.append_text(rotation_consts[time])
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
@@ -62,7 +76,7 @@ class ConfigDialog(UITricks):
         import urllib
         data = urllib.urlopen(url).read()
         for channel in parse_cid_file(data):
-            self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True))
+            self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True, 'Interestingness'))
         flickr_pos = self.notebook.child_get(self.flickr_tab, 'position')[0]
         self.notebook.set_current_page(flickr_pos)
 
@@ -114,9 +128,15 @@ class ConfigDialog(UITricks):
 
         # flickr tab
         self.flickr_enabled.set_active(config.get('flickr.enabled'))
-        model = gtk.ListStore(str, str, str, bool)
+        model = gtk.ListStore(str, str, str, bool, str)
         for rule in config.get('flickr.rules'):
-            model.append([rule['album'], rule['tags'], rule['user_id'], rule.get('enabled', True)])
+            model.append((
+                rule['album'], 
+                rule['tags'], 
+                rule['user_id'], 
+                rule.get('enabled', True),
+                rule.get('sort', 'Interestingness'),
+                ))
         self.flickr_rules.set_model(model)
         self.flickr_download_interesting.set_active(config.get('flickr.download_interesting'))
 
@@ -151,7 +171,7 @@ class ConfigDialog(UITricks):
         config.set('flickr.enabled', self.flickr_enabled.get_active())
         rules = []
         for rule in self.flickr_rules.get_model():
-            rules.append({'album': rule[0], 'tags': rule[1], 'user_id': rule[2], 'enabled': rule[3]})
+            rules.append({'album': rule[0], 'tags': rule[1], 'user_id': rule[2], 'enabled': rule[3], 'sort': rule[4]})
         config.set('flickr.rules', rules)
         config.set('flickr.download_interesting', self.flickr_download_interesting.get_active())
 
@@ -196,7 +216,7 @@ class ConfigDialog(UITricks):
         self.script.set_sensitive(self.wallpaper_use_script.get_active())
 
     def on_add__clicked(self, widget):
-        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2','', True])
+        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2','', True, 'Interestingness'])
         # self.flickr_rules.scroll_to_cell(path)
         
     def on_remove__clicked(self, widget):
@@ -245,10 +265,15 @@ class ConfigDialog(UITricks):
         
         If you want to get photos of a specific flickr user, 
         just write his username in the <i>User</i> column, 
-        otherwise leave this column blank.
+       otherwise leave this column blank.
 
         The album name can be anything meaningful to you, 
         for example "Beach Parties".
+
+        To get the best photos it is best to leave the sort
+        column with 'Interestingness'. This will download only
+        the most interesting photos. The other option 'Date',
+        will make Webilder to download most recent photos.
         """
         mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
         
@@ -257,7 +282,7 @@ class ConfigDialog(UITricks):
         mb.destroy()
 
     def on_flickr_recommend__clicked(self, widget):
-        dialog = ProgressDialog(text='Sending your recommendations...')
+        recommend_dialog = ProgressDialog(text='Sending your recommendations...')
         rules = list(self.flickr_rules.get_model())
         class RecommendingThread(ProgressThread):
             @progress_thread_run
@@ -266,20 +291,25 @@ class ConfigDialog(UITricks):
                 recommend = [rule for rule in rules if (not rule[2]) or (not rule[3])]
                 size = len(recommend)
                 for index, rule in enumerate(recommend):
+                    if self.should_terminate():
+                        break
                     album, terms = rule[0], rule[1]
                     data = urllib.urlencode({'name': album, 'terms': terms})
                     self.status_notify(float(index)/size, 
                             progress_text='Sending rule %d of %d' % (index+1, size))
                     try:
-                        rsp = urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
+                        # rsp = urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
+                        import time
+                        time.sleep(2)
                     except e:
                         print str(e)
-                self.status_notify(1.0, progress_text='Done')
-                self.safe_message_dialog('Thank you for recommending your albums!', gtk.MESSAGE_INFO)
+                else:
+                    self.status_notify(1.0, progress_text='Done')
+                    self.safe_message_dialog('Thank you for recommending your albums!', gtk.MESSAGE_INFO)
 
-        thread=RecommendingThread(dialog)
+        thread=RecommendingThread(recommend_dialog)
         thread.start()
-        dialog.show()
+        recommend_dialog._top.run()
 
     def on_flickr_get_more_albums__clicked(self, widget):
         url = 'http://www.webilder.org/channels/'
