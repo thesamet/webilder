@@ -1,3 +1,4 @@
+import urllib
 import pygtk
 import gtk
 import gtk.glade
@@ -7,6 +8,9 @@ import webilder_globals as aglobals
 from uitricks import UITricks, open_browser
 
 from progress_dialog import *
+
+class WebilderAgent(urllib.FancyURLopener):
+    version = 'Webilder/'+aglobals.version
 
 pygtk.require("2.0")
 
@@ -74,7 +78,7 @@ class ConfigDialog(UITricks):
         else:
             url = selection.data
         import urllib
-        data = urllib.urlopen(url).read()
+        data = WebilderAgent().open(url).read()
         for channel in parse_cid_file(data):
             self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True, 'Interestingness'))
         flickr_pos = self.notebook.child_get(self.flickr_tab, 'position')[0]
@@ -298,7 +302,7 @@ class ConfigDialog(UITricks):
                     self.status_notify(float(index)/size, 
                             progress_text='Sending rule %d of %d' % (index+1, size))
                     try:
-                        rsp = urllib.urlopen('http://api.webilder.org/submit_channel', data).read()
+                        rsp = WebilderAgent().open('http://api.webilder.org/submit_channel', data).read()
                     except e:
                         print str(e)
                 else:

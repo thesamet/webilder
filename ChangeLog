@@ -11,3 +11,7 @@ ChangeLog for Webilder !
 07-Oct-2006: Added sort option on webilder_desktop
 07-Oct-2006: Added option to recommend flickr albums
 08-Oct-2006: Switched from autotools to distutils
+13-Oct-2006: Fixed bug to prevent sudden deletion of configuration file.
+13-Oct-2006: Default flickr sorting method is now by Interestingness, and it
+			 can be modified to be by Date.
+			 
