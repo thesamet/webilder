@@ -131,6 +131,14 @@ Please report any problem to thesamet at gmail.com.
             setattr(self, backup_attr, getattr(self, attr))
         _install.change_roots(self, *names)
 
+
+    def get_outputs(self):
+        # webilder_globals will now go to the installation record, which is required
+        # in order to build RPMs
+        return (_install.get_outputs(self) + 
+               [os.path.join(self.install_lib, 'webilder/webilder_globals.py'),
+                os.path.join(self.install_lib, 'webilder/webilder_globals.pyc')])
+
 class install_kde(Command):
     user_options = []
 

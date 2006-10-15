@@ -1,3 +1,4 @@
+include MANIFEST.in
 include desktop/*.desktop
 include ui/*.png ui/*.glade
 include scripts/webilder_downloader scripts/kwebilder scripts/WebilderApplet scripts/wbz_handler
