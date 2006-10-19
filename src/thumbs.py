@@ -65,13 +65,15 @@ def ThumbnailGenerator(image_dict):
             else:
                 break
         pixbuf = loader.get_pixbuf()
+        if pixbuf is None:
+            raise ValueError("Invalid picture")
         scaled = scale_image(pixbuf, image_dict['data']['thumb'])
         loader.close()
         loader = None
         fin.close()
         gc.collect()
         yield image_dict,scaled
-    except IOError, ValueError:
+    except (IOError, ValueError):
         print "Exception raised in generation"
         loader.close()
         loader = None

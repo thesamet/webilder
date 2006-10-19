@@ -71,6 +71,7 @@ class WebilderDesktopWindow(UITricks):
         l = os.listdir(root)
         for entry in sorted(l):
             fullpath = os.path.join(root, entry)
+            entry = html_escape(entry)
             if os.path.isdir(fullpath):
                 model.append(None, (entry, fullpath, TV_KIND_DIR))
         self.tree.set_model(model)
