@@ -43,10 +43,14 @@ class ThumbLoader(object):
             self.thumbnail_generator = ThumbnailGenerator(image_dict)
 
         if self.thumbnail_generator:
-            pic = self.thumbnail_generator.next()
-            if pic is not None:
-                self.model.set_value(pic[0]['position'], 1, pic[1])       #IV_PIXBUF_COLUMN
+            try:
+                pic = self.thumbnail_generator.next()
+            except:
                 self.thumbnail_generator = None
+            else:
+                if pic is not None:
+                    self.model.set_value(pic[0]['position'], 1, pic[1])       #IV_PIXBUF_COLUMN
+                    self.thumbnail_generator = None
 
         return True
 
@@ -73,8 +77,8 @@ def ThumbnailGenerator(image_dict):
         fin.close()
         gc.collect()
         yield image_dict,scaled
-    except (IOError, ValueError):
-        print "Exception raised in generation"
+    except (IOError, ValueError), e:
+        print image_dict['data']['filename'] + ': ' + str(e)
         loader.close()
         loader = None
         raise

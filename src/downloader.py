@@ -152,9 +152,13 @@ def download_all(notify=lambda *args: None, terminate=lambda: False):
 
         if terminate():
             break
-        image, metadata = photo['_plugin']['module'].process_photo(config, photo, memfile)
-        save_photo(config, photo, image, metadata)
-        completed += 1
+        try:
+            image, metadata = photo['_plugin']['module'].process_photo(config, photo, memfile)
+            save_photo(config, photo, image, metadata)
+        except IOError:
+            pass
+        else:
+            completed += 1
    
     stats = config.get('webilder.stats')
     stats['downloads'] += completed
