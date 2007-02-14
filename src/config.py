@@ -42,20 +42,21 @@ class ConfigObject:
                     raise ValueError('Error parsing line %d of config file %s' % (lineno, file))
             else:
                 raise ValueError('Unrecognized key in line %d of config file %s' % (lineno, file))
+        close(f)
 
     def save_config(self, file=None):
         if not file:
             file = self._filename
         org_cfg = ConfigObject(file)
             
-        file = open(file, 'w')
+        f = open(file, 'w')
         for key,v in DEFAULT_CONFIG:
             if key in self._dirty_keys:
                 value = self._dict[key]
             else:
-                value = org_cfg.get(key)
-            file.write('%s = %r\n' % (key, value))
-        file.close()
+                value = org_cfg.get(key, None)
+            f.write('%s = %r\n' % (key, value))
+        f.close()
         self._dirty_keys.clear()
 
 DEFAULT_CONFIG = [

@@ -42,6 +42,11 @@ class FlickrProxy(object):
         user = rsp.getElementsByTagName('user')[0]
         return user.getAttribute('nsid')
 
+    def get_user_by_email(self, email):
+        rsp = self.call('flickr.people.findByEmail', find_email=email)
+        user = rsp.getElementsByTagName('user')[0]
+        return user.getAttribute('nsid')
+
     def _makePhotoList(self, photos):
         return [FlickrPhoto(self, 
             photo_id=photo.getAttribute('id'), 
