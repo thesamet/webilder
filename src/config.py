@@ -13,12 +13,13 @@ class ConfigObject:
         if not os.path.exists(os.path.dirname(file)):
             os.mkdir(os.path.dirname(file))
             os.mkdir(self.get('collection.dir'))
+            self.save_config(file);
 
         if not os.path.isdir(self.get('collection.dir')):
             raise ValueError, "collection.dir is set to a non-directory, check your config file."
 
-    def get(self, key):
-        return self._dict[key]
+    def get(self, key, *args):
+        return self._dict.get(key, *args)
 
     def set(self, key, value):
         self._dirty_keys.add(key)
@@ -42,7 +43,7 @@ class ConfigObject:
                     raise ValueError('Error parsing line %d of config file %s' % (lineno, file))
             else:
                 raise ValueError('Unrecognized key in line %d of config file %s' % (lineno, file))
-        close(f)
+        f.close()
 
     def save_config(self, file=None):
         if not file:
@@ -51,11 +52,14 @@ class ConfigObject:
             
         f = open(file, 'w')
         for key,v in DEFAULT_CONFIG:
-            if key in self._dirty_keys:
-                value = self._dict[key]
-            else:
-                value = org_cfg.get(key, None)
-            f.write('%s = %r\n' % (key, value))
+            try:
+                if key in self._dirty_keys:
+                    value = self._dict[key]
+                else:
+                    value = org_cfg.get(key, None)
+                f.write('%s = %r\n' % (key, value))
+            except e:
+                f.write('# '+str(e))
         f.close()
         self._dirty_keys.clear()
 

@@ -1,6 +1,6 @@
 import flickrapi
 import re
-import urllib
+import urllib2
 from datetime import date
 from PIL import Image
 import cStringIO
@@ -21,11 +21,11 @@ def get_download_list(config):
             continue
         sort_method = rule.get('sort', 'Interestingness')
         sort_method = {'Interestingness': 'interestingness-desc',
-                       'Date': 'date-posted-desc'}
+                       'Date': 'date-posted-desc'}[sort_method]
 
         for tag_term in rule['tags'].split(';'):
             tag_term = ','.join([tag.strip() for tag in tag_term.split(',')])
-            params_dict = dict(per_page=20, sort=sort_method)
+            params_dict = dict(per_page=20, sort=sort_method, extras='original_format')
             if tag_term:
                 params_dict['tags'] = tag_term
                 params_dict['tag_mode'] = 'all'
@@ -43,7 +43,7 @@ def get_download_list(config):
             all_photos.extend(photos)
 
     if config.get('flickr.download_interesting'):
-        photos = flickr.interestingness_search(per_page=20)
+        photos = flickr.interestingness_search(per_page=20, extras='original_format')
         for photo in photos:
             photo._album = 'Interestingness - '+date.today().strftime('%B %Y')
         all_photos.extend(photos)
@@ -63,12 +63,14 @@ def get_download_list(config):
 def fetch_photo_info(config, photo):
     photo_obj = photo['data']['photo']
     photo['data']['info'] = photo_obj.get_info()
+    photo['data']['sizes'] = photo_obj.get_sizes()
     if config.get('filter.only_landscape'):
         photo['data']['aspect_ratio'] = photo_obj.get_aspect_ratio()
 
 def get_photo_stream(config, photo):
-    stream = urllib.urlopen(photo['data']['info']['image_url'])
-    return stream
+    request = urllib2.Request(photo['data']['info']['image_url'])
+    opener = urllib2.build_opener()
+    return opener.open(request)
 
 def process_photo(config, photo, f):
     info = photo['data']['info']

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import os
 import gtk
 import gtk.glade
@@ -38,6 +36,7 @@ class LeechThread(ProgressThread):
         except (IOError, ValueError), e:
             self.safe_message_dialog(
                             "<b>Error occured while downloading images</b>\n\n%s" % html_escape(str(e)))
+            raise e
             
 
 def html_escape(text):

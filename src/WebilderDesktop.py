@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import sys, os, time, glob, gc
 
 import gtk, gtk.glade, gobject
@@ -353,6 +351,9 @@ class WebilderDesktopWindow(UITricks):
     def on_sort_combo__changed(self, widget):
         self.sort_photos(self.iconview.get_model())
 
+    def on_delete__activate(self, widget):
+        delete_files(self, forever=False)
+
 class ImagePopup(UITricks):
     def __init__(self, main_window):
         self.main_window = main_window
@@ -362,57 +363,58 @@ class ImagePopup(UITricks):
         UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder_desktop.glade'), 'WebilderImagePopup')
 
     def on_delete_images__activate(self, event):
-        self.delete_files(forever=False)
+        delete_files(self.main_window, forever=False)
 
     def on_delete_forever__activate(self, event):
-        self.delete_files(forever=True)
+        delete_files(self.main_window, forever=True)
 
-    def delete_files(self, forever):
-        iconview = self.main_window.iconview
-        selected = iconview.get_selected_items()
-        if selected and len(selected)>1:
-            if forever:
-                message = 'Would you like to permanently delete the selected images?'
-            else:
-                message = 'Would you like to delete the selected images?'
+def delete_files(main_window, forever):
+    iconview = main_window.iconview
+    selected = iconview.get_selected_items()
+    if selected and len(selected)>1:
+        if forever:
+            message = 'Would you like to permanently delete the selected images?'
+        else:
+            message = 'Would you like to delete the selected images?'
 
-            dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, 
-                buttons=gtk.BUTTONS_YES_NO, 
-                message_format=message)
-            response = dlg.run()
-            dlg.destroy()
-            if response != gtk.RESPONSE_YES:
-                return
+        dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, 
+            buttons=gtk.BUTTONS_YES_NO, 
+            message_format=message)
+        response = dlg.run()
+        dlg.destroy()
+        if response != gtk.RESPONSE_YES:
+            return
 
-        banned = open(os.path.expanduser('~/.webilder/banned_photos'), 'a')
-        model = iconview.get_model()
+    banned = open(os.path.expanduser('~/.webilder/banned_photos'), 'a')
+    model = iconview.get_model()
 
-        monitor = self.main_window.collection_monitor
-        if monitor['monitor'] is not None:
-            gnomevfs.monitor_cancel(monitor['monitor'])
+    monitor = main_window.collection_monitor
+    if monitor['monitor'] is not None:
+        gnomevfs.monitor_cancel(monitor['monitor'])
 
-        for path in selected:                
-            iter = model.get_iter(path)
-            data = model.get_value(iter,
-                IV_DATA_COLUMN)
-            for fname in (data['filename'], data['info_file'], data['thumb']):
-                try:
-                    os.remove(fname)
-                except:
-                    pass
-            if forever:
-                banned.write(os.path.basename(data['filename'])+'\n')
-            model.remove(iter)
+    for path in selected:                
+        iter = model.get_iter(path)
+        data = model.get_value(iter,
+            IV_DATA_COLUMN)
+        for fname in (data['filename'], data['info_file'], data['thumb']):
+            try:
+                os.remove(fname)
+            except:
+                pass
+        if forever:
+            banned.write(os.path.basename(data['filename'])+'\n')
+        model.remove(iter)
 
-        if monitor['dir']:
-            monitor['monitor'] = gnomevfs.monitor_add(
-                monitor['dir'],
-                gnomevfs.MONITOR_DIRECTORY,
-                self.main_window.collection_directory_changed)
+    if monitor['dir']:
+        monitor['monitor'] = gnomevfs.monitor_add(
+            monitor['dir'],
+            gnomevfs.MONITOR_DIRECTORY,
+            main_window.collection_directory_changed)
 
-        banned.close()
+    banned.close()
 
-        
+    
+
 html_escape_table = {
     "&": "&amp;",
     '"': "&quot;",

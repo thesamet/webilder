@@ -12,7 +12,7 @@ from progress_dialog import *
 class WebilderAgent(urllib.FancyURLopener):
     version = 'Webilder/'+aglobals.version
 
-pygtk.require("2.0")
+# pygtk.require("2.0")
 
 rotation_consts = {
     1: '1 minute',

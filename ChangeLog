@@ -14,4 +14,5 @@ ChangeLog for Webilder !
 13-Oct-2006: Fixed bug to prevent sudden deletion of configuration file.
 13-Oct-2006: Default flickr sorting method is now by Interestingness, and it
 			 can be modified to be by Date.
+05-Mar-2007: Bug fixes.
 			 

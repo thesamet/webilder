@@ -182,7 +182,7 @@ class install_kde(Command):
 
 
 setup(name='Webilder',
-      version='0.6',
+      version='0.6.2',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',
@@ -191,7 +191,7 @@ setup(name='Webilder',
       package_dir = {'webilder': 'src'},
       cmdclass = {'build': build, 'build_server': build_server, 'build_globals': build_globals, 'install': install, 'install_kde': install_kde},
       data_files = [
-        (os.path.join('share', 'webilder'), ['ui/config.glade', 'ui/webilder.glade', 'ui/webilder_desktop.glade', 'ui/camera48.png', 'ui/camera48_g.png', 'ui/camera16.png', 'ui/logo.png']),
+        (os.path.join('share', 'webilder'), ['ui/config.glade', 'ui/webilder.glade', 'ui/webilder_desktop.glade', 'ui/camera48.png', 'ui/camera48_g.png', 'ui/camera16.png', 'ui/logo.png', 'ui/camera16.xpm']),
         (os.path.join('share', 'pixmaps'), ['ui/camera48.png']),
         (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
         (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),

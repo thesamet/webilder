@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Library to parse WBZ and WBC files.
 
 Usage:

@@ -52,35 +52,70 @@ class FlickrProxy(object):
             photo_id=photo.getAttribute('id'), 
             title=photo.getAttribute('title'),
             secret=photo.getAttribute('secret'),
+            originalsecret=photo.getAttribute('originalsecret'),
+            originalformat=photo.getAttribute('originalformat'),
             server=photo.getAttribute('server'),
+            farm=photo.getAttribute('farm'),
             ) for photo in photos]
 
 
 class FlickrPhoto(object):
-    def __init__(self, proxy, photo_id, title, secret, server):
-        self.photo_id, self.title, self.secret, self.server = photo_id, title, secret, server
+    def __init__(self, proxy, photo_id, title, secret, originalsecret, originalformat, server, farm):
+        self.photo_id, self.title, self.secret, self.originalsecret, self.originalformat, self.server, self.farm = photo_id, title, secret, originalsecret, originalformat, server, farm
         self._proxy = proxy
+        self._size_cache = None
 
-    def get_aspect_ratio(self):
+    def get_sizes(self):
+        if self._size_cache:
+            return self._size_cache
         rsp = self._proxy.call('flickr.photos.getSizes', photo_id=self.photo_id)
         sizes = rsp.getElementsByTagName('size')
-        for size in sizes:
-            if size.getAttribute('label').lower() in ('original', 'large', 'medium', 'small', 'thumbnail'):
-                return float(size.getAttribute('width'))/float(size.getAttribute('height'))
-        return None
+        result=[{'label': size.getAttribute('label')[0].lower(),
+                 'width': int(size.getAttribute('width')),
+                 'height': int(size.getAttribute('height')),
+                 'source': size.getAttribute('source')
+                 } for size in sizes]
+        self._size_cache = result
+        return result
 
-    def get_image_url(self, size, format='jpg'):
-        return 'http://static.flickr.com/%(server)s/%(id)s_%(secret)s_%(size)s.%(format)s' % dict(
+    def get_aspect_ratio(self):
+        sizes = self.get_sizes()
+        for size in sizes:
+            if size['label'] in ('t','o','m'):
+                return float(size['width'])/float(size['height'])
+
+    def get_image_url(self, size):
+        if size=='o':
+            secret=self.originalsecret
+            format=self.originalformat
+        else:
+            secret=self.secret
+            format='jpg'
+
+        file = '%(id)s_%(secret)s_%(size)s.%(format)s' % dict(
+                    id=self.photo_id,
+                    secret=secret,
+                    size=size,
+                    format=format)
+        url = 'http://farm%(farm)s.static.flickr.com/%(server)s/%(file)s' % dict(
             id = self.photo_id,
+            farm = self.farm,
             server = self.server,
-            secret = self.secret,
-            format = 'jpg', 
-            size = size)
+            file=file)
+        return url
+        
+    def get_best_image_url(self):
+        sizes = self.get_sizes()[:]
+        best = sizes[0]
+        for size in sizes:
+            if size['width']>best['width']:
+                best = size
+        return best['source'] #self.get_image_url(best['label'])
             
     def get_info(self):
         rsp = self._proxy.call('flickr.photos.getInfo', photo_id=self.photo_id)
         photo = rsp.getElementsByTagName('photo')[0]
-        image_url = self.get_image_url('o', format=photo.getAttribute('originalformat'))
+        image_url = self.get_best_image_url()
 
         title = photo.getElementsByTagName('title')[0]
         if title.firstChild:
