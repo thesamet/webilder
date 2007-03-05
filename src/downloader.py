@@ -155,13 +155,15 @@ def download_all(notify=lambda *args: None, terminate=lambda: False):
         try:
             image, metadata = photo['_plugin']['module'].process_photo(config, photo, memfile)
             save_photo(config, photo, image, metadata)
-        except IOError:
+        except IOError, e:
+            print "IOError: ",str(e)
             pass
         else:
             completed += 1
    
     stats = config.get('webilder.stats')
     stats['downloads'] += completed
+    config.set('webilder.stats', stats)
     config.save_config()
 
 
