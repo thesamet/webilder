@@ -182,7 +182,7 @@ class install_kde(Command):
 
 
 setup(name='Webilder',
-      version='0.6.2',
+      version='0.6.3',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',
