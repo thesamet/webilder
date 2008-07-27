@@ -80,7 +80,7 @@ def launch_webilder(args=''):
 def get_about_data():
     return KAboutData('webilder', 'Webilder', aglobals.version,
                 'Photo downloader', KAboutData.License_GPL, 
-                '(c) 2005-2006, Nadav Samet',
+                '(c) 2005-2008, Nadav Samet',
                 '',
                 'http://www.webilder.org/',
                 'thesamet@gmail.com')
