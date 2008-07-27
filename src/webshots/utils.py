@@ -1,5 +1,6 @@
 import httplib
 import urllib, urllib2
+import cookielib
 import re
 import wbz
 
@@ -14,18 +15,20 @@ class LeechHighQualityForPremiumOnlyError(Exception):
 
 def get_cookie(user, password):
     """Returns a webshots daily cookie given a user and a password."""
-    params = urllib.urlencode({'username': user, 'password': password})
-    conn = httplib.HTTPConnection(r'daily.webshots.com')
-    conn.request("GET", '/login?' + params)
-    response = conn.getresponse()
+    cj = cookielib.CookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+    response = opener.open(
+        'http://daily.webshots.com/login', 
+        urllib.urlencode({'username': user, 
+                         'password': password, 
+                         'done': 'http://www.webshots.com/login'}))
     r = response.read().lower()
     if 'username or password' in r or 'username and password' in r:
         raise WBZLoginException, 'Incorrect username or password.'
 
-    header = response.getheader('set-cookie')
-    m = re.search('daily=([^;]+)', header)
-    if m:
-        return m.groups()[0]
+    for cookie in cj:
+        if cookie.name=='daily':
+            return cookie.value
     else:
         raise WBZLoginException, "Cookie not found!"
 
