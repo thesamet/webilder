@@ -43,7 +43,7 @@ class WebilderApplet(BaseApplet):
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.evtbox.add(self.applet_icon)
         self.applet.add(self.evtbox)
-        self.propxml="""
+        self.propxml=_("""
     <popup name="button3">
         <menuitem name="Item 1" verb="Browse" label="_Browse Collection" pixtype="stock" 
 pixname="gtk-directory"/>
@@ -55,7 +55,7 @@ pixname="%s"/>
 pixname="gtk-preferences"/>
         <menuitem name="Item 5" verb="About" label="_About" pixtype="stock" pixname="gnome-stock-about"/>
         </popup>
-    """ % os.path.join(aglobals.glade_dir, 'camera16.png')
+    """) % os.path.join(aglobals.glade_dir, 'camera16.png')
         
         self.applet.connect("change-size", self.on_resize_panel)
         self.applet.connect("button-press-event", self.on_button_press)
@@ -82,7 +82,7 @@ pixname="gtk-preferences"/>
     
     def about(self, object, menu):
         import AboutDialog
-        AboutDialog.ShowAboutDialog('Webilder Applet')
+        AboutDialog.ShowAboutDialog(_('Webilder Applet'))
 
     def leech(self, object, menu):
         def remove_reference(*args):
@@ -141,7 +141,7 @@ def main():
 
     if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":   
             main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-            main_window.set_title("Webilder Applet Window")
+            main_window.set_title(_("Webilder Applet Window"))
             main_window.connect("destroy", gtk.main_quit) 
             app = gnomeapplet.Applet()
             WebilderApplet(app, None)

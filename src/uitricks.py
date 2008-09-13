@@ -24,7 +24,7 @@ class UITricks:
                         signal = 'changed'
                     widget.connect(signal, callback)
                 else:
-                    raise RuntimeWarning('Widget %s not found when trying to register callback %s' % (widget, name))
+                    raise RuntimeWarning(_('Widget %s not found when trying to register callback %s') % (widget, name))
 
     def run(self):
         return self._top.run()

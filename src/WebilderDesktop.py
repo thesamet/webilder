@@ -1,6 +1,6 @@
 import sys, os, time, glob, gc
 
-import gtk, gtk.glade, gobject
+import gtk, gobject
 
 from uitricks import UITricks, open_browser
 from thumbs import ThumbLoader
@@ -14,7 +14,6 @@ except ImportError:
     
 import webilder_globals as aglobals
 from config import config, set_wallpaper, reload_config
-
 
 # Iconview column constants
 IV_TEXT_COLUMN = 0
@@ -65,7 +64,7 @@ class WebilderDesktopWindow(UITricks):
 
     def load_collection_tree(self, root):                
         model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
-        model.append(None, ('<b>Recent Photos</b>', '', TV_KIND_RECENT))
+        model.append(None, (_('<b>Recent Photos</b>'), '', TV_KIND_RECENT))
         l = os.listdir(root)
         for entry in sorted(l):
             fullpath = os.path.join(root, entry)
@@ -120,7 +119,7 @@ class WebilderDesktopWindow(UITricks):
                 inf = {}
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
-            credit = inf.get('credit', 'Not available')
+            credit = inf.get('credit', _('Not available'))
             tags = inf.get('tags', '')
             
             title = html_escape(title)
@@ -142,7 +141,7 @@ class WebilderDesktopWindow(UITricks):
             if len(title)>24:
                 title=title[:21]+'...'
             if 0<=time.time()-os.path.getmtime(image)<24*3600:
-                title='<b>*New* %s</b>' % title
+                title=_('<b>*New* %s</b>') % title
             position = model.append((title, empty_picture, data))
             image_list.append(dict(
                 position=position,
@@ -284,10 +283,10 @@ class WebilderDesktopWindow(UITricks):
       
     def on_file_webshots_import__activate(self, event):
         dlg = gtk.FileChooserDialog(
-            'Choose files to import',
+            _('Choose files to import'),
             None,
             action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=("_Import", gtk.RESPONSE_OK, "_Cancel", gtk.RESPONSE_CANCEL))
+            buttons=(_("_Import"), gtk.RESPONSE_OK, _("_Cancel"), gtk.RESPONSE_CANCEL))
         dlg.set_select_multiple(True)
         try:
             response = dlg.run()
@@ -322,7 +321,7 @@ class WebilderDesktopWindow(UITricks):
         win.album.set_markup(data['album'])
         win.file.set_text(data['filename'])
         win.tags.set_text(data['tags'])
-        win.size.set_text('%.1f KB' % (os.path.getsize(data['filename'])/1024.0))
+        win.size.set_text(_('%.1f KB') % (os.path.getsize(data['filename'])/1024.0))
         win.date.set_text(time.strftime('%c', time.localtime(os.path.getctime(data['filename']))))
         win.url.set_text(data['inf'].get('url', ''))
         
@@ -373,9 +372,9 @@ def delete_files(main_window, forever):
     selected = iconview.get_selected_items()
     if selected and len(selected)>1:
         if forever:
-            message = 'Would you like to permanently delete the selected images?'
+            message = _('Would you like to permanently delete the selected images?')
         else:
-            message = 'Would you like to delete the selected images?'
+            message = _('Would you like to delete the selected images?')
 
         dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, 
             buttons=gtk.BUTTONS_YES_NO, 
@@ -434,11 +433,11 @@ class DonateDialog(UITricks):
     def __init__(self):
         UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder.glade'), 
             'DonateDialog')
-        text = '''
+        text = _('''
 Webilder is trying hard to make your desktop the coolest in town.
 
 Since you installed it on %(inst_date)s, it downloaded <b>%(downloads)d photos</b>
-for you%(rotations)s
+for you and changed your wallpaper <b>%(rotations)d times</b>.
 
 It takes a lot of time and hard work to develop and maintain Webilder.
 
@@ -452,14 +451,13 @@ the donation page. If the page does not appear, please visit:
 %(url)s
 
 Would you like to donate to Webilder?
-'''
+''')
     
         stats = config.get('webilder.stats')
         self.url = 'http://www.webilder.org/donate.html'
         context = dict(
                 downloads = stats['downloads'],
-                rotations = ' and changed your wallpaper <b>%d times</b>.' % 
-                    stats['rotations'],
+                rotations = stats['rotations'],
                 inst_date = time.strftime('%B %Y'),
                 url = self.url
                 )
@@ -469,9 +467,9 @@ Would you like to donate to Webilder?
     def run(self):
         val = UITricks.run(self)
         if val==0:
-            open_browser(self.url,no_browser_title='Thank You!',
-                             no_browser_markup="<b>Thanks for your interest in supporting Webilder.</b>\n\n"
-                            'Please follow this link to send us a donation:\n\n%s' % self.url)
+            open_browser(self.url,no_browser_title=_('Thank You!'),
+                             no_browser_markup=_("<b>Thanks for your interest in supporting Webilder.</b>\n\n"
+                            'Please follow this link to send us a donation:\n\n%s') % self.url)
 
 
 def configure():

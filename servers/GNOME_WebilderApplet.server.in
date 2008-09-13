@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <oaf_info>
         <oaf_server iid="OAFIID:GNOME_WebilderApplet_Factory"
                     type="exe" location="%(bin_dir)s/WebilderApplet">
@@ -7,7 +8,9 @@
                         <item value="IDL:Bonobo/Unknown:1.0"/>
                 </oaf_attribute>
                 <oaf_attribute name="name" type="string" value="Webilder Applet Factory"/>
+                <oaf_attribute name="name-fr" type="string" value="Fabrique d'Applet Webilder"/>
                 <oaf_attribute name="description" type="string" value="Webilder Applet Factory"/>
+                <oaf_attribute name="description-fr" type="string" value="Fabrique d'Applet Webilder"/>
         </oaf_server>
 
         <oaf_server iid="OAFIID:GNOME_WebilderApplet"
@@ -19,8 +22,10 @@
                         <item value="IDL:Bonobo/Unknown:1.0"/>
                 </oaf_attribute>
                 <oaf_attribute name="name" type="string" value="Webilder Desktop Applet"/>
+                <oaf_attribute name="name-fr" type="string" value="Bureau Webilder"/>
                 <oaf_attribute name="description" type="string" value="Downloads and displays Flickr and Webshots photos on 
 your desktop."/>
+                <oaf_attribute name="description-fr" type="string" value="Télécharge et affiche des photos de Flickr et Webshots sur votre bureau."/>
                 <oaf_attribute name="panel:category" type="string" value="Utility"/>
                 <oaf_attribute name="panel:icon" type="string" value="%(data_dir)s/camera48.png"/>
         </oaf_server>

@@ -38,7 +38,7 @@ def progress_thread_run(func):
             gtk.gdk.threads_enter()
             if self._pdialog._top:
                 self._pdialog._top.destroy()
-            print "Thread done"
+            print _("Thread done")
             gtk.gdk.threads_leave()
     return newfunc
 

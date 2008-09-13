@@ -19,16 +19,16 @@ def handle_image(img):
     title = (metadata.get('title') or metadata.get('STR_ImageTitle'))
     album = (metadata.get('albumTitle') or metadata.get('STR_CollectionTitle'))
     if not title:
-        raise ValueError, "Unable to find image's title"
+        raise ValueError, _("Unable to find image's title")
     if not album:
-        raise ValueError, "Unable to find image's album"
+        raise ValueError, _("Unable to find image's album")
         
     downloader.save_photo(config, 
             {'name': title+'.jpg'}, 
             img.get_image_data(),
             img.get_metadata())
 
-    print "Extracted: %s/%s" % (album, title)
+    print _("Extracted: %s/%s") % (album, title)
 
 def handle_wbp(wbpfile):
     f = wbp.open(wbpfile, 'r')
@@ -45,17 +45,17 @@ def handle_file(filename):
     elif magic==wbp.WBP_ID:
         handle_wbp(filename)
     else:
-        raise IOError, "Unrecognized file type"
+        raise IOError, _("Unrecognized file type")
         
 def main():
     if len(sys.argv)!=2:
-        print """wbz_handler will extract webshots archives into your collection.
+        print _("""wbz_handler will extract webshots archives into your collection.
 
 Usage:
 
     wbz_handler filename.wbz
 
-Where filename.wbz is a Webshots archive."""
+Where filename.wbz is a Webshots archive.""")
         sys.exit(1)
     handle_file(sys.argv[1])
 

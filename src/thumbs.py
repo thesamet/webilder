@@ -70,7 +70,7 @@ def ThumbnailGenerator(image_dict):
                 break
         pixbuf = loader.get_pixbuf()
         if pixbuf is None:
-            raise ValueError("Invalid picture")
+            raise ValueError(_("Invalid picture"))
         scaled = scale_image(pixbuf, image_dict['data']['thumb'])
         loader.close()
         loader = None

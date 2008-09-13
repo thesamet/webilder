@@ -235,7 +235,8 @@ Future versions will add more options here, such as selecting which collections 
                 <child>
                   <widget class="GtkCheckButton" id="flickr_enabled">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes" context="yes">Download images from Flickr</property>
+                    <property name="label" translatable="yes" context="yes">_Download images from Flickr</property>
+                    <property name="use_underline">True</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -258,7 +259,8 @@ Future versions will add more options here, such as selecting which collections 
                             <child>
                               <widget class="GtkCheckButton" id="flickr_download_interesting">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes" context="yes">Download interesting photos</property>
+                                <property name="label" translatable="yes" context="yes">Download _interesting photos</property>
+                                <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                               </widget>
                             </child>
@@ -319,7 +321,8 @@ Future versions will add more options here, such as selecting which collections 
                                     <child>
                                       <widget class="GtkButton" id="add">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes" context="yes">Add</property>
+                                        <property name="label" translatable="yes" context="yes">A_dd</property>
+                                        <property name="use_underline">True</property>
                                         <property name="tooltip">Add new flickr tags</property>
                                       </widget>
                                       <packing>
@@ -331,7 +334,8 @@ Future versions will add more options here, such as selecting which collections 
                                       <widget class="GtkButton" id="remove">
                                         <property name="visible">True</property>
                                         <property name="is_focus">True</property>
-                                        <property name="label" translatable="yes" context="yes">Remove</property>
+                                        <property name="label" translatable="yes" context="yes">_Remove</property>
+                                        <property name="use_underline">True</property>
                                         <property name="tooltip">Remove selected tags</property>
                                       </widget>
                                       <packing>
@@ -343,7 +347,8 @@ Future versions will add more options here, such as selecting which collections 
                                     <child>
                                       <widget class="GtkButton" id="tips">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes" context="yes">Tips...</property>
+                                        <property name="label" translatable="yes" context="yes">_Tips...</property>
+                                        <property name="use_underline">True</property>
                                         <property name="tooltip">Some tips on using Flickr with Webilder</property>
                                       </widget>
                                       <packing>
@@ -370,7 +375,8 @@ Future versions will add more options here, such as selecting which collections 
                                 <child>
                                   <widget class="GtkButton" id="flickr_recommend">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes" context="yes">Recommend My Tags</property>
+                                    <property name="label" translatable="yes" context="yes">_Recommend My Tags</property>
+                                    <property name="use_underline">True</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -380,7 +386,8 @@ Future versions will add more options here, such as selecting which collections 
                                 <child>
                                   <widget class="GtkButton" id="flickr_get_more_albums">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes" context="yes">Get More Albums</property>
+                                    <property name="label" translatable="yes" context="yes">_Get More Albums</property>
+                                    <property name="use_underline">True</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -438,7 +445,8 @@ Future versions will add more options here, such as selecting which collections 
                 <child>
                   <widget class="GtkCheckButton" id="webshots_enabled">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes" context="yes">Download images from Webshots</property>
+                    <property name="label" translatable="yes" context="yes">_Download images from Webshots</property>
+                    <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </widget>
                   <packing>
@@ -966,14 +974,14 @@ sign up for a free basic account. </property>
             <child>
               <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes" context="yes">gtk-ok</property>
+                <property name="label" context="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
               </widget>
             </child>
             <child>
               <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes" context="yes">gtk-cancel</property>
+                <property name="label" context="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">-1</property>
               </widget>

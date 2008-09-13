@@ -11,9 +11,15 @@ from distutils.errors import DistutilsError
 
 import os
 import sys
+import glob
+
+#Gettext Support
+import gettext
+LOCALE_DIR = os.path.realpath(os.path.dirname(sys.argv[0])) + '/locale/'
+gettext.install('webilder', LOCALE_DIR)
 
 if sys.argv[-1] == 'setup.py':
-    print "To install, run 'python setup.py install'"
+    print _("To install, run '%s'") % 'python setup.py install'
     print 
 
 class file_build_command(Command):
@@ -47,13 +53,13 @@ class file_build_command(Command):
         fw.close()
 
 class build_server(file_build_command):
-    description ='Builds the bonobo server file representing the applet.'
+    description =_('Builds the bonobo server file representing the applet.')
     dir = 'servers'
     filename = 'GNOME_WebilderApplet.server'
     get_dest_dir = lambda self: 'servers'
 
 class build_globals(file_build_command):
-    description = 'Building Webilder global settings file.'
+    description = _('Building Webilder global settings file.')
     dir = 'src'
     filename = 'webilder_globals.py'
     get_dest_dir = lambda self: os.path.join(self.build_lib, 'webilder')
@@ -83,12 +89,22 @@ def check_modules(*modules):
         try:
             imp.find_module(module)
         except ImportError, e:
-            raise DistutilsError, 'Could not find module %s. Make sure all dependencies are installed.' % e
+            raise DistutilsError, _('Could not find module %s. Make sure all dependencies are installed.') % e
+            
+def find_mo_files ():
+  mo_files = []
+
+  for mo in glob.glob (os.path.join('locale', '*', 'webilder.mo')):
+    lang = os.path.basename(os.path.dirname(mo))
+    dest = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
+    mo_files.append((dest, [mo]))
+
+  return mo_files
 
 class install(_install):
     user_options = _install.user_options[:]
-    user_options.append(('with-kde', None, 'Install with KDE support'))
-    user_options.append(('kde-prefix=', None, 'Base directory of KDE installation'))
+    user_options.append(('with-kde', None, _('Install with KDE support')))
+    user_options.append(('kde-prefix=', None, _('Base directory of KDE installation')))
 
     sub_commands = _install.sub_commands[:]
 
@@ -105,7 +121,7 @@ class install(_install):
         _install.run(self)
         if self.with_kde:
             self.run_command('install_kde')
-        print """
+        print _("""
 Installation completed successfully.
 
   GNOME Users: Right-click on the GNOME panel, choose "Add to panel", 
@@ -120,7 +136,7 @@ possible to start photo downloading from the command line by
 starting webilder_downloader.  
 
 Please report any problem to thesamet at gmail.com. 
-"""
+""")
 
     def change_roots(self, *names):
         # in case we are going to perform a rooted install, store the original
@@ -149,11 +165,11 @@ class install_kde(Command):
     def finalize_options(self):
         self.set_undefined_options('install', ('kde_prefix', 'kde_prefix'), ('root', 'root'))
         if self.kde_prefix is None:
-            self.announce('Detecting KDE installation directory')
+            self.announce(_('Detecting KDE installation directory'))
             self.kde_prefix = ask_kde_config('--prefix').strip()
             if not self.kde_prefix:
-                raise DistutilsError, 'Could not detect KDE installation directory. Please provide --kde-prefix argument'
-            self.announce('KDE installation directory is '+self.kde_prefix)
+                raise DistutilsError, _('Could not detect KDE installation directory. Please provide --kde-prefix argument')
+            self.announce(_('KDE installation directory is %s') % self.kde_prefix)
             if self.root is not None:
                 self.kde_prefix = change_root(self.root, self.kde_prefix)
 
@@ -180,7 +196,6 @@ class install_kde(Command):
                 )
         os.chmod(kwebilder, 0755)
 
-
 setup(name='Webilder',
       version='0.6.3',
       description='Webilder Desktop',
@@ -195,6 +210,6 @@ setup(name='Webilder',
         (os.path.join('share', 'pixmaps'), ['ui/camera48.png']),
         (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
         (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),
-      ],
+      ] + find_mo_files(),
       scripts = ['scripts/webilder_downloader', 'scripts/webilder_desktop', 'scripts/WebilderApplet', 'scripts/wbz_handler']
 )

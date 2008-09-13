@@ -1,7 +1,6 @@
 import urllib
 import pygtk
 import gtk
-import gtk.glade
 import os
 import webilder_globals as aglobals
 
@@ -15,16 +14,16 @@ class WebilderAgent(urllib.FancyURLopener):
 # pygtk.require("2.0")
 
 rotation_consts = {
-    1: '1 minute',
-    2: '2 minutes',
-    5: '5 minutes',
-    10: '10 minutes',
-    20: '20 minutes',
-    30: '30 minutes',
-    60: '1 hour',
-    120: '2 hours',
-    240: '4 hours',
-    24*60: '1 day'}
+    1: _('1 minute'),
+    2: _('2 minutes'),
+    5: _('5 minutes'),
+    10: _('10 minutes'),
+    20: _('20 minutes'),
+    30: _('30 minutes'),
+    60: _('1 hour'),
+    120: _('2 hours'),
+    240: _('4 hours'),
+    24*60: _('1 day')}
 quality_names = ['high', 'wide', 'low']
 
 class ConfigDialog(UITricks):
@@ -42,7 +41,7 @@ class ConfigDialog(UITricks):
         self.flickr_rules.append_column(column)
         cell.connect('toggled', self.on_rule_toggled, 3)
 
-        for index, value in enumerate(['Album', 'Tags', 'User']):
+        for index, value in enumerate([_('Album'), _('Tags'), _('User')]):
             cell = gtk.CellRendererText()
             cell.set_property('editable', True)
             column = gtk.TreeViewColumn(value, cell, text=index)
@@ -54,11 +53,11 @@ class ConfigDialog(UITricks):
         cell.set_property('has-entry', False)
         combo_model = gtk.ListStore(str)
         combo_model.append(('Interestingness', ))
-        combo_model.append(('Date', ))
+        combo_model.append((_('Date'), ))
         cell.set_property('model', combo_model)
         cell.set_property('text-column', 0)
         cell.set_property('editable', True)
-        column = gtk.TreeViewColumn('Sort', cell, text=4)
+        column = gtk.TreeViewColumn(_('Sort'), cell, text=4)
         self.flickr_rules.append_column(column)
         cell.connect('edited', self.on_cell_edited, 4)
         self.rotate_interval.get_model().clear()
@@ -80,7 +79,7 @@ class ConfigDialog(UITricks):
         import urllib
         data = WebilderAgent().open(url).read()
         for channel in parse_cid_file(data):
-            self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True, 'Interestingness'))
+            self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True, _('Interestingness')))
         flickr_pos = self.notebook.child_get(self.flickr_tab, 'position')[0]
         self.notebook.set_current_page(flickr_pos)
 
@@ -94,7 +93,7 @@ class ConfigDialog(UITricks):
             cdir = self.collection_dir.get_text()
             if not os.path.exists(cdir):
                 mb = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, buttons=gtk.BUTTONS_YES_NO, message_format=
-                    "Collection directory %s does not exist. Would you like it to be created?" % cdir)
+                    _("Collection directory %s does not exist. Would you like it to be created?") % cdir)
                 mbval = mb.run()
                 mb.destroy()
                 if (mbval == gtk.RESPONSE_YES):
@@ -104,7 +103,7 @@ class ConfigDialog(UITricks):
                     continue
 
             if not os.path.isdir(cdir):
-                mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK, message_format="%s is not a directory." % cdir)
+                mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK, message_format=_("%s is not a directory.") % cdir)
                 mb.run()
                 mb.destroy()
                 self.collection_dir.grab_focus()
@@ -220,7 +219,7 @@ class ConfigDialog(UITricks):
         self.script.set_sensitive(self.wallpaper_use_script.get_active())
 
     def on_add__clicked(self, widget):
-        iter = self.flickr_rules.get_model().append(['Album Name','tag1,tag2','', True, 'Interestingness'])
+        iter = self.flickr_rules.get_model().append([_('Album Name'),'tag1,tag2','', True, 'Interestingness'])
         # self.flickr_rules.scroll_to_cell(path)
         
     def on_remove__clicked(self, widget):
@@ -255,7 +254,7 @@ class ConfigDialog(UITricks):
         fs.destroy()
 
     def on_tips__clicked(self, widget):
-        text = """
+        text = _("""
         Getting started with flickr is easy.
 
         Press the 'Add' button. Changing the tags to
@@ -278,7 +277,7 @@ class ConfigDialog(UITricks):
         column with 'Interestingness'. This will download only
         the most interesting photos. The other option 'Date',
         will make Webilder to download most recent photos.
-        """
+        """)
         mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
         
         mb.set_markup(text)
@@ -286,7 +285,7 @@ class ConfigDialog(UITricks):
         mb.destroy()
 
     def on_flickr_recommend__clicked(self, widget):
-        recommend_dialog = ProgressDialog(text='Sending your recommendations...')
+        recommend_dialog = ProgressDialog(text=_('Sending your recommendations...'))
         rules = list(self.flickr_rules.get_model())
         class RecommendingThread(ProgressThread):
             @progress_thread_run
@@ -300,14 +299,14 @@ class ConfigDialog(UITricks):
                     album, terms = rule[0], rule[1]
                     data = urllib.urlencode({'name': album, 'terms': terms})
                     self.status_notify(float(index)/size, 
-                            progress_text='Sending rule %d of %d' % (index+1, size))
+                            progress_text=_('Sending rule %d of %d') % (index+1, size))
                     try:
                         rsp = WebilderAgent().open('http://api.webilder.org/submit_channel', data).read()
                     except e:
                         print str(e)
                 else:
                     self.status_notify(1.0, progress_text='Done')
-                    self.safe_message_dialog('Thank you for recommending your albums!', gtk.MESSAGE_INFO)
+                    self.safe_message_dialog(_('Thank you for recommending your albums!'), gtk.MESSAGE_INFO)
 
         thread=RecommendingThread(recommend_dialog)
         thread.start()
@@ -316,9 +315,9 @@ class ConfigDialog(UITricks):
     def on_flickr_get_more_albums__clicked(self, widget):
         url = 'http://www.webilder.org/channels/'
         open_browser(url = url,
-                no_browser_title = 'Could not open browser',
-                no_browser_markup = 'Webilder was unable to find a browser, please visit: \n'
-                '%s' % url)
+                no_browser_title = _('Could not open browser'),
+                no_browser_markup = _('Webilder was unable to find a browser, please visit: \n'
+                '%s') % url)
 
 def parse_cid_file(data):
     from xml.dom.minidom import parseString

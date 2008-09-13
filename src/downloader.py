@@ -53,10 +53,10 @@ def filter_photos(config, photos):
     for photo in photos:
         if photo['name'] in files:
             filtered_photos.append(photo)
-            print "Skipping already existing photo '%s'" % photo['title']
+            print _("Skipping already existing photo '%s'") % photo['title']
             continue
         if photo['name'] in banned_photos:
-            print "Skipping banned photo '%s'." % photo['title']
+            print _("Skipping banned photo '%s'.") % photo['title']
             filtered_photos.append(photo)
             continue
         if photo['name'] in _recently_filtered and config.get('filter.only_landscape'):
@@ -64,14 +64,14 @@ def filter_photos(config, photos):
             # photos from being blocked by this cache soon after only_landscape has 
             # set to false, the right term of the 'and' above was added.
             filtered_photos.append(photo)
-            print "Skipping previously filtered photo '%s'." % photo['title']
+            print _("Skipping previously filtered photo '%s'.") % photo['title']
             continue
 
         photo['_plugin']['module'].fetch_photo_info(config, photo)
         if config.get('filter.only_landscape'):
             if 'aspect_ratio' in photo['data'] and photo['data']['aspect_ratio']<1.1:
                 filtered_photos.append(photo)
-                print "Skipping non-landscape photo '%s'" % photo['title']
+                print _("Skipping non-landscape photo '%s'") % photo['title']
                 _recently_filtered[photo['name']] = time.time()
                 continue
         files.append(photo['name'])
@@ -80,7 +80,7 @@ def filter_photos(config, photos):
         photos.remove(photo)
 
 def download_photo(config, photo, notify):
-    print "%s: Downloading '%s'" % (
+    print _("%s: Downloading '%s'") % (
         photo['_plugin']['name'], photo['title'])
     stream = photo['_plugin']['module'].get_photo_stream(config, photo)
     memfile = cStringIO.StringIO()
@@ -130,11 +130,11 @@ def save_photo(config, photo, image, metadata):
     finf.close()
  
 def download_all(notify=lambda *args: None, terminate=lambda: False):
-    notify(0, '', 'Downloading list of photos (may take some time)')
+    notify(0, '', _('Downloading list of photos (may take some time)'))
     photos = get_full_download_list(config)
     if terminate():
         return
-    notify(0, '', 'Filtering photos (may take some time)')
+    notify(0, '', _('Filtering photos (may take some time)'))
     filter_photos(config, photos)
     if terminate():
         return
@@ -142,12 +142,12 @@ def download_all(notify=lambda *args: None, terminate=lambda: False):
     for index, photo in enumerate(photos):
         download_notifier = lambda fraction: notify(
                 (float(index+1)+fraction)/(len(photos)+1),
-                    'Downloading photo %d of %d from %s.' % (index+1, len(photos), photo['_plugin']['name']),
-                    'Downloading <b><i>"%s"</i></b>' % photo['title'])
+                    _('Downloading photo %d of %d from %s.') % (index+1, len(photos), photo['_plugin']['name']),
+                    _('Downloading <b><i>"%s"</i></b>') % photo['title'])
         try:
             memfile = download_photo(config, photo, download_notifier)
         except LeechPremiumOnlyPhotoError:
-            print "   Photo is available only to premium members. Skipping."
+            print _("   Photo is available only to premium members. Skipping.")
             continue # skip this photo (goes back to for)
 
         if terminate():

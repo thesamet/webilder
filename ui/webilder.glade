@@ -9,7 +9,7 @@
 <glade-interface>
   <widget class="GtkDialog" id="AuthenticationDialog">
     <property name="border_width">6</property>
-    <property name="title">Login to Webshots</property>
+    <property name="title" translatable="yes">Login to Webshots</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
@@ -215,7 +215,7 @@ You can sign up for a free account at
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="xalign">0.000000</property>
-            <property name="label" translatable="yes">&lt;i&gt;Status text&lt;/i&gt;</property>
+            <property name="label">&lt;i&gt;Status text&lt;/i&gt;</property>
             <property name="use_markup">True</property>
             <property name="selectable">True</property>
             <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
@@ -281,7 +281,7 @@ You can sign up for a free account at
     </child>
   </widget>
   <widget class="GtkDialog" id="DonateDialog">
-    <property name="title">Webilder needs your help!</property>
+    <property name="title" translatable="yes">Webilder needs your help!</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default_width">420</property>
@@ -343,7 +343,7 @@ You can sign up for a free account at
             <child>
               <widget class="GtkButton" id="cancel_button">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">gtk-no</property>
+                <property name="label">gtk-no</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">1</property>
               </widget>
@@ -351,7 +351,7 @@ You can sign up for a free account at
             <child>
               <widget class="GtkButton" id="ok_button">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">gtk-yes</property>
+                <property name="label">gtk-yes</property>
                 <property name="use_stock">True</property>
               </widget>
               <packing>
@@ -368,7 +368,7 @@ You can sign up for a free account at
     </child>
   </widget>
   <widget class="GtkDialog" id="PhotoPropertiesDialog">
-    <property name="title">Photo Properties</property>
+    <property name="title" translatable="yes">Photo Properties</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox6">
@@ -449,7 +449,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="title">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">title</property>
+                        <property name="label">title</property>
                         <property name="use_markup">True</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
@@ -464,7 +464,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="album">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">album</property>
+                        <property name="label">album</property>
                         <property name="use_markup">True</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
@@ -481,7 +481,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="file">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">file</property>
+                        <property name="label">file</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
                       </widget>
@@ -497,7 +497,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="tags">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">tags</property>
+                        <property name="label">tags</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
                       </widget>
@@ -541,7 +541,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="date">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">date</property>
+                        <property name="label">date</property>
                         <property name="selectable">True</property>
                       </widget>
                       <packing>
@@ -556,7 +556,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="size">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">size</property>
+                        <property name="label">size</property>
                         <property name="selectable">True</property>
                       </widget>
                       <packing>
@@ -585,7 +585,7 @@ You can sign up for a free account at
                       <widget class="GtkLabel" id="url">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
-                        <property name="label" translatable="yes">url</property>
+                        <property name="label">url</property>
                         <property name="selectable">True</property>
                       </widget>
                       <packing>
@@ -623,7 +623,7 @@ You can sign up for a free account at
             <child>
               <widget class="GtkButton" id="closebutton">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">gtk-close</property>
+                <property name="label">gtk-close</property>
                 <property name="use_stock">True</property>
               </widget>
             </child>

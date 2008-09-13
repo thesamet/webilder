@@ -1,5 +1,10 @@
 import os, time
 
+#Gettext Support
+#import webilder_globals as aglobals
+#import gettext
+#gettext.install(aglobals.name)
+
 class ConfigObject:
     def __init__(self, file=None):
         self._dict = dict(DEFAULT_CONFIG)
@@ -16,7 +21,7 @@ class ConfigObject:
             self.save_config(file);
 
         if not os.path.isdir(self.get('collection.dir')):
-            raise ValueError, "collection.dir is set to a non-directory, check your config file."
+            raise ValueError, _("collection.dir is set to a non-directory, check your config file.")
 
     def get(self, key, *args):
         return self._dict.get(key, *args)
@@ -34,15 +39,15 @@ class ConfigObject:
                 continue
             index = line.find('=')
             if index<0:
-                raise ValueError('Error parsing line %d of config file %s' % (lineno, file))
+                raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
             key, value = line[:index].strip(), line[index+1:].strip()
             if key in self._dict:
                 try:
                     self._dict[key] = eval(value)
                 except:
-                    raise ValueError('Error parsing line %d of config file %s' % (lineno, file))
+                    raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
             else:
-                raise ValueError('Unrecognized key in line %d of config file %s' % (lineno, file))
+                raise ValueError(_('Unrecognized key in line %d of config file %s') % (lineno, file))
         f.close()
 
     def save_config(self, file=None):

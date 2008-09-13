@@ -1,0 +1,913 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Webilder\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-13 13:43+0200\n"
+"PO-Revision-Date: 2008-08-13 13:58+0100\n"
+"Last-Translator: Nicolas ELIE <chrystalyst@free.fr>\n"
+"Language-Team: Webilder <chrystalyst@free.fr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: src/DownloadDialog.py:9
+msgid ""
+"<b>Downloading photos</b>\n"
+"\n"
+"Downloading photos... Download times vary according to your connection speed.."
+msgstr ""
+"<b>Téléchargement des photos</b>\n"
+"\n"
+"Téléchargement des photos... Le temps de téléchargement varie en fonction de la vitesse de votre connexion..."
+
+#: src/DownloadDialog.py:28
+msgid ""
+"<b>Only Webshots Premium members can download wide or highest quality photos.</b>\n"
+"\n"
+"Go to the Preferences window, choose \"Regular Quality\" and try again."
+msgstr ""
+"<b>Seuls les membres Premium de Webshots peuvent télécharger des photos 16:9 ou de qualité supérieures.</b>\n"
+"\n"
+"Allez dans la fenêtre de Préférences, choisissez \"Qualité Classique\" et réessayez."
+
+#: src/DownloadDialog.py:33
+msgid ""
+"<b>Incorrect Webshots Username or Password</b>\n"
+"\n"
+"Please check your username and password in the preferences dialog."
+msgstr ""
+"<b>Nom d'Utilisateur Webshots ou Mot de Passe incorrect</b>\n"
+"\n"
+"Veuillez vérifier votre nom d'utilisateur et votre mot de passe dans la boîte de dialogue de préférences."
+
+#: src/DownloadDialog.py:37
+#, python-format
+msgid ""
+"<b>Error occured while downloading images</b>\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Une erreur est survenue lors du téléchargement des images</b>\n"
+"\n"
+"%s"
+
+#: src/WebilderDesktop.py:67
+msgid "<b>Recent Photos</b>"
+msgstr "<b>Photos Récentes</b>"
+
+#: src/WebilderDesktop.py:122
+msgid "Not available"
+msgstr "Non disponible"
+
+#: src/WebilderDesktop.py:144
+#, python-format
+msgid "<b>*New* %s</b>"
+msgstr "<b>*Nouveau* %s</b>"
+
+#: src/WebilderDesktop.py:286
+msgid "Choose files to import"
+msgstr "Choisissez les fichiers à importer"
+
+#: src/WebilderDesktop.py:289
+msgid "_Import"
+msgstr "_Importer"
+
+#: src/WebilderDesktop.py:289
+msgid "_Cancel"
+msgstr "_Annuler"
+
+#: src/WebilderDesktop.py:324
+#, python-format
+msgid "%.1f KB"
+msgstr "%.1f Ko"
+
+#: src/WebilderDesktop.py:375
+msgid "Would you like to permanently delete the selected images?"
+msgstr "Voulez-vous supprimer définitivement les images sélectionnées?"
+
+#: src/WebilderDesktop.py:377
+msgid "Would you like to delete the selected images?"
+msgstr "Voulez-vous supprimer les images sélectionnées?"
+
+#: src/WebilderDesktop.py:436
+#, python-format
+msgid ""
+"\n"
+"Webilder is trying hard to make your desktop the coolest in town.\n"
+"\n"
+"Since you installed it on %(inst_date)s, it downloaded <b>%(downloads)d photos</b>\n"
+"for you and changed your wallpaper <b>%(rotations)d times</b>.\n"
+"\n"
+"It takes a lot of time and hard work to develop and maintain Webilder.\n"
+"\n"
+"If you'd like to see Webilder becomes even better, you can help us \n"
+"a lot by making a small donation. \n"
+"\n"
+"Any donation will be GREATLY appreciated. You can even donate $5.\n"
+"\n"
+"After clicking on the <i>Yes</i> button below you'll be taken to \n"
+"the donation page. If the page does not appear, please visit:\n"
+"%(url)s\n"
+"\n"
+"Would you like to donate to Webilder?\n"
+msgstr ""
+"\n"
+"Webilder tente de faire de votre bureau le plus cool de la ville.\n"
+"\n"
+"Depuis que l'avez installé le %(inst_date)s, il a téléchargé <b>%(downloads)d photos</b>\n"
+"pour vous et changer votre fond d'écran <b>%(rotations)d fois</b>\n"
+"\n"
+"Cela prend beaucoup de temps et de dur travail pour développer et maintenir Webilder.\n"
+"\n"
+"Si vous vous voulez voir Webilder devenir encore meilleur, vous pouvez nous aider\n"
+"beaucoup en faisant un petit don.\n"
+"\n"
+"Toute donation sera GRANDEMENT appréciée. Vous pouvez donner même €5.\n"
+"\n"
+"Après avoir cliqué sur le button <i>Oui</i> ci-dessous, vous serez dirigé vers la page de don.\n"
+"Si la page n'apparaît pas, s'il vous plaît visitez cette page:\n"
+"%(url)s\n"
+"\n"
+"Voulez-vous faire un don à Webilder?\n"
+
+#: src/WebilderDesktop.py:470
+msgid "Thank You!"
+msgstr "Merci!"
+
+#: src/WebilderDesktop.py:471
+#, python-format
+msgid ""
+"<b>Thanks for your interest in supporting Webilder.</b>\n"
+"\n"
+"Please follow this link to send us a donation:\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Merci de votre intérêt envers Webilder.</b>\n"
+"\n"
+"Veuillez SVP suivre ce lien pour nous envoyer un don:\n"
+"\n"
+"%s"
+
+#: src/config.py:24
+msgid "collection.dir is set to a non-directory, check your config file."
+msgstr "collection.dir ne pointe pas vers un répertoire, vérifiez votre fichier de configuration."
+
+#: src/config.py:42
+#: src/config.py:48
+#, python-format
+msgid "Error parsing line %d of config file %s"
+msgstr "Erreur lors de l'analyse de la ligne %d du fichier de configuration %s"
+
+#: src/config.py:50
+#, python-format
+msgid "Unrecognized key in line %d of config file %s"
+msgstr "Clé non reconnue à la ligne %d du fichier de configuration %s"
+
+#: src/config_dialog.py:17
+msgid "1 minute"
+msgstr "1 minute"
+
+#: src/config_dialog.py:18
+msgid "2 minutes"
+msgstr "2 minutes"
+
+#: src/config_dialog.py:19
+msgid "5 minutes"
+msgstr "5 minutes"
+
+#: src/config_dialog.py:20
+msgid "10 minutes"
+msgstr "10 minutes"
+
+#: src/config_dialog.py:21
+msgid "20 minutes"
+msgstr "20 minutes"
+
+#: src/config_dialog.py:22
+msgid "30 minutes"
+msgstr "30 minutes"
+
+#: src/config_dialog.py:23
+msgid "1 hour"
+msgstr "1 heure"
+
+#: src/config_dialog.py:24
+msgid "2 hours"
+msgstr "2 heures"
+
+#: src/config_dialog.py:25
+msgid "4 hours"
+msgstr "4 heures"
+
+#: src/config_dialog.py:26
+msgid "1 day"
+msgstr "1 jour"
+
+#: src/config_dialog.py:44
+msgid "Album"
+msgstr "Album"
+
+#: src/config_dialog.py:44
+msgid "Tags"
+msgstr "Tags"
+
+#: src/config_dialog.py:44
+msgid "User"
+msgstr "Utilisateur"
+
+#: src/config_dialog.py:56
+msgid "Date"
+msgstr "Date"
+
+#: src/config_dialog.py:60
+msgid "Sort"
+msgstr "Tri"
+
+#: src/config_dialog.py:82
+msgid "Interestingness"
+msgstr "Intérêt"
+
+#: src/config_dialog.py:96
+#, python-format
+msgid "Collection directory %s does not exist. Would you like it to be created?"
+msgstr "Le répertoire de collection %s n'existe pas. Voulez-vous le créer maintenant ?"
+
+#: src/config_dialog.py:106
+#, python-format
+msgid "%s is not a directory."
+msgstr "%s n'est pas un répertoire."
+
+#: src/config_dialog.py:222
+msgid "Album Name"
+msgstr "Nom d'Album"
+
+#: src/config_dialog.py:257
+msgid ""
+"\n"
+"        Getting started with flickr is easy.\n"
+"\n"
+"        Press the 'Add' button. Changing the tags to\n"
+"        <b>party,beach</b> (or anything that you want).\n"
+"        will bring you photos that are tagged with both\n"
+"        <b>party</b> and <b>beach</b>.\n"
+"\n"
+"        You can write: <b>party,beach;swimsuit</b>\n"
+"        if you want photos tagged with both \n"
+"        <b>party</b> and <b>beach</b>, or with <b>swimsuit</b>.\n"
+"        \n"
+"        If you want to get photos of a specific flickr user, \n"
+"        just write his username in the <i>User</i> column, \n"
+"       otherwise leave this column blank.\n"
+"\n"
+"        The album name can be anything meaningful to you, \n"
+"        for example \"Beach Parties\".\n"
+"\n"
+"        To get the best photos it is best to leave the sort\n"
+"        column with 'Interestingness'. This will download only\n"
+"        the most interesting photos. The other option 'Date',\n"
+"        will make Webilder to download most recent photos.\n"
+"        "
+msgstr ""
+"\n"
+"        Débuter avec flickr est facile.\n"
+"\n"
+"        Appuyez sur le bouton 'Ajouter'. Taper les tags\n"
+"        <b>party,beach</b> (ou n'importe quoi d'autre)\n"
+"        pour obtenir les photos taggées avec <b>party</b>\n"
+"        (fête) et <b>beach</b> (plage).\n"
+"\n"
+"        Vous pouvez écrire: <b>party,beach;swimsuit</b>\n"
+"        si vous voulez des photos taggées avec\n"
+"        <b>party</b> (fête) et <b>beach</b> (plage),\n"
+"        ou avec <b>swimsuit</b> (maillot de bain).\n"
+"        \n"
+"        Si vous voulez obtenir des photos d'un utilisateur\n"
+"         spécifique de flickr, écrivez juste son nom\n"
+"        d'utilisateur dans la colonne <i>Utilisateur</i>,\n"
+"        sinon laissez cette colonne vide.\n"
+"\n"
+"        Le nom de l'album peut être n'importe quoi qui vous\n"
+"        permet de l'identifier, par exemple \"Fêtes de Plage\".\n"
+"\n"
+"        Pour obtenir les meilleurs photos, il est conseillé de\n"
+"        conserver le critère de tri sur 'Interestingness' (Intérêt).\n"
+"        Cela téléchargera uniquement les photos les plus\n"
+"        intéressantes. L'autre option 'Date', demandera à\n"
+"        Webilder de télécharger les photos les plus récentes.\n"
+"        "
+
+#: src/config_dialog.py:288
+msgid "Sending your recommendations..."
+msgstr "Envoi de vos recommandations..."
+
+#: src/config_dialog.py:302
+#, python-format
+msgid "Sending rule %d of %d"
+msgstr "Envoi de la règle %d sur %d"
+
+#: src/config_dialog.py:309
+msgid "Thank you for recommending your albums!"
+msgstr "Merci d'avoir recommander vos albums!"
+
+#: src/config_dialog.py:318
+msgid "Could not open browser"
+msgstr "Impossible d'ouvrir le navigateur"
+
+#: src/config_dialog.py:319
+#, python-format
+msgid ""
+"Webilder was unable to find a browser, please visit: \n"
+"%s"
+msgstr ""
+"Webilder n'a pas pu trouver de navigateur, veuillez visiter: \n"
+"%s"
+
+#: src/downloader.py:56
+#, python-format
+msgid "Skipping already existing photo '%s'"
+msgstr "Photo déjà existante '%s' ignorée"
+
+#: src/downloader.py:59
+#, python-format
+msgid "Skipping banned photo '%s'."
+msgstr "Photo bannie '%s' ignorée."
+
+#: src/downloader.py:67
+#, python-format
+msgid "Skipping previously filtered photo '%s'."
+msgstr "Photo déjà filtrée '%s' ignorée."
+
+#: src/downloader.py:74
+#, python-format
+msgid "Skipping non-landscape photo '%s'"
+msgstr "Photo au format Portrait '%s' ignorée"
+
+#: src/downloader.py:83
+#, python-format
+msgid "%s: Downloading '%s'"
+msgstr "%s: Téléchargement '%s'"
+
+#: src/downloader.py:133
+msgid "Downloading list of photos (may take some time)"
+msgstr ""
+"Téléchargement de la liste des photos\n"
+"(peut prendre du temps)"
+
+#: src/downloader.py:137
+msgid "Filtering photos (may take some time)"
+msgstr "Filtrage des photos (peut prendre du temps)"
+
+#: src/downloader.py:145
+#, python-format
+msgid "Downloading photo %d of %d from %s."
+msgstr "Téléchargement de la photo %d de %d depuis %s."
+
+#: src/downloader.py:146
+#, python-format
+msgid "Downloading <b><i>\"%s\"</i></b>"
+msgstr "Téléchargement de <b><i>\"%s\"</i></b>"
+
+#: src/downloader.py:150
+msgid "   Photo is available only to premium members. Skipping."
+msgstr "   La photo est disponible uniquement pour les membres Premium. Ignorée."
+
+#: src/kwebilder.py:29
+msgid "&Browse Collection"
+msgstr "&Parcourir la Collection"
+
+#: src/kwebilder.py:32
+msgid "&Next Photo"
+msgstr "Photo _Suivante"
+
+#: src/kwebilder.py:35
+msgid "&Download Photos"
+msgstr "&Télécharger des Photos"
+
+#: src/progress_dialog.py:41
+msgid "Thread done"
+msgstr "Processus Terminé"
+
+#: src/thumbs.py:73
+msgid "Invalid picture"
+msgstr "Image invalide"
+
+#: src/uitricks.py:27
+#, python-format
+msgid "Widget %s not found when trying to register callback %s"
+msgstr "Le contrôle %s n'a pas été trouvé lors de la tentative d'enregistrement du rappel %s"
+
+#: src/wbz_handler.py:22
+msgid "Unable to find image's title"
+msgstr "Impossible de trouver le titre de l'image"
+
+#: src/wbz_handler.py:24
+msgid "Unable to find image's album"
+msgstr "Impossible de trouver l'album de l'image"
+
+#: src/wbz_handler.py:31
+#, python-format
+msgid "Extracted: %s/%s"
+msgstr "Extrait: %s/%s"
+
+#: src/wbz_handler.py:48
+msgid "Unrecognized file type"
+msgstr "Type de fichier non reconnu"
+
+#: src/wbz_handler.py:52
+msgid ""
+"wbz_handler will extract webshots archives into your collection.\n"
+"\n"
+"Usage:\n"
+"\n"
+"    wbz_handler filename.wbz\n"
+"\n"
+"Where filename.wbz is a Webshots archive."
+msgstr ""
+"wbz_handler extrait des archives webshots dans votre collection.\n"
+"\n"
+"Utilisation:\n"
+"\n"
+"    wbz_handler filename.wbz\n"
+"\n"
+"Où filename.wbz est une archive Webshots."
+
+#: src/webilder_gnome_applet.py:46
+#, python-format
+msgid ""
+"\n"
+"    <popup name=\"button3\">\n"
+"        <menuitem name=\"Item 1\" verb=\"Browse\" label=\"_Browse Collection\" pixtype=\"stock\" \n"
+"pixname=\"gtk-directory\"/>\n"
+"        <menuitem name=\"Item 2\" verb=\"NextPhoto\" label=\"_Next Photo\" pixtype=\"stock\" \n"
+"pixname=\"gtk-go-forward\"/>\n"
+"        <menuitem name=\"Item 3\" verb=\"Leech\" label=\"_Download Photos\" pixtype=\"filename\" \n"
+"pixname=\"%s\"/>\n"
+"        <menuitem name=\"Item 4\" verb=\"Pref\" label=\"_Preferences\" pixtype=\"stock\" \n"
+"pixname=\"gtk-preferences\"/>\n"
+"        <menuitem name=\"Item 5\" verb=\"About\" label=\"_About\" pixtype=\"stock\" pixname=\"gnome-stock-about\"/>\n"
+"        </popup>\n"
+"    "
+msgstr ""
+"\n"
+"    <popup name=\"button3\">\n"
+"        <menuitem name=\"Item 1\" verb=\"Browse\" label=\"_Parcourir la  collection\" pixtype=\"stock\" \n"
+"pixname=\"gtk-directory\"/>\n"
+"        <menuitem name=\"Item 2\" verb=\"NextPhoto\" label=\"Photo _Suivante\" pixtype=\"stock\" \n"
+"pixname=\"gtk-go-forward\"/>\n"
+"        <menuitem name=\"Item 3\" verb=\"Leech\" label=\"_Télécharger des Photos\" pixtype=\"filename\" \n"
+"pixname=\"%s\"/>\n"
+"        <menuitem name=\"Item 4\" verb=\"Pref\" label=\"_Préférences\" pixtype=\"stock\" \n"
+"pixname=\"gtk-preferences\"/>\n"
+"        <menuitem name=\"Item 5\" verb=\"About\" label=\"_À propos\" pixtype=\"stock\" pixname=\"gnome-stock-about\"/>\n"
+"        </popup>\n"
+"    "
+
+#: src/webilder_gnome_applet.py:85
+msgid "Webilder Applet"
+msgstr "Applet Webilder"
+
+#: src/webilder_gnome_applet.py:144
+msgid "Webilder Applet Window"
+msgstr "Fenêtre de l'Applet Webilder"
+
+#: ui/config.glade:29
+msgid "Note: the following features work only if the Webilder panel applet is running."
+msgstr "Note: les fonctions suivantes ne fonctionneront que si l'applet Webilder pour le tableau de bord est lancée."
+
+#: ui/config.glade:60
+msgid "_Rotate wallpaper every"
+msgstr "Change_r de fond d'écran toutes les"
+
+#: ui/config.glade:72
+msgid ""
+"1 minute\n"
+"2 minutes\n"
+"5 minutes\n"
+"10 minutes\n"
+"20 minutes\n"
+"30 minutes\n"
+"1 hour\n"
+"2 hours\n"
+"4 hours\n"
+"1 day"
+msgstr ""
+"1 minute\n"
+"2 minutes\n"
+"5 minutes\n"
+"10 minutes\n"
+"20 minutes\n"
+"30 minutes\n"
+"1 heure\n"
+"2 heures\n"
+"4 heures\n"
+"1 jour"
+
+#: ui/config.glade:97
+msgid ""
+"Rotation will choose a photo at random from the entire collection.\n"
+"\n"
+"Future versions will add more options here, such as selecting which collections to use, etc."
+msgstr ""
+"La rotation sélectionnera une photo aléatoirement dans la collection entière.\n"
+"\n"
+"Les futures versions ajouteront plus d'options, comme la sélection de la collection à utiliser, etc."
+
+#: ui/config.glade:115
+msgid "<b>Wallpaper Rotation Settings:</b>"
+msgstr "<b>Paramètres de Rotation du Fond d'Écran:</b>"
+
+#: ui/config.glade:153
+msgid "_Download new photos every"
+msgstr "_Télécharger des nouvelles toutes les"
+
+#: ui/config.glade:179
+msgid "hours."
+msgstr "heures."
+
+#: ui/config.glade:200
+msgid "<b>Auto-downloader:</b>"
+msgstr "<b>Téléchargement automatique:</b>"
+
+#: ui/config.glade:221
+msgid "_General"
+msgstr "_Général"
+
+#: ui/config.glade:238
+msgid "_Download images from Flickr"
+msgstr "_Télécharger des images depuis Flickr"
+
+#: ui/config.glade:262
+msgid "Download _interesting photos"
+msgstr "Télécharger les photos _intéressantes"
+
+#: ui/config.glade:274
+msgid "<b>Interestingness</b>"
+msgstr "<b>Intérêt</b>"
+
+#: ui/config.glade:324
+msgid "A_dd"
+msgstr "_Ajouter"
+
+#: ui/config.glade:337
+msgid "_Remove"
+msgstr "_Supprimer"
+
+#: ui/config.glade:350
+msgid "_Tips..."
+msgstr "A_stuces..."
+
+#: ui/config.glade:378
+msgid "_Recommend My Tags"
+msgstr "_Recommander Mes Tags"
+
+#: ui/config.glade:389
+msgid "_Get More Albums"
+msgstr "_Obtenir Plus d'Albums"
+
+#: ui/config.glade:410
+msgid "<b>Tags</b>"
+msgstr "<b>Tags</b>"
+
+#: ui/config.glade:431
+msgid "_Flickr"
+msgstr "_Flickr"
+
+#: ui/config.glade:448
+msgid "_Download images from Webshots"
+msgstr "_Télécharger des images depuis Webshots"
+
+#: ui/config.glade:481
+#: ui/webilder.glade:72
+msgid "_Username:"
+msgstr "Nom d'_Utilisateur:"
+
+#: ui/config.glade:493
+#: ui/webilder.glade:85
+msgid "_Password:"
+msgstr "Mot de _Passe:"
+
+#: ui/config.glade:538
+msgid ""
+"Don't have a Webshots account yet? \n"
+"Go to http://www.webshots.com and\n"
+"sign up for a free basic account. "
+msgstr ""
+"Vous n'avez pas encore de compte Webshots account? \n"
+"Visitez http://www.webshots.com et\n"
+"créez un compte basique gratuitement. "
+
+#: ui/config.glade:558
+msgid "<b>Login Options:</b>"
+msgstr "<b>Options d'Identification:</b>"
+
+#: ui/config.glade:602
+msgid "_High Quality (1600 x 1200)"
+msgstr "_Haute Quality (1600 x 1200)"
+
+#: ui/config.glade:648
+msgid "_Wide Screen (16:9)"
+msgstr "Écran _Large (16:9)"
+
+#: ui/config.glade:681
+msgid "_Regular (800 x 600)"
+msgstr "_Classique (800 x 600)"
+
+#: ui/config.glade:699
+msgid "<b>Image Type:</b>"
+msgstr "<b>Type d'Image:</b>"
+
+#: ui/config.glade:723
+msgid "_Webshots"
+msgstr "_Webshots"
+
+#: ui/config.glade:759
+msgid "_Directory:"
+msgstr "_Répertoire:"
+
+#: ui/config.glade:781
+msgid "_Browse..."
+msgstr "_Parcourir..."
+
+#: ui/config.glade:799
+msgid "<b>Collection Settings:</b>"
+msgstr "<b>Paramètres des Collections:</b>"
+
+#: ui/config.glade:830
+msgid "Use _GNOME settings"
+msgstr "Utiliser les paramètres GN_OME"
+
+#: ui/config.glade:843
+msgid "Use _KDE settings"
+msgstr "Utiliser les paramètres _KDE"
+
+#: ui/config.glade:858
+msgid "Set a wallpaper by _running:"
+msgstr "Appliquer un fond d'écran en _lançant:"
+
+#: ui/config.glade:894
+msgid "<b>Wallpaper Settings:</b>"
+msgstr "<b>Paramètres de Fond d'Écran:</b>"
+
+#: ui/config.glade:922
+msgid "Download only _Landscape photos."
+msgstr "Ne télécharger que des photos au format Pa_ysage."
+
+#: ui/config.glade:932
+msgid "<b>Download Filters</b>"
+msgstr "<b>Filtres de Téléchargement</b>"
+
+#: ui/config.glade:954
+msgid "_Advanced"
+msgstr "A_vancé"
+
+#: ui/webilder.glade:12
+msgid "Login to Webshots"
+msgstr "S'identifier sur Webshots"
+
+#: ui/webilder.glade:47
+msgid ""
+"<span weight=\"bold\" size=\"larger\">Password required</span>\n"
+"\n"
+"Enter your username and password for Webshots. \n"
+"\n"
+"You can sign up for a free account at\n"
+"<tt>http://www.webshots.com</tt>"
+msgstr ""
+"<span weight=\"bold\" size=\"larger\">Mot de Passe requis</span>\n"
+"\n"
+"Entrez votre nom d'utilisateur et votre mot de passe pour Webshots. \n"
+"\n"
+"Vous pouvez créer un compte gratuit sur\n"
+"<tt>http://www.webshots.com</tt>"
+
+#: ui/webilder.glade:160
+msgid "_Login"
+msgstr "_Identifiant"
+
+#: ui/webilder.glade:284
+msgid "Webilder needs your help!"
+msgstr "Webilder a besoin de votre aide!"
+
+#: ui/webilder.glade:326
+msgid "<b>You can help Webilder!</b>"
+msgstr "<b>Vous pouvez aider Webilder!</b>"
+
+#: ui/webilder.glade:371
+msgid "Photo Properties"
+msgstr "Propriétés de la Photo"
+
+#: ui/webilder.glade:398
+#: ui/webilder_desktop.glade:360
+msgid "Title:"
+msgstr "Titre:"
+
+#: ui/webilder.glade:410
+#: ui/webilder_desktop.glade:330
+msgid "Album:"
+msgstr "Album:"
+
+#: ui/webilder.glade:424
+msgid "File:"
+msgstr "Fichier:"
+
+#: ui/webilder.glade:438
+#: ui/webilder_desktop.glade:402
+msgid "Tags:"
+msgstr "Tags:"
+
+#: ui/webilder.glade:516
+msgid "Size:"
+msgstr "Taille:"
+
+#: ui/webilder.glade:530
+msgid "Date:"
+msgstr "Date:"
+
+#: ui/webilder.glade:574
+msgid "URL:"
+msgstr "URL:"
+
+#: ui/webilder.glade:606
+msgid "<b>Photo Properties</b>"
+msgstr "<b>Propriétés de la Photo</b>"
+
+#: ui/webilder_desktop.glade:13
+msgid "Webilder Desktop"
+msgstr "Bureau Webilder"
+
+#: ui/webilder_desktop.glade:24
+msgid "_File"
+msgstr "_Fichier"
+
+#: ui/webilder_desktop.glade:31
+msgid "Import webshots photos or collections."
+msgstr "Importer des photos ou des collections Webshots."
+
+#: ui/webilder_desktop.glade:32
+msgid "_Import Webshots Files..."
+msgstr "_Importer des Fichiers Webshots..."
+
+#: ui/webilder_desktop.glade:59
+msgid "_Photo"
+msgstr "_Photo"
+
+#: ui/webilder_desktop.glade:66
+msgid "Set the image as your wallpaper"
+msgstr "Faire de l'image votre fond d'écran"
+
+#: ui/webilder_desktop.glade:67
+#: ui/webilder_desktop.glade:470
+msgid "Set as _Wallpaper"
+msgstr "Appliquer en tant que _Fond d'Écran"
+
+#: ui/webilder_desktop.glade:76
+msgid "View a fullscreen version of the image"
+msgstr "Voir une version en plein écran de l'image"
+
+#: ui/webilder_desktop.glade:77
+msgid "View _Fullscreen"
+msgstr "Voir en _Plein Écran"
+
+#: ui/webilder_desktop.glade:91
+msgid "Delete photo"
+msgstr "Supprimer la photo"
+
+#: ui/webilder_desktop.glade:92
+msgid "_Delete Photo"
+msgstr "_Supprimer la photo"
+
+#: ui/webilder_desktop.glade:106
+#: ui/webilder_desktop.glade:512
+msgid "_Properties..."
+msgstr "_Propriétés..."
+
+#: ui/webilder_desktop.glade:123
+msgid "_Tools"
+msgstr "_Outils"
+
+#: ui/webilder_desktop.glade:130
+msgid "_Download Photos"
+msgstr "_Télécharger des Photos"
+
+#: ui/webilder_desktop.glade:150
+msgid "_Preferences"
+msgstr "_Préférences"
+
+#: ui/webilder_desktop.glade:169
+msgid "_Help"
+msgstr "_Aide"
+
+#: ui/webilder_desktop.glade:185
+msgid "_Donate to this project..."
+msgstr "Faire un _Don à ce projet..."
+
+#: ui/webilder_desktop.glade:266
+msgid "Sort by:"
+msgstr "Classer par:"
+
+#: ui/webilder_desktop.glade:276
+msgid ""
+"Title\n"
+"Date"
+msgstr ""
+"Titre\n"
+"Date"
+
+#: ui/webilder_desktop.glade:316
+msgid "Credit:"
+msgstr "Crédit:"
+
+#: ui/webilder_desktop.glade:434
+msgid "<b>Photo Information</b>"
+msgstr "<b>Informations sur la Photo</b>"
+
+#: ui/webilder_desktop.glade:478
+msgid "View _Full Screen"
+msgstr "Voir en _Plein Écran"
+
+#: ui/webilder_desktop.glade:500
+msgid "De_lete Forever"
+msgstr "Supprimer D_éfinitivement"
+
+#: setup.py:22
+#, python-format
+msgid "To install, run '%s'"
+msgstr "Pour installer, lancez '%s'"
+
+#: setup.py:56
+msgid "Builds the bonobo server file representing the applet."
+msgstr "Construit le serveur fichier du serveur représentant l'applet."
+
+#: setup.py:62
+msgid "Building Webilder global settings file."
+msgstr "Construction du fichier de paramètres gloabux de Webilder."
+
+#: setup.py:92
+#, python-format
+msgid "Could not find module %s. Make sure all dependencies are installed."
+msgstr "Impossible de trouver le module %s. Veuillez vérifier que tous les dépendances sont installées."
+
+#: setup.py:106
+msgid "Install with KDE support"
+msgstr "Installation avec le support KDE"
+
+#: setup.py:107
+msgid "Base directory of KDE installation"
+msgstr "Répertoire de base de l'installation KDE"
+
+#: setup.py:124
+msgid ""
+"\n"
+"Installation completed successfully.\n"
+"\n"
+"  GNOME Users: Right-click on the GNOME panel, choose \"Add to panel\", \n"
+"               and select \"Webilder Webshots Applet\".  If it\n"
+"               is not in the list - log off and log in again.\n"
+"\n"
+"  KDE Users:   From the graphics menu, start KWebilder.\n"
+"\n"
+"If you prefer the command line, you can run webilder_desktop\n"
+"to configure Webilder and manage your photos. It is also\n"
+"possible to start photo downloading from the command line by\n"
+"starting webilder_downloader.  \n"
+"\n"
+"Please report any problem to thesamet at gmail.com. \n"
+msgstr ""
+"\n"
+"Installation terminée avec succès.\n"
+"\n"
+"  Utilisateurs de GNOME: Cliquez avec le bouton droit sur le tableau de\n"
+"                         bord GNOME, choissisez \"Ajouter au tableau de bord\", \n"
+"                         et sélectionnez \"Bureau Webilder\". Si celui-ci n'est\n"
+"                         pas dans la liste, déconnectez-vous puis\n"
+"                         reconnectez-vous.\n"
+"\n"
+"  Utilisateurs de KDE:   Depuis le menu graphique, lancez KWebilder.\n"
+"\n"
+"Si vous préférez la ligne de commande, vous pouvez lancer webilder_desktop\n"
+"pour configurer Webilder et gérer vos photos. Il est aussi possible de lancer\n"
+"le téléchargement de photos depuis la ligne de commande en lançant\n"
+"webilder_downloader.\n"
+"\n"
+"Veuillez rapporter tout problème à thesamet at gmail.com. \n"
+
+#: setup.py:168
+msgid "Detecting KDE installation directory"
+msgstr "Détection du répertoire d'installation KDE"
+
+#: setup.py:171
+msgid "Could not detect KDE installation directory. Please provide --kde-prefix argument"
+msgstr "Impossible de détecter le répertoire d'installation KDE. Veuillez fournir l'argument --kde-prefix."
+
+#: setup.py:172
+#, python-format
+msgid "KDE installation directory is %s"
+msgstr "Le répertoire d'installation KDE est %s"
+
+#~ msgid " and changed your wallpaper <b>%d times</b>."
+#~ msgstr " et changer votre papier peint <b>%d fois</b>."
+

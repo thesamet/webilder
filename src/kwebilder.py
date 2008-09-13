@@ -26,13 +26,13 @@ class WebilderTray(KSystemTray, BaseApplet):
         actions = self.actionCollection()
         context = self.contextMenu()
 
-        browse = KAction('&Browse Collection', 'folder_open', KShortcut(), self.browse, actions, 'browse')
+        browse = KAction(_('&Browse Collection'), 'folder_open', KShortcut(), self.browse, actions, 'browse')
         browse.plug(context)
 
-        next = KAction('&Next Photo', 'next', KShortcut(), self.next_photo, actions, 'next')
+        next = KAction(_('&Next Photo'), 'next', KShortcut(), self.next_photo, actions, 'next')
         next.plug(context)
 
-        download = KAction('&Download Photos', QIconSet(pixmap), KShortcut(), self.download, actions, 'download')
+        download = KAction(_('&Download Photos'), QIconSet(pixmap), KShortcut(), self.download, actions, 'download')
         download.plug(context)
 
         preferences = KStdAction.preferences(self.preferences, actions)
