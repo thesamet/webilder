@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Webilder\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-13 13:43+0200\n"
-"PO-Revision-Date: 2008-08-13 13:58+0100\n"
+"POT-Creation-Date: 2008-09-16 19:46+0200\n"
+"PO-Revision-Date: 2008-09-16 19:47+0100\n"
 "Last-Translator: Nicolas ELIE <chrystalyst@free.fr>\n"
 "Language-Team: Webilder <chrystalyst@free.fr>\n"
 "MIME-Version: 1.0\n"
@@ -12,160 +12,6 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-Country: FRANCE\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: src/DownloadDialog.py:9
-msgid ""
-"<b>Downloading photos</b>\n"
-"\n"
-"Downloading photos... Download times vary according to your connection speed.."
-msgstr ""
-"<b>Téléchargement des photos</b>\n"
-"\n"
-"Téléchargement des photos... Le temps de téléchargement varie en fonction de la vitesse de votre connexion..."
-
-#: src/DownloadDialog.py:28
-msgid ""
-"<b>Only Webshots Premium members can download wide or highest quality photos.</b>\n"
-"\n"
-"Go to the Preferences window, choose \"Regular Quality\" and try again."
-msgstr ""
-"<b>Seuls les membres Premium de Webshots peuvent télécharger des photos 16:9 ou de qualité supérieures.</b>\n"
-"\n"
-"Allez dans la fenêtre de Préférences, choisissez \"Qualité Classique\" et réessayez."
-
-#: src/DownloadDialog.py:33
-msgid ""
-"<b>Incorrect Webshots Username or Password</b>\n"
-"\n"
-"Please check your username and password in the preferences dialog."
-msgstr ""
-"<b>Nom d'Utilisateur Webshots ou Mot de Passe incorrect</b>\n"
-"\n"
-"Veuillez vérifier votre nom d'utilisateur et votre mot de passe dans la boîte de dialogue de préférences."
-
-#: src/DownloadDialog.py:37
-#, python-format
-msgid ""
-"<b>Error occured while downloading images</b>\n"
-"\n"
-"%s"
-msgstr ""
-"<b>Une erreur est survenue lors du téléchargement des images</b>\n"
-"\n"
-"%s"
-
-#: src/WebilderDesktop.py:67
-msgid "<b>Recent Photos</b>"
-msgstr "<b>Photos Récentes</b>"
-
-#: src/WebilderDesktop.py:122
-msgid "Not available"
-msgstr "Non disponible"
-
-#: src/WebilderDesktop.py:144
-#, python-format
-msgid "<b>*New* %s</b>"
-msgstr "<b>*Nouveau* %s</b>"
-
-#: src/WebilderDesktop.py:286
-msgid "Choose files to import"
-msgstr "Choisissez les fichiers à importer"
-
-#: src/WebilderDesktop.py:289
-msgid "_Import"
-msgstr "_Importer"
-
-#: src/WebilderDesktop.py:289
-msgid "_Cancel"
-msgstr "_Annuler"
-
-#: src/WebilderDesktop.py:324
-#, python-format
-msgid "%.1f KB"
-msgstr "%.1f Ko"
-
-#: src/WebilderDesktop.py:375
-msgid "Would you like to permanently delete the selected images?"
-msgstr "Voulez-vous supprimer définitivement les images sélectionnées?"
-
-#: src/WebilderDesktop.py:377
-msgid "Would you like to delete the selected images?"
-msgstr "Voulez-vous supprimer les images sélectionnées?"
-
-#: src/WebilderDesktop.py:436
-#, python-format
-msgid ""
-"\n"
-"Webilder is trying hard to make your desktop the coolest in town.\n"
-"\n"
-"Since you installed it on %(inst_date)s, it downloaded <b>%(downloads)d photos</b>\n"
-"for you and changed your wallpaper <b>%(rotations)d times</b>.\n"
-"\n"
-"It takes a lot of time and hard work to develop and maintain Webilder.\n"
-"\n"
-"If you'd like to see Webilder becomes even better, you can help us \n"
-"a lot by making a small donation. \n"
-"\n"
-"Any donation will be GREATLY appreciated. You can even donate $5.\n"
-"\n"
-"After clicking on the <i>Yes</i> button below you'll be taken to \n"
-"the donation page. If the page does not appear, please visit:\n"
-"%(url)s\n"
-"\n"
-"Would you like to donate to Webilder?\n"
-msgstr ""
-"\n"
-"Webilder tente de faire de votre bureau le plus cool de la ville.\n"
-"\n"
-"Depuis que l'avez installé le %(inst_date)s, il a téléchargé <b>%(downloads)d photos</b>\n"
-"pour vous et changer votre fond d'écran <b>%(rotations)d fois</b>\n"
-"\n"
-"Cela prend beaucoup de temps et de dur travail pour développer et maintenir Webilder.\n"
-"\n"
-"Si vous vous voulez voir Webilder devenir encore meilleur, vous pouvez nous aider\n"
-"beaucoup en faisant un petit don.\n"
-"\n"
-"Toute donation sera GRANDEMENT appréciée. Vous pouvez donner même €5.\n"
-"\n"
-"Après avoir cliqué sur le button <i>Oui</i> ci-dessous, vous serez dirigé vers la page de don.\n"
-"Si la page n'apparaît pas, s'il vous plaît visitez cette page:\n"
-"%(url)s\n"
-"\n"
-"Voulez-vous faire un don à Webilder?\n"
-
-#: src/WebilderDesktop.py:470
-msgid "Thank You!"
-msgstr "Merci!"
-
-#: src/WebilderDesktop.py:471
-#, python-format
-msgid ""
-"<b>Thanks for your interest in supporting Webilder.</b>\n"
-"\n"
-"Please follow this link to send us a donation:\n"
-"\n"
-"%s"
-msgstr ""
-"<b>Merci de votre intérêt envers Webilder.</b>\n"
-"\n"
-"Veuillez SVP suivre ce lien pour nous envoyer un don:\n"
-"\n"
-"%s"
-
-#: src/config.py:24
-msgid "collection.dir is set to a non-directory, check your config file."
-msgstr "collection.dir ne pointe pas vers un répertoire, vérifiez votre fichier de configuration."
-
-#: src/config.py:42
-#: src/config.py:48
-#, python-format
-msgid "Error parsing line %d of config file %s"
-msgstr "Erreur lors de l'analyse de la ligne %d du fichier de configuration %s"
-
-#: src/config.py:50
-#, python-format
-msgid "Unrecognized key in line %d of config file %s"
-msgstr "Clé non reconnue à la ligne %d du fichier de configuration %s"
 
 #: src/config_dialog.py:17
 msgid "1 minute"
@@ -326,6 +172,62 @@ msgstr ""
 "Webilder n'a pas pu trouver de navigateur, veuillez visiter: \n"
 "%s"
 
+#: src/config.py:24
+msgid "collection.dir is set to a non-directory, check your config file."
+msgstr "collection.dir ne pointe pas vers un répertoire, vérifiez votre fichier de configuration."
+
+#: src/config.py:42
+#: src/config.py:48
+#, python-format
+msgid "Error parsing line %d of config file %s"
+msgstr "Erreur lors de l'analyse de la ligne %d du fichier de configuration %s"
+
+#: src/config.py:50
+#, python-format
+msgid "Unrecognized key in line %d of config file %s"
+msgstr "Clé non reconnue à la ligne %d du fichier de configuration %s"
+
+#: src/DownloadDialog.py:9
+msgid ""
+"<b>Downloading photos</b>\n"
+"\n"
+"Downloading photos... Download times vary according to your connection speed.."
+msgstr ""
+"<b>Téléchargement des photos</b>\n"
+"\n"
+"Téléchargement des photos... Le temps de téléchargement varie en fonction de la vitesse de votre connexion..."
+
+#: src/DownloadDialog.py:28
+msgid ""
+"<b>Only Webshots Premium members can download wide or highest quality photos.</b>\n"
+"\n"
+"Go to the Preferences window, choose \"Regular Quality\" and try again."
+msgstr ""
+"<b>Seuls les membres Premium de Webshots peuvent télécharger des photos 16:9 ou de qualité supérieures.</b>\n"
+"\n"
+"Allez dans la fenêtre de Préférences, choisissez \"Qualité Classique\" et réessayez."
+
+#: src/DownloadDialog.py:33
+msgid ""
+"<b>Incorrect Webshots Username or Password</b>\n"
+"\n"
+"Please check your username and password in the preferences dialog."
+msgstr ""
+"<b>Nom d'Utilisateur Webshots ou Mot de Passe incorrect</b>\n"
+"\n"
+"Veuillez vérifier votre nom d'utilisateur et votre mot de passe dans la boîte de dialogue de préférences."
+
+#: src/DownloadDialog.py:37
+#, python-format
+msgid ""
+"<b>Error occured while downloading images</b>\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Une erreur est survenue lors du téléchargement des images</b>\n"
+"\n"
+"%s"
+
 #: src/downloader.py:56
 #, python-format
 msgid "Skipping already existing photo '%s'"
@@ -435,6 +337,104 @@ msgstr ""
 "\n"
 "Où filename.wbz est une archive Webshots."
 
+#: src/WebilderDesktop.py:67
+msgid "<b>Recent Photos</b>"
+msgstr "<b>Photos Récentes</b>"
+
+#: src/WebilderDesktop.py:122
+msgid "Not available"
+msgstr "Non disponible"
+
+#: src/WebilderDesktop.py:144
+#, python-format
+msgid "<b>*New* %s</b>"
+msgstr "<b>*Nouveau* %s</b>"
+
+#: src/WebilderDesktop.py:286
+msgid "Choose files to import"
+msgstr "Choisissez les fichiers à importer"
+
+#: src/WebilderDesktop.py:289
+msgid "_Import"
+msgstr "_Importer"
+
+#: src/WebilderDesktop.py:289
+msgid "_Cancel"
+msgstr "_Annuler"
+
+#: src/WebilderDesktop.py:324
+#, python-format
+msgid "%.1f KB"
+msgstr "%.1f Ko"
+
+#: src/WebilderDesktop.py:375
+msgid "Would you like to permanently delete the selected images?"
+msgstr "Voulez-vous supprimer définitivement les images sélectionnées?"
+
+#: src/WebilderDesktop.py:377
+msgid "Would you like to delete the selected images?"
+msgstr "Voulez-vous supprimer les images sélectionnées?"
+
+#: src/WebilderDesktop.py:436
+#, python-format
+msgid ""
+"\n"
+"Webilder is trying hard to make your desktop the coolest in town.\n"
+"\n"
+"Since you installed it on %(inst_date)s, it downloaded <b>%(downloads)d photos</b>\n"
+"for you and changed your wallpaper <b>%(rotations)d times</b>.\n"
+"\n"
+"It takes a lot of time and hard work to develop and maintain Webilder.\n"
+"\n"
+"If you'd like to see Webilder becomes even better, you can help us \n"
+"a lot by making a small donation. \n"
+"\n"
+"Any donation will be GREATLY appreciated. You can even donate $5.\n"
+"\n"
+"After clicking on the <i>Yes</i> button below you'll be taken to \n"
+"the donation page. If the page does not appear, please visit:\n"
+"%(url)s\n"
+"\n"
+"Would you like to donate to Webilder?\n"
+msgstr ""
+"\n"
+"Webilder tente de faire de votre bureau le plus cool de la ville.\n"
+"\n"
+"Depuis que l'avez installé le %(inst_date)s, il a téléchargé <b>%(downloads)d photos</b>\n"
+"pour vous et changer votre fond d'écran <b>%(rotations)d fois</b>\n"
+"\n"
+"Cela prend beaucoup de temps et de dur travail pour développer et maintenir Webilder.\n"
+"\n"
+"Si vous vous voulez voir Webilder devenir encore meilleur, vous pouvez nous aider\n"
+"beaucoup en faisant un petit don.\n"
+"\n"
+"Toute donation sera GRANDEMENT appréciée. Vous pouvez donner même €5.\n"
+"\n"
+"Après avoir cliqué sur le button <i>Oui</i> ci-dessous, vous serez dirigé vers la page de don.\n"
+"Si la page n'apparaît pas, s'il vous plaît visitez cette page:\n"
+"%(url)s\n"
+"\n"
+"Voulez-vous faire un don à Webilder?\n"
+
+#: src/WebilderDesktop.py:470
+msgid "Thank You!"
+msgstr "Merci!"
+
+#: src/WebilderDesktop.py:471
+#, python-format
+msgid ""
+"<b>Thanks for your interest in supporting Webilder.</b>\n"
+"\n"
+"Please follow this link to send us a donation:\n"
+"\n"
+"%s"
+msgstr ""
+"<b>Merci de votre intérêt envers Webilder.</b>\n"
+"\n"
+"Veuillez SVP suivre ce lien pour nous envoyer un don:\n"
+"\n"
+"%s"
+
 #: src/webilder_gnome_applet.py:46
 #, python-format
 msgid ""
@@ -473,6 +473,10 @@ msgstr "Applet Webilder"
 #: src/webilder_gnome_applet.py:144
 msgid "Webilder Applet Window"
 msgstr "Fenêtre de l'Applet Webilder"
+
+#: ui/config.glade:11
+msgid "Webilder Preferences"
+msgstr "Préférences de Webilder"
 
 #: ui/config.glade:29
 msgid "Note: the following features work only if the Webilder panel applet is running."
@@ -664,77 +668,6 @@ msgstr "<b>Filtres de Téléchargement</b>"
 msgid "_Advanced"
 msgstr "A_vancé"
 
-#: ui/webilder.glade:12
-msgid "Login to Webshots"
-msgstr "S'identifier sur Webshots"
-
-#: ui/webilder.glade:47
-msgid ""
-"<span weight=\"bold\" size=\"larger\">Password required</span>\n"
-"\n"
-"Enter your username and password for Webshots. \n"
-"\n"
-"You can sign up for a free account at\n"
-"<tt>http://www.webshots.com</tt>"
-msgstr ""
-"<span weight=\"bold\" size=\"larger\">Mot de Passe requis</span>\n"
-"\n"
-"Entrez votre nom d'utilisateur et votre mot de passe pour Webshots. \n"
-"\n"
-"Vous pouvez créer un compte gratuit sur\n"
-"<tt>http://www.webshots.com</tt>"
-
-#: ui/webilder.glade:160
-msgid "_Login"
-msgstr "_Identifiant"
-
-#: ui/webilder.glade:284
-msgid "Webilder needs your help!"
-msgstr "Webilder a besoin de votre aide!"
-
-#: ui/webilder.glade:326
-msgid "<b>You can help Webilder!</b>"
-msgstr "<b>Vous pouvez aider Webilder!</b>"
-
-#: ui/webilder.glade:371
-msgid "Photo Properties"
-msgstr "Propriétés de la Photo"
-
-#: ui/webilder.glade:398
-#: ui/webilder_desktop.glade:360
-msgid "Title:"
-msgstr "Titre:"
-
-#: ui/webilder.glade:410
-#: ui/webilder_desktop.glade:330
-msgid "Album:"
-msgstr "Album:"
-
-#: ui/webilder.glade:424
-msgid "File:"
-msgstr "Fichier:"
-
-#: ui/webilder.glade:438
-#: ui/webilder_desktop.glade:402
-msgid "Tags:"
-msgstr "Tags:"
-
-#: ui/webilder.glade:516
-msgid "Size:"
-msgstr "Taille:"
-
-#: ui/webilder.glade:530
-msgid "Date:"
-msgstr "Date:"
-
-#: ui/webilder.glade:574
-msgid "URL:"
-msgstr "URL:"
-
-#: ui/webilder.glade:606
-msgid "<b>Photo Properties</b>"
-msgstr "<b>Propriétés de la Photo</b>"
-
 #: ui/webilder_desktop.glade:13
 msgid "Webilder Desktop"
 msgstr "Bureau Webilder"
@@ -821,6 +754,21 @@ msgstr ""
 msgid "Credit:"
 msgstr "Crédit:"
 
+#: ui/webilder_desktop.glade:330
+#: ui/webilder.glade:410
+msgid "Album:"
+msgstr "Album:"
+
+#: ui/webilder_desktop.glade:360
+#: ui/webilder.glade:398
+msgid "Title:"
+msgstr "Titre:"
+
+#: ui/webilder_desktop.glade:402
+#: ui/webilder.glade:438
+msgid "Tags:"
+msgstr "Tags:"
+
 #: ui/webilder_desktop.glade:434
 msgid "<b>Photo Information</b>"
 msgstr "<b>Informations sur la Photo</b>"
@@ -832,6 +780,62 @@ msgstr "Voir en _Plein Écran"
 #: ui/webilder_desktop.glade:500
 msgid "De_lete Forever"
 msgstr "Supprimer D_éfinitivement"
+
+#: ui/webilder.glade:12
+msgid "Login to Webshots"
+msgstr "S'identifier sur Webshots"
+
+#: ui/webilder.glade:47
+msgid ""
+"<span weight=\"bold\" size=\"larger\">Password required</span>\n"
+"\n"
+"Enter your username and password for Webshots. \n"
+"\n"
+"You can sign up for a free account at\n"
+"<tt>http://www.webshots.com</tt>"
+msgstr ""
+"<span weight=\"bold\" size=\"larger\">Mot de Passe requis</span>\n"
+"\n"
+"Entrez votre nom d'utilisateur et votre mot de passe pour Webshots. \n"
+"\n"
+"Vous pouvez créer un compte gratuit sur\n"
+"<tt>http://www.webshots.com</tt>"
+
+#: ui/webilder.glade:160
+msgid "_Login"
+msgstr "_Identifiant"
+
+#: ui/webilder.glade:284
+msgid "Webilder needs your help!"
+msgstr "Webilder a besoin de votre aide!"
+
+#: ui/webilder.glade:326
+msgid "<b>You can help Webilder!</b>"
+msgstr "<b>Vous pouvez aider Webilder!</b>"
+
+#: ui/webilder.glade:371
+msgid "Photo Properties"
+msgstr "Propriétés de la Photo"
+
+#: ui/webilder.glade:424
+msgid "File:"
+msgstr "Fichier:"
+
+#: ui/webilder.glade:516
+msgid "Size:"
+msgstr "Taille:"
+
+#: ui/webilder.glade:530
+msgid "Date:"
+msgstr "Date:"
+
+#: ui/webilder.glade:574
+msgid "URL:"
+msgstr "URL:"
+
+#: ui/webilder.glade:606
+msgid "<b>Photo Properties</b>"
+msgstr "<b>Propriétés de la Photo</b>"
 
 #: setup.py:22
 #, python-format
