@@ -391,7 +391,7 @@ def delete_files(main_window, forever):
     if monitor['monitor'] is not None:
         gnomevfs.monitor_cancel(monitor['monitor'])
 
-    for path in selected:                
+    for path in selected:
         iter = model.get_iter(path)
         data = model.get_value(iter,
             IV_DATA_COLUMN)

@@ -4,7 +4,7 @@ ChangeLog for Webilder !
 3-Mar-2006: Released version 0.2
 6-Sep-2006: Updated URLs to new webshots template.
 6-Sep-2006: Fixed support for 64-bit Python.
-6-Sep-2006: Released version 0.3 
+6-Sep-2006: Released version 0.3
 12-Sep-2006: Added Flickr module, lots of code reorganization
 22-Sep-2006: Added KDE wallpaper setting method (patch by behanw)
 23-Sep-2006: Added flickr interestingness, and user_id support
@@ -15,4 +15,6 @@ ChangeLog for Webilder !
 13-Oct-2006: Default flickr sorting method is now by Interestingness, and it
 			 can be modified to be by Date.
 05-Mar-2007: Bug fixes.
-			 
+02-May-2009: Added Italian and French translations.
+             Works with Python 2.6.
+			 Delete current photo menu item for the applet.

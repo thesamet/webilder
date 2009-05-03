@@ -52,12 +52,11 @@ class BaseApplet:
                     self.leech_thread = threading.Thread(
                         target=downloader.download_all)
                     self.leech_thread.setDaemon(True)
-                    self.leech_thread.start()                        
+                    self.leech_thread.start()
                     config.set('autodownload.last_time', now)
                     config.save_config()
         finally:
             return True
-    
 
     def next_photo(self, *args):
         reload_config()
@@ -87,7 +86,25 @@ class BaseApplet:
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             self.set_tooltip_for_photo('%s - %s' % (title, album))
-                
+
+    def delete_current(self, *args):
+        if self.image_file != '':
+            jpg_file = self.image_file
+            inf_file = self.info_file
+            self.next_photo()
+            try:
+                os.remove(jpg_file)
+                os.remove(inf_file)
+                banned = open(os.path.expanduser('~/.webilder/banned_photos'),
+                              'a')
+                banned.write(os.path.basename(jpg_file)+'\n')
+                banned.close()
+            except IOError:
+                pass
+        else:
+            self.next_photo()
+
+
 
     def set_tooltip_for_photo(self, text):
         self._tt_photo = text

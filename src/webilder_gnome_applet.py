@@ -57,11 +57,11 @@ pixname="gtk-preferences"/>
         <menuitem name="Item 5" verb="About" label="_About" pixtype="stock" pixname="gnome-stock-about"/>
         </popup>
     """) % os.path.join(aglobals.glade_dir, 'camera16.png')
-        
+ 
         self.applet.connect("change-size", self.on_resize_panel)
         self.applet.connect("button-press-event", self.on_button_press)
 
-        self.verbs = [ 
+        self.verbs = [
             ( "Pref", self.preferences ),
             ( "About", self.about),
             ( "Browse", self.browse),
@@ -72,16 +72,16 @@ pixname="gtk-preferences"/>
         self.applet.show_all()
         gobject.timeout_add(60*1000, self.timer_event)
         self.photo_browser = None
-        self.download_dlg = None 
-        
+        self.download_dlg = None
+
     def set_tooltip(self, text):
         self.tooltips.enable()
-        self.tooltips.set_tip(self.applet, text)                    
+        self.tooltips.set_tip(self.applet, text)
 
     def preferences(self, object, menu):
         import config_dialog
         config_dialog.ConfigDialog().run_dialog(config)
-    
+
     def about(self, object, menu):
         import AboutDialog
         AboutDialog.ShowAboutDialog(_('Webilder Applet'))
@@ -98,21 +98,6 @@ pixname="gtk-preferences"/>
         self.download_dlg.show()
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.tooltips.disable()
-
-    def delete_current(self, object, menu):
-        if self.image_file != '':
-            try:
-                jpg_file = self.image_file
-                inf_file = self.info_file
-
-                self.next_photo(object, menu)
-                os.remove(jpg_file)
-                os.remove(inf_file)
-            except:
-                pass
-        else:
-            self.next_photo( object, menu)
-
 
     def on_resize_panel(self, widget, size):
         self.scaled_icon = self.icon.scale_simple(size - 4, size - 4,
