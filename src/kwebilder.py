@@ -34,7 +34,10 @@ class WebilderTray(KSystemTray, BaseApplet):
 
         download = KAction(_('&Download Photos'), QIconSet(pixmap), KShortcut(), self.download, actions, 'download')
         download.plug(context)
-
+		
+        trash = KAction('&Delete Current', 'trashcan_full', KShortcut(), self.trash, actions, 'trash')
+        trash.plug(context)
+		
         preferences = KStdAction.preferences(self.preferences, actions)
         preferences.plug(context)
 
@@ -61,6 +64,20 @@ class WebilderTray(KSystemTray, BaseApplet):
 
     def download(self):
         self._launch_unique_app('--download', 'download')
+
+    def trash(self):
+        if self.image_file != '':
+            try:
+              jpg_file = self.image_file 
+              inf_file = self.info_file
+
+              self.next_photo()
+              os.remove(jpg_file)
+              os.remove(inf_file)
+            except:
+              pass
+        else:
+          self.next_photo()
 
     def preferences(self):
         launch_webilder('--configure')

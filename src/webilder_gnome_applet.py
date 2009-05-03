@@ -51,6 +51,7 @@ pixname="gtk-directory"/>
 pixname="gtk-go-forward"/>
         <menuitem name="Item 3" verb="Leech" label="_Download Photos" pixtype="filename" 
 pixname="%s"/>
+        <menuitem name="Item 6" verb="DeleteCurrent" label="_Delete Current" pixtype="stock" pixname="gtk-delete"/>
         <menuitem name="Item 4" verb="Pref" label="_Preferences" pixtype="stock" 
 pixname="gtk-preferences"/>
         <menuitem name="Item 5" verb="About" label="_About" pixtype="stock" pixname="gnome-stock-about"/>
@@ -65,7 +66,8 @@ pixname="gtk-preferences"/>
             ( "About", self.about),
             ( "Browse", self.browse),
             ( "NextPhoto", self.next_photo),
-            ( "Leech", self.leech)]        
+            ( "Leech", self.leech),
+            ( "DeleteCurrent", self.delete_current)]
         self.applet.setup_menu(self.propxml, self.verbs, None)
         self.applet.show_all()
         gobject.timeout_add(60*1000, self.timer_event)
@@ -96,6 +98,21 @@ pixname="gtk-preferences"/>
         self.download_dlg.show()
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.tooltips.disable()
+
+    def delete_current(self, object, menu):
+        if self.image_file != '':
+            try:
+                jpg_file = self.image_file
+                inf_file = self.info_file
+
+                self.next_photo(object, menu)
+                os.remove(jpg_file)
+                os.remove(inf_file)
+            except:
+                pass
+        else:
+            self.next_photo( object, menu)
+
 
     def on_resize_panel(self, widget, size):
         self.scaled_icon = self.icon.scale_simple(size - 4, size - 4,

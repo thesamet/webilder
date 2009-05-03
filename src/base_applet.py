@@ -19,7 +19,7 @@ class BaseApplet:
         self.last_rotate = time.time()
         self.last_autodownload = config.get('autodownload.last_time') or (time.time() - 50*3600)
         self.last_version_check = time.time()-9*3600
-        self._tt_photo = self._tt_announce = ''
+        self._tt_photo = self._tt_announce = self.image_file =  self.info_file = ''
 
     def timer_event(self, *args):
         try:
@@ -71,7 +71,7 @@ class BaseApplet:
             wp = self.wallpaper_list.pop()
 
             image_file = os.path.join(croot, wp)
-            set_wallpaper(image_file)        
+            set_wallpaper(image_file)
 
             dirname, base = os.path.split(image_file)
             basename, ext = os.path.splitext(base)
@@ -82,6 +82,8 @@ class BaseApplet:
                 f.close()
             except IOError:
                 inf = {}
+            self.image_file = image_file
+            self.info_file = info_file
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             self.set_tooltip_for_photo('%s - %s' % (title, album))
