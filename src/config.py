@@ -1,9 +1,9 @@
 import os, time
 
 #Gettext Support
-#import webilder_globals as aglobals
-#import gettext
-#gettext.install(aglobals.name)
+import webilder_globals as aglobals
+import gettext
+gettext.install(aglobals.name)
 
 class ConfigObject:
     def __init__(self, file=None):
@@ -45,7 +45,11 @@ class ConfigObject:
                 try:
                     self._dict[key] = eval(value)
                 except:
-                    raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
+                    if key == 'webilder.installation_date' and value.startswith('time.struct_time'):
+			# repr(time.localtime()) stopped looking like a tuple in Python 2.6
+			self._dict[key] = time.localtime()[:3]
+                    else:	
+                        raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
             else:
                 raise ValueError(_('Unrecognized key in line %d of config file %s') % (lineno, file))
         f.close()
@@ -92,7 +96,7 @@ DEFAULT_CONFIG = [
     ('webilder.layout', {}),
     ('webilder.wallpaper_set_method', 'gnome'),
     ('webilder.wallpaper_script', ''),
-    ('webilder.installation_date', time.localtime()),
+    ('webilder.installation_date', time.localtime()[:3]),
     ('webilder.stats', dict(downloads=0, rotations=0)),
     ('filter.only_landscape', False)]
 

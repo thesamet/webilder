@@ -1,4 +1,5 @@
 import gtk
+import gtk.glade
 import re
 
 class UITricks:

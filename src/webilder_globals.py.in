@@ -1,3 +1,4 @@
 name = "webilder"
 version = "%(version)s"
 glade_dir = r"%(data_dir)s"
+locale_dir = r"%(data_dir)s/locale"
