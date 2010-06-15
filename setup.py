@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
-from distutils.cmd import Command
-from distutils.util import change_root
-
-from distutils.command.build import build as _build
-from distutils.command.install import install as _install
-from distutils.spawn import find_executable
-from distutils.errors import DistutilsError
+from setuptools import setup
 
 import os
 import sys
 import glob
 
+from distutils.core import Command
+from distutils.command.build import build as build_
+from setuptools.command.develop import develop as develop_
+from setuptools.command.install import install as install_
+
 import gettext
-LOCALE_DIR = os.path.join(os.path.dirname(sys.argv[0]), 'locale')
+
+LOCALE_DIR = os.path.join(os.path.dirname(sys.argv[0]), 'src/webilder/locale')
 gettext.install('webilder', LOCALE_DIR)
 
 if sys.argv[-1] == 'setup.py':
@@ -47,29 +46,43 @@ class file_build_command(Command):
         fw = file(os.path.join(dest_dir, self.filename), 'w')
         fw.write(fc % dict(
             bin_dir = self.install_scripts,
-            data_dir = os.path.join(self.install_data, 'share', 'webilder'),
+            data_dir = os.path.join(self.install_data, 'share', 'pixmaps'),
             version = self.distribution.get_version()))
         fw.close()
 
+
 class build_server(file_build_command):
-    description =_('Builds the bonobo server file representing the applet.')
+    description = _('Builds the bonobo server file representing the applet.')
     dir = 'servers'
     filename = 'GNOME_WebilderApplet.server'
     get_dest_dir = lambda self: 'servers'
 
-class build_globals(file_build_command):
-    description = _('Building Webilder global settings file.')
-    dir = 'src'
-    filename = 'webilder_globals.py'
-    get_dest_dir = lambda self: os.path.join(self.build_lib, 'webilder')
 
-class build(_build):
-    sub_commands = _build.sub_commands[:]
+class build(build_):
+    sub_commands = build_.sub_commands[:]
     sub_commands.append(('build_server', None))
-    sub_commands.append(('build_globals', None))
+    # sub_commands.append(('build_globals', None))
     sub_commands.append(('build_i18n', None))
 
-class build_i18n(Command):
+
+class CompileTranslationsMixin(object):
+    def compile_mo(self):
+        for po in glob.glob(os.path.join(LOCALE_DIR, '*/*/*.po')):
+            self.spawn([
+                'msgfmt', po,
+                '-o', po[:-3]+'.mo'])
+
+
+class develop(develop_, CompileTranslationsMixin):
+    def install_for_development(self):
+        self.compile_mo()
+        return develop_.install_for_development(self)
+
+    sub_commands = develop_.sub_commands[:]
+    sub_commands.append(('build_i18n', None))
+
+
+class build_i18n(Command, CompileTranslationsMixin):
     def initialize_options(self):
         pass
 
@@ -77,22 +90,8 @@ class build_i18n(Command):
         pass
 
     def run(self):
-        for po in glob.glob(os.path.join(LOCALE_DIR, '*/*.po')):
-            self.spawn(['msgfmt', po, '-o', po[:-3]+'.mo'])
+        self.compile_mo()
 
-
-def ask_kde_config(question):
-    # Look for the kde-config program
-    kdeconfig = find_executable("kde-config", os.environ['PATH'] + os.pathsep + \
-        os.pathsep.join(['/bin','/usr/bin','/opt/kde3/bin','/opt/kde/bin','/usr/local/bin']))
-    if kdeconfig!=None:
-        # Ask the kde-config program for the
-        fhandle = os.popen(kdeconfig+' ' + question,'r')
-        result = fhandle.read()
-        fhandle.close()
-        return result
-    else:
-        return None
 
 def check_modules(*modules):
     for module in modules:
@@ -102,26 +101,13 @@ def check_modules(*modules):
         except ImportError, e:
             raise DistutilsError, _('Could not find module %s. Make sure all dependencies are installed.') % e
 
-class install(_install):
-    user_options = _install.user_options[:]
-    user_options.append(('with-kde', None, _('Install with KDE support')))
-    user_options.append(('kde-prefix=', None, _('Base directory of KDE installation')))
-
-    sub_commands = _install.sub_commands[:]
-
-    def initialize_options(self):
-        self.with_kde = False
-        self.kde_prefix = None
-        _install.initialize_options(self)
-
-    def finalize_options(self):
-        _install.finalize_options(self)
+class install(install_):
+    user_options = install_.user_options[:]
+    sub_commands = install_.sub_commands[:]
 
     def run(self):
         check_modules('gtk', 'pygtk', 'gnome', 'gnomeapplet')
-        _install.run(self)
-        if self.with_kde:
-            self.run_command('install_kde')
+        install_.run(self)
         print _("""
 Installation completed successfully.
 
@@ -129,15 +115,13 @@ Installation completed successfully.
                and select "Webilder Webshots Applet".  If it
                is not in the list - log off and log in again.
 
-  KDE Users:   From the graphics menu, start KWebilder.
-
-If you prefer the command line, you can run webilder_desktop
-to configure Webilder and manage your photos. It is also
-possible to start photo downloading from the command line by
-starting webilder_downloader.
-
-Please report any problem to thesamet at gmail.com.
-""")
+# If you prefer the command line, you can run webilder_desktop
+# to configure Webilder and manage your photos. It is also
+# possible to start photo downloading from the command line by
+# starting webilder_downloader.
+# 
+# Please report any problem to thesamet at gmail.com.
+# """)
 
     def change_roots(self, *names):
         # in case we are going to perform a rooted install, store the original
@@ -149,76 +133,36 @@ Please report any problem to thesamet at gmail.com.
         _install.change_roots(self, *names)
 
 
-    def get_outputs(self):
-        # webilder_globals will now go to the installation record, which is required
-        # in order to build RPMs
-        return (_install.get_outputs(self) + 
-               [os.path.join(self.install_lib, 'webilder/webilder_globals.py'),
-                os.path.join(self.install_lib, 'webilder/webilder_globals.pyc')])
-
-class install_kde(Command):
-    user_options = []
-
-    def initialize_options(self):
-        self.kde_prefix = None
-        self.root = None
-
-    def finalize_options(self):
-        self.set_undefined_options('install', ('kde_prefix', 'kde_prefix'), ('root', 'root'))
-        if self.kde_prefix is None:
-            self.announce(_('Detecting KDE installation directory'))
-            self.kde_prefix = ask_kde_config('--prefix').strip()
-            if not self.kde_prefix:
-                raise DistutilsError, _('Could not detect KDE installation directory. Please provide --kde-prefix argument')
-            self.announce(_('KDE installation directory is %s') % self.kde_prefix)
-            if self.root is not None:
-                self.kde_prefix = change_root(self.root, self.kde_prefix)
-
-    def run(self):
-        # check_modules('PyQt4', 'PyKDE4')
-        check_modules('qt', 'kdecore', 'kdeui')
-        dir = os.path.join(self.kde_prefix, 'share', 'applications', 'kde')
-        self.mkpath(dir)
-        self.copy_file(
-            'desktop/kwebilder.desktop',
-            os.path.join(dir, 'kwebilder.desktop'))
-
-        dir = os.path.join(self.kde_prefix, 'share', 'icons', 'hicolor', '48x48', 'apps')
-        self.mkpath(dir)
-        self.copy_file(
-                'ui/camera48.png',
-                os.path.join(dir, 'webilder.png'))
-
-        dir = os.path.join(self.kde_prefix, 'bin')
-        self.mkpath(dir)
-        kwebilder = os.path.join(dir, 'kwebilder')
-        self.copy_file(
-                'scripts/kwebilder',
-                kwebilder
-                )
-        os.chmod(kwebilder, 0755)
-
 setup(name='Webilder',
       version='0.6.4',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',
       url='http://www.webilder.org',
-      packages=['webilder', 'webilder.webshots', 'webilder.flickr'],
-      package_dir = {'webilder': 'src'},
-      cmdclass = {'build': build,
-                  'build_globals': build_globals,
-                  'build_i18n': build_i18n,
-                  'build_server': build_server,
-                  'install': install,
-                  'install_kde': install_kde},
+      packages = ['webilder', 'webilder.webshots', 'webilder.flickr'],
+      package_dir = {'': 'src'},
+      package_data = {
+        '': ['ui/*.glade', 'ui/*.png', 'ui/*.xpm', 'locale/*/*/*.mo'],
+      },
       data_files = [
-        (os.path.join('share', 'webilder'), ['ui/config.glade', 'ui/webilder.glade', 'ui/webilder_desktop.glade', 'ui/camera48.png', 'ui/camera48_g.png', 'ui/camera16.png', 'ui/logo.png', 'ui/camera16.xpm']),
-        (os.path.join('share', 'pixmaps'), ['ui/camera48.png']),
-        (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
-        (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),
-        (os.path.join('share', 'webilder', 'locale', 'fr', 'LC_MESSAGES'), ['locale/fr/webilder.mo']),
-        (os.path.join('share', 'webilder', 'locale', 'it', 'LC_MESSAGES'), ['locale/it/webilder.mo']),
+          (os.path.join('share', 'pixmaps'), ['src/webilder/ui/camera48.png']),
+          (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
+          (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),
       ],
-      scripts = ['scripts/webilder_downloader', 'scripts/webilder_desktop', 'scripts/WebilderApplet', 'scripts/wbz_handler']
+      cmdclass = {
+        'build': build,
+        'build_server': build_server,
+        'build_i18n': build_i18n,
+        'develop': develop,
+        'install': install},
+      entry_points = {
+        'console_scripts': [
+          'webilder_downloader = webilder.downloader:main',
+          'wbz_handler = webilder.wbz_handler:main',
+          'WebilderApplet = webilder.webilder_gnome_applet:main',
+        ],
+        'gui_scripts': [
+          'webilder_desktop = webilder.WebilderDesktop:main'
+        ]
+      }
 )

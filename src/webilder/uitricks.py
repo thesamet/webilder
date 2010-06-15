@@ -1,3 +1,4 @@
+import pkg_resources
 import gtk
 import gtk.glade
 import re
@@ -6,9 +7,11 @@ class UITricks:
     def __init__(self, gladefile, toplevel, controller = None):
         if controller is None:
             controller = self
-        self._wTree = gtk.glade.XML(gladefile, toplevel)
+        self._wTree = gtk.glade.XML(
+            pkg_resources.resource_filename(__name__,
+            gladefile), toplevel)
         self._top = self._wTree.get_widget(toplevel)
-        widgets = dict([(widget.get_name(),widget) for widget in 
+        widgets = dict([(widget.get_name(),widget) for widget in
             self._wTree.get_widget_prefix('')])
         for widget_name, widget in widgets.iteritems():
             setattr(self, widget_name, widget)

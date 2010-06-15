@@ -1,15 +1,15 @@
+from webilder import __version__
 import urllib
 import pygtk
 import gtk
 import os
-import webilder_globals as aglobals
 
 from uitricks import UITricks, open_browser
 
 from progress_dialog import *
 
 class WebilderAgent(urllib.FancyURLopener):
-    version = 'Webilder/'+aglobals.version
+    version = 'Webilder/%s' % __version__
 
 # pygtk.require("2.0")
 
@@ -28,7 +28,7 @@ quality_names = ['high', 'wide', 'low']
 
 class ConfigDialog(UITricks):
     def __init__(self):
-        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'config.glade'), 'config_dialog')
+        UITricks.__init__(self, 'ui/config.glade', 'config_dialog')
         self.on_flickr_enabled__toggled()
         self.on_webshots_enabled__toggled()
         self.on_autodownload_bool__toggled()

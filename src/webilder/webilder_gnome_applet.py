@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import pygtk
 pygtk.require('2.0')
+import pkg_resources
+
+from webilder import __version__
 
 import sys
 import os
@@ -10,7 +13,6 @@ import gtk
 import gnomeapplet
 import gnome
 import gobject
-import webilder_globals as aglobals
 from base_applet import BaseApplet
 
 from config import config, set_wallpaper, reload_config
@@ -18,28 +20,28 @@ from config import config, set_wallpaper, reload_config
 # Set this to False if you don't want the software to check
 # for updates.
 #
-# No information, except of the version request itself is sent 
+# No information, except of the version request itself is sent
 # to Webilder's server.
 
 class WebilderApplet(BaseApplet):
     def __init__(self, applet, iid):
         BaseApplet.__init__(self)
-        gnome.init('WebilderApplet', aglobals.version)
+        gnome.init('WebilderApplet', __version__)
         self.applet = applet
         self.tooltips = gtk.Tooltips()
         self.tooltips.enable()
         self.evtbox = gtk.EventBox()
         self.icon = gtk.gdk.pixbuf_new_from_file(
-            os.path.join(aglobals.glade_dir, 'camera48.png'))
+            pkg_resources.resource_filename(__name__, 'ui/camera48.png'))
         self.icon_green = gtk.gdk.pixbuf_new_from_file(
-            os.path.join(aglobals.glade_dir, 'camera48_g.png'))
+            pkg_resources.resource_filename(__name__, 'ui/camera48_g.png'))
 
         self.applet_icon = gtk.Image()
         self.scaled_icon = self.icon.scale_simple(16, 16,
                 gtk.gdk.INTERP_BILINEAR)
         self.scaled_icon_green = self.icon_green.scale_simple(16, 16,
                 gtk.gdk.INTERP_BILINEAR)
-        
+
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.evtbox.add(self.applet_icon)
         self.applet.add(self.evtbox)
@@ -56,7 +58,7 @@ pixname="%s"/>
 pixname="gtk-preferences"/>
         <menuitem name="Item 5" verb="About" label="_About" pixtype="stock" pixname="gnome-stock-about"/>
         </popup>
-    """) % os.path.join(aglobals.glade_dir, 'camera16.png')
+    """) % pkg_resources.resource_filename(__name__, 'ui/camera16.png')
  
         self.applet.connect("change-size", self.on_resize_panel)
         self.applet.connect("button-press-event", self.on_button_press)
@@ -142,6 +144,7 @@ def main():
     gtk.gdk.threads_init()
 
     if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":   
+            print "here"
             main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
             main_window.set_title(_("Webilder Applet Window"))
             main_window.connect("destroy", gtk.main_quit) 

@@ -1,9 +1,8 @@
 import os, time
 
 #Gettext Support
-import webilder_globals as aglobals
 import gettext
-gettext.install(aglobals.name)
+gettext.install('webilder')
 
 class ConfigObject:
     def __init__(self, file=None):

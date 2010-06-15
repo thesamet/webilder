@@ -1,12 +1,12 @@
 import threading, os
 import gtk
 
-import webilder_globals as aglobals
+import pkg_resources
 import uitricks
 
 class ProgressDialog(uitricks.UITricks):
     def __init__(self, text='', statustext=''):
-        uitricks.UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder.glade'), 'ProgressDialog')
+        uitricks.UITricks.__init__(self, 'ui/webilder.glade', 'ProgressDialog')
         self.statustext.set_markup(statustext)
         self.text.set_markup(text)
         self._thread = None

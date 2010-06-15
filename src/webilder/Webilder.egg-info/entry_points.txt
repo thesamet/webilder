@@ -1,0 +1,8 @@
+[console_scripts]
+WebilderApplet = webilder.webilder_gnome_applet:main
+wbz_handler = webilder.wbz_handler:main
+webilder_downloader = webilder.downloader:main
+
+[gui_scripts]
+webilder_desktop = webilder.WebilderDesktop:main
+

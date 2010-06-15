@@ -1,6 +1,7 @@
 import sys, os, time, glob, gc
 
 import gtk, gobject
+import pkg_resources
 
 from uitricks import UITricks, open_browser
 from thumbs import ThumbLoader
@@ -12,7 +13,6 @@ try:
 except ImportError:
     gnomevfs = None
     
-import webilder_globals as aglobals
 from config import config, set_wallpaper, reload_config
 
 # Iconview column constants
@@ -29,17 +29,17 @@ TV_KIND_DIR = "dir"
 TV_KIND_RECENT = "recent"
 
 empty_picture = gtk.gdk.pixbuf_new_from_file_at_size(
-    os.path.join(aglobals.glade_dir, 'camera48.png'),160,120)
+    pkg_resources.resource_filename(__name__, 'ui/camera48.png'), 160, 120)
 
 def connect_to_menu(wTree, item, callback):
     wTree.get_widget(item).connect('activate', callback)
-    
+
 class WebilderDesktopWindow(UITricks):
     def __init__(self):
-        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder_desktop.glade'), 
+        UITricks.__init__(self, 'ui/webilder_desktop.glade',
             'WebilderDesktopWindow')
         self.sort_combo.set_active(1)       # date
-        renderer = gtk.CellRendererText()        
+        renderer = gtk.CellRendererText()
         self.tree.append_column(
             column=gtk.TreeViewColumn("Album", renderer, markup=0))
         self.tree.columns_autosize()
@@ -49,20 +49,20 @@ class WebilderDesktopWindow(UITricks):
         self.on_iconview__selection_changed(self.iconview)
         self.collection_monitor = dict(monitor=None, dir=None)
         self.image_popup = ImagePopup(self)
-       
+
         if gnomevfs:
             self.tree_monitor = gnomevfs.monitor_add(
                 config.get('collection.dir'),
                 gnomevfs.MONITOR_DIRECTORY,
                 self.collection_tree_changed)
-        
+
         self.restore_window_state()
         self._top.show_all()
 
         self.hand_cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
         # self.donate_button_box.window.set_cursor(self.hand_cursor)
 
-    def load_collection_tree(self, root):                
+    def load_collection_tree(self, root):
         model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
         model.append(None, (_('<b>Recent Photos</b>'), '', TV_KIND_RECENT))
         l = os.listdir(root)
@@ -311,7 +311,7 @@ class WebilderDesktopWindow(UITricks):
         if not selected:
             return
 
-        win = UITricks(os.path.join(aglobals.glade_dir, 'webilder.glade'), 'PhotoPropertiesDialog')
+        win = UITricks('ui/webilder.glade', 'PhotoPropertiesDialog')
         selected=selected[-1]            
         path = selected;
         iter = self.iconview.get_model().get_iter(path)
@@ -359,7 +359,7 @@ class ImagePopup(UITricks):
         self.on_view_full_screen__activate = main_window.on_view_fullscreen__activate
         self.on_set_as_wallpaper__activate = main_window.on_set_as_wallpaper__activate
         self.on_photo_properties__activate = main_window.on_photo_properties__activate
-        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder_desktop.glade'), 'WebilderImagePopup')
+        UITricks.__init__(self, 'ui/webilder_desktop.glade', 'WebilderImagePopup')
 
     def on_delete_images__activate(self, event):
         delete_files(self.main_window, forever=False)
@@ -431,8 +431,7 @@ def html_escape(text):
 
 class DonateDialog(UITricks):
     def __init__(self):
-        UITricks.__init__(self, os.path.join(aglobals.glade_dir, 'webilder.glade'), 
-            'DonateDialog')
+        UITricks.__init__(self, 'ui/webilder.glade', 'DonateDialog')
         text = _('''
 Webilder is trying hard to make your desktop the coolest in town.
 

@@ -2,8 +2,8 @@ import glob, random, os, time
 from config import config, set_wallpaper, reload_config
 import urllib
 
-import webilder_globals as aglobals
 from webshots.wbz import parse_metadata
+from webilder import __version__
 
 CHECK_FOR_UPDATES = True
 CHECK_URL = 'http://www.webilder.org/latest.html'
@@ -11,7 +11,7 @@ CHECK_URL = 'http://www.webilder.org/latest.html'
 random.seed()
 
 class VersionCheckerOpener(urllib.FancyURLopener):
-    version = 'Webilder/'+aglobals.version
+    version = 'Webilder/%s' % __version__
 
 class BaseApplet:
     def __init__(self):
