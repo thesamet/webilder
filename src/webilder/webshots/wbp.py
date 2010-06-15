@@ -4,17 +4,17 @@ Usage:
 
 Reading WBP files:
     f = wbp.open(file, 'r')
-where file is either the name of a file or a file-like object which must 
+where file is either the name of a file or a file-like object which must
 implement read() and seek().
 
 This returns an instance of a class which have the following attributes:
     title               -- the collection title
     pictures            -- list of picture. See below.
-       
+
     Each picture has the attributes as described in WBP_PicHeader_format.
     It also has an attribute 'image' which contains an object implementing
     the same interface of wbz files:
-    
+
     get_metadata()     -- returns a dictionary containing image's metadata
     get_image_data()    -- returns a string with the image data
 """
@@ -68,8 +68,8 @@ class WBP_DirEntry(object):
         fileutil.unpack(obj, WBP_DirEntry_format, fp)
         return obj
     unpack = staticmethod(unpack)
-    
-class WBP_PicHeader(object):            
+
+class WBP_PicHeader(object):
     def unpack(fp):
         obj = WBP_PicHeader()
         s = fileutil.unpack(obj, WBP_PicHeader_format, fp)
@@ -77,7 +77,7 @@ class WBP_PicHeader(object):
             raise WBPError, "Invalid header"
         return obj
     unpack = staticmethod(unpack)
-        
+
 class WBP_Header(object):
     def unpack(fp):
         obj = WBP_Header()
@@ -87,15 +87,15 @@ class WBP_Header(object):
         obj.entries = [WBP_DirEntry.unpack(fp) for dummy in xrange(obj.file_count)]
         return obj
     unpack = staticmethod(unpack)
-    
+
 class WBP_Image(object):
     def __init__(self, imagedata, metadata):
         self.imagedata = imagedata
         self.metadata = metadata
-    
+
     def get_image_data(self):
         return self.imagedata
-        
+
     def get_metadata(self):
         return self.metadata
 
@@ -106,9 +106,9 @@ class WBP_read(object):
             f = __builtin__.open(f, 'rb')
             i_opened_the_file = f
         # else, assume it is an open file object already
-        
+
         self.header = WBP_Header.unpack(f)
-        self.pictures = []        
+        self.pictures = []
         for entry in self.header.entries:
             f.seek(entry.start)
             pic = WBP_PicHeader.unpack(f)
@@ -118,7 +118,7 @@ class WBP_read(object):
                      credit=pic.credit,
                      albumTitle=self.header.title))
             self.pictures.append(pic)
-                
+
 def open(f, mode=None):
     if mode is None:
         if hasattr(f, 'mode'):
@@ -140,7 +140,6 @@ def test():
         print (d['title'], d['albumTitle'], d['credit'])
         data = pic.image.get_image_data()
         assert(data[-2:] == '\xff\xd9')
-    
+
 if __name__ == "__main__":
     test()
-    

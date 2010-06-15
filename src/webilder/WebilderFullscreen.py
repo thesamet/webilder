@@ -11,7 +11,7 @@ class FullscreenViewer(gtk.Window):
     def expose(self, widget, event):
         area = event.area
         gc = widget.get_style().fg_gc[gtk.STATE_NORMAL]
-        widget.window.draw_drawable(gc, self.pixmap, area[0], area[1], 
+        widget.window.draw_drawable(gc, self.pixmap, area[0], area[1],
             area[0], area[1],
                area[2], area[3])
         return False
@@ -51,8 +51,8 @@ class FullscreenViewer(gtk.Window):
         self.pixmap.draw_rectangle(gc, True,
             0, 0, self.W, self.H)
         cx, cy = (self.W - self.new_w)/2, (self.H-self.new_h)/2
-        self.pixmap.draw_pixbuf(gc, self.pixbuf, 0, 0, 
-            cx, cy, 
+        self.pixmap.draw_pixbuf(gc, self.pixbuf, 0, 0,
+            cx, cy,
             self.new_w, self.new_h)
         context = self.create_pango_context()
         fsize=context.get_font_description().get_size()*3/2
@@ -63,13 +63,12 @@ class FullscreenViewer(gtk.Window):
         layout.set_alignment(pango.ALIGN_CENTER)
         layout.set_markup(self.p_title+'\n'+self.p_credit)
         psize_x, psize_y = layout.get_pixel_size()
-        self.pixmap.draw_layout(gc, (self.W-psize_x)/2, cy+23, 
+        self.pixmap.draw_layout(gc, (self.W-psize_x)/2, cy+23,
                 layout)
-        self.pixmap.draw_layout(widget.get_style().white_gc, 
-                (self.W-psize_x)/2-3, cy+20, 
+        self.pixmap.draw_layout(widget.get_style().white_gc,
+                (self.W-psize_x)/2-3, cy+20,
                 layout)
-    
+
     def run(self):
         self.fullscreen()
         self.show_all()
-        

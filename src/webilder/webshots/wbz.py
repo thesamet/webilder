@@ -4,7 +4,7 @@ Usage:
 
 Reading WBZ files:
     f = wbz.open(file, 'r')
-where file is either the name of a file or a file-like object which must 
+where file is either the name of a file or a file-like object which must
 implement read() and seek()
 
 This returns an instance of a class with the following public methods:
@@ -35,7 +35,7 @@ WBZ_PicHeader_format = [
     ('', 'L'),
     ('data_size2', 'L'),
     ('', '256s')]
-    
+
 WBZ_Header_format = [
     ('id', 'L'),
     ('first_pic', 'L'),
@@ -63,7 +63,7 @@ class WBZ_PicHeader(object):
             raise WBZError, "Corrupted WBZ header"
         return obj
     unpack = staticmethod(unpack)
-        
+
 class WBZ_read:
     def __init__(self, f):
         i_opened_the_file = None
@@ -73,7 +73,7 @@ class WBZ_read:
         # else, assume it is an open file object already
         self.header = WBZ_Header.unpack(f)
         if self.header.file_count != 1:
-            raise WBZError, """I don't know yet how to handle WBZ with more than 
+            raise WBZError, """I don't know yet how to handle WBZ with more than
 one file. please sent this file to me."""
         f.seek(self.header.first_pic)
         self.pic_header = WBZ_PicHeader.unpack(f)
@@ -88,10 +88,10 @@ one file. please sent this file to me."""
 
     def get_metadata(self):
         return self._info
-            
+
     def get_image_data(self):
         return self._data
-                
+
 def open(f, mode=None):
     if mode is None:
         if hasattr(f, 'mode'):
@@ -107,9 +107,9 @@ def open(f, mode=None):
 
 # "decryption" methods:
 
-def XOR_decrypt(key, data):            
+def XOR_decrypt(key, data):
     m_a, m_b = map(ord, data[:100]), map(ord, data[100:200])
-    data = (''.join([chr(a^b^key^0xff) for a,b in zip(m_a,m_b)]) + 
+    data = (''.join([chr(a^b^key^0xff) for a,b in zip(m_a,m_b)]) +
             data[100:])
     return data
 
@@ -134,7 +134,7 @@ def decrypt(data):
 def parse_metadata(metastr):
     import re
     metastr=metastr.replace('\r\n', '\n')
-    return dict(re.findall('^(.*)=(.*)\n', metastr, 
+    return dict(re.findall('^(.*)=(.*)\n', metastr,
         flags=re.MULTILINE))
 
 def test():
@@ -142,7 +142,6 @@ def test():
     f = open(sys.argv[1])
     print f.get_metadata()
     assert f.get_image_data()[-2:]=='\xff\xd9'
-    
+
 if __name__ == "__main__":
     test()
-    

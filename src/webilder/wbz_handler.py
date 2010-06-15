@@ -13,7 +13,7 @@ from config import config
 def handle_wbz(wbzfile):
     f = wbz.open(wbzfile, 'r')
     handle_image(f)
-    
+
 def handle_image(img):
     metadata = img.get_metadata()
     title = (metadata.get('title') or metadata.get('STR_ImageTitle'))
@@ -22,9 +22,9 @@ def handle_image(img):
         raise ValueError, _("Unable to find image's title")
     if not album:
         raise ValueError, _("Unable to find image's album")
-        
-    downloader.save_photo(config, 
-            {'name': title+'.jpg'}, 
+
+    downloader.save_photo(config,
+            {'name': title+'.jpg'},
             img.get_image_data(),
             img.get_metadata())
 
@@ -34,7 +34,7 @@ def handle_wbp(wbpfile):
     f = wbp.open(wbpfile, 'r')
     res = []
     return [handle_image(picture.image) for picture in f.pictures]
-        
+
 
 def handle_file(filename):
     f = open(filename, 'rb')
@@ -46,7 +46,7 @@ def handle_file(filename):
         handle_wbp(filename)
     else:
         raise IOError, _("Unrecognized file type")
-        
+
 def main():
     if len(sys.argv)!=2:
         print _("""wbz_handler will extract webshots archives into your collection.

@@ -45,9 +45,9 @@ class ConfigObject:
                     self._dict[key] = eval(value)
                 except:
                     if key == 'webilder.installation_date' and value.startswith('time.struct_time'):
-			# repr(time.localtime()) stopped looking like a tuple in Python 2.6
-			self._dict[key] = time.localtime()[:3]
-                    else:	
+                        # repr(time.localtime()) stopped looking like a tuple in Python 2.6
+                        self._dict[key] = time.localtime()[:3]
+                    else:
                         raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
             else:
                 raise ValueError(_('Unrecognized key in line %d of config file %s') % (lineno, file))
@@ -57,7 +57,7 @@ class ConfigObject:
         if not file:
             file = self._filename
         org_cfg = ConfigObject(file)
-            
+
         f = open(file, 'w')
         for key,v in DEFAULT_CONFIG:
             try:
@@ -105,13 +105,13 @@ config = ConfigObject(DEFAULT_CONFIG_FILE)
 
 def reload_config():
     config.load_config(DEFAULT_CONFIG_FILE)
-     
+
 def set_wallpaper(filename):
     use = config.get('webilder.wallpaper_set_method')
     if use=="gnome":
         import gconf
         conf_client = gconf.client_get_default()
-        conf_client.set_string('/desktop/gnome/background/picture_filename', 
+        conf_client.set_string('/desktop/gnome/background/picture_filename',
             filename)
     elif use=="kde":
         script = 'dcop kdesktop KBackgroundIface setWallpaper "%f" 4'
@@ -125,4 +125,3 @@ def set_wallpaper(filename):
     stats['rotations'] += 1
     config.set('webilder.stats', stats)
     config.save_config()
-

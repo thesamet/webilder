@@ -67,7 +67,7 @@ class ConfigDialog(UITricks):
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
                 kde=self.wallpaper_use_kde,
                 script=self.wallpaper_use_script)
-        self.notebook.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)], 
+        self.notebook.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)],
                 gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
 
     def on_notebook__drag_data_received(self, widget, context, x, y,
@@ -108,7 +108,7 @@ class ConfigDialog(UITricks):
                 mb.destroy()
                 self.collection_dir.grab_focus()
                 continue
-            
+
             self.update_config(config)
             config.save_config()
             break
@@ -134,9 +134,9 @@ class ConfigDialog(UITricks):
         model = gtk.ListStore(str, str, str, bool, str)
         for rule in config.get('flickr.rules'):
             model.append((
-                rule['album'], 
-                rule['tags'], 
-                rule['user_id'], 
+                rule['album'],
+                rule['tags'],
+                rule['user_id'],
                 rule.get('enabled', True),
                 rule.get('sort', 'Interestingness'),
                 ))
@@ -199,7 +199,7 @@ class ConfigDialog(UITricks):
         config.set('webilder.wallpaper_set_method', use)
         config.set('webilder.wallpaper_script', self.script.get_text())
         config.set('filter.only_landscape', self.only_landscape.get_active())
-        
+
 
     def on_rotate_bool__toggled(self, *args):
         self.rotate_interval.set_sensitive(self.rotate_bool.get_active())
@@ -221,7 +221,7 @@ class ConfigDialog(UITricks):
     def on_add__clicked(self, widget):
         iter = self.flickr_rules.get_model().append([_('Album Name'),'tag1,tag2','', True, 'Interestingness'])
         # self.flickr_rules.scroll_to_cell(path)
-        
+
     def on_remove__clicked(self, widget):
         model, iter = self.flickr_rules.get_selection().get_selected()
         if iter:
@@ -263,14 +263,14 @@ class ConfigDialog(UITricks):
         <b>party</b> and <b>beach</b>.
 
         You can write: <b>party,beach;swimsuit</b>
-        if you want photos tagged with both 
+        if you want photos tagged with both
         <b>party</b> and <b>beach</b>, or with <b>swimsuit</b>.
-        
-        If you want to get photos of a specific flickr user, 
-        just write his username in the <i>User</i> column, 
+
+        If you want to get photos of a specific flickr user,
+        just write his username in the <i>User</i> column,
        otherwise leave this column blank.
 
-        The album name can be anything meaningful to you, 
+        The album name can be anything meaningful to you,
         for example "Beach Parties".
 
         To get the best photos it is best to leave the sort
@@ -279,7 +279,7 @@ class ConfigDialog(UITricks):
         will make Webilder to download most recent photos.
         """)
         mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-        
+
         mb.set_markup(text)
         mbval = mb.run()
         mb.destroy()
@@ -298,7 +298,7 @@ class ConfigDialog(UITricks):
                         break
                     album, terms = rule[0], rule[1]
                     data = urllib.urlencode({'name': album, 'terms': terms})
-                    self.status_notify(float(index)/size, 
+                    self.status_notify(float(index)/size,
                             progress_text=_('Sending rule %d of %d') % (index+1, size))
                     try:
                         rsp = WebilderAgent().open('http://api.webilder.org/submit_channel', data).read()
@@ -335,4 +335,3 @@ def parse_cid_file(data):
         name = channel.attributes['name'].value
         channels.append(dict(name=name, terms=terms))
     return channels
-

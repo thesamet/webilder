@@ -93,4 +93,3 @@ def process_photo(config, photo, f):
 
     gc.collect()
     return data, metadata
-

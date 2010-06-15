@@ -18,9 +18,9 @@ def get_cookie(user, password):
     cj = cookielib.CookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     response = opener.open(
-        'http://daily.webshots.com/login', 
-        urllib.urlencode({'username': user, 
-                         'password': password, 
+        'http://daily.webshots.com/login',
+        urllib.urlencode({'username': user,
+                         'password': password,
                          'done': 'http://www.webshots.com/login'}))
     r = response.read().lower()
     if 'username or password' in r or 'username and password' in r:
@@ -48,8 +48,8 @@ def get_download_list(config):
         else:
             title, is_premium = '', False
         l.append({
-            'name': 'webshots_d%s.jpg' % photo, 
-            'title': title, 
+            'name': 'webshots_d%s.jpg' % photo,
+            'title': title,
             'data': {
                 'photo': photo,
                 'image_link': image_link,
@@ -68,10 +68,10 @@ def get_photo_stream(config, photo):
         config.save_config()
 
     args = urllib.urlencode({
-        'res' : config.get('webshots.quality'), 
+        'res' : config.get('webshots.quality'),
         'targetmode' : 'daily',
         'photos' : photo['data']['photo']})
-    headers = {'Cookie': 
+    headers = {'Cookie':
         'daily='+config.get('webshots.cookie'),
     }
 
@@ -100,4 +100,3 @@ def process_photo(config, photo, f):
     metadata['url'] = photo['data']['image_link']
     data = img.get_image_data()
     return data, metadata
- 

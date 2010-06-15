@@ -1,5 +1,5 @@
 # Flickr API for Python - thesamet, 2006
-# 
+#
 # Released under the GPL license
 
 import urllib2, urllib
@@ -17,8 +17,8 @@ class FlickrProxy(object):
     def call(self, method, **kwargs):
         kwargs.update(dict(api_key=self.api_key, method=method))
         args = urllib.urlencode(kwargs)
-	url = 'http://api.flickr.com/services/rest/?' + args
-	print "url = ", url
+        url = 'http://api.flickr.com/services/rest/?' + args
+        print "url = ", url
         resp = urllib2.urlopen(url)
         xml = parseString(resp.read())
         rsp = xml.getElementsByTagName('rsp')[0]
@@ -50,8 +50,8 @@ class FlickrProxy(object):
         return user.getAttribute('nsid')
 
     def _makePhotoList(self, photos):
-        return [FlickrPhoto(self, 
-            photo_id=photo.getAttribute('id'), 
+        return [FlickrPhoto(self,
+            photo_id=photo.getAttribute('id'),
             title=photo.getAttribute('title'),
             secret=photo.getAttribute('secret'),
             originalsecret=photo.getAttribute('originalsecret'),
@@ -105,7 +105,7 @@ class FlickrPhoto(object):
             server = self.server,
             file=file)
         return url
-        
+
     def get_best_image_url(self):
         sizes = self.get_sizes()[:]
         best = sizes[0]
@@ -113,7 +113,7 @@ class FlickrPhoto(object):
             if size['width']>best['width']:
                 best = size
         return best['source'] #self.get_image_url(best['label'])
-            
+
     def get_info(self):
         rsp = self._proxy.call('flickr.photos.getInfo', photo_id=self.photo_id)
         photo = rsp.getElementsByTagName('photo')[0]
@@ -137,4 +137,3 @@ class FlickrPhoto(object):
             url = url,
             image_url = image_url,
             )
-

@@ -119,4 +119,3 @@ class BaseApplet:
 
     def set_tooltip(self, text):
         raise NotImplementedError()
-

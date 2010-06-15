@@ -6,12 +6,12 @@ import struct
 
 def from_c_string(str):
     return str[:str.find('\x00')]
-    
+
 def unpack(self, fmt, fp):
     """unpack binary data from the file fp, formatted by fmt. fmt is a sequence
     of tuples of the form:
         attrname, datafmt
-        
+
     for each tuple, a new attr in self will be created, containing data
     formatted according to datafmt. datafmt can contain exactly one format
     characted according to struct module documentation."""

@@ -21,7 +21,7 @@ class LeechThread(ProgressThread):
     def run(self):
         import downloader
         import webshots
-        try:    
+        try:
             downloader.download_all(notify=self.status_notify, terminate = self.should_terminate)
         except webshots.utils.LeechHighQualityForPremiumOnlyError:
             self.safe_message_dialog(
@@ -36,7 +36,7 @@ class LeechThread(ProgressThread):
             self.safe_message_dialog(
                             _("<b>Error occured while downloading images</b>\n\n%s") % html_escape(str(e)))
             raise e
-            
+
 
 def html_escape(text):
     """Produce entities within text."""
@@ -52,4 +52,3 @@ html_escape_table = {
     ">": "&gt;",
     "<": "&lt;",
     }
-

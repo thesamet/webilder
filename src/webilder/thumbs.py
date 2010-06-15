@@ -30,14 +30,14 @@ class ThumbLoader(object):
             image_dict = self.image_list.pop()
             item_data = image_dict['data']
             thumb = item_data['thumb']
-            if (not os.path.exists(thumb) or 
+            if (not os.path.exists(thumb) or
                 os.path.getmtime(thumb)<os.path.getmtime(item_data['filename'])):
                 self.thumbnail_na.append(image_dict)
             else:
                 pic = gtk.gdk.pixbuf_new_from_file(thumb)
                 self.model.set_value(image_dict['position'], 1, pic)       #IV_PIXBUF_COLUMN
                 count += 1
-            
+
         if self.thumbnail_na and self.thumbnail_generator is None:
             image_dict = self.thumbnail_na.pop()
             self.thumbnail_generator = ThumbnailGenerator(image_dict)
@@ -86,9 +86,7 @@ def ThumbnailGenerator(image_dict):
 def scale_image(img, thumb):
     THUMB_SIZE = 160
     width, height = img.get_width(), img.get_height()
-    scaled = img.scale_simple(THUMB_SIZE, THUMB_SIZE*height/width, 
+    scaled = img.scale_simple(THUMB_SIZE, THUMB_SIZE*height/width,
         gtk.gdk.INTERP_BILINEAR)
     scaled.save(thumb, 'jpeg', {"quality": "75"})
     return scaled
-                
-

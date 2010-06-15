@@ -12,7 +12,7 @@ try:
     import gnomevfs
 except ImportError:
     gnomevfs = None
-    
+
 from config import config, set_wallpaper, reload_config
 
 # Iconview column constants
@@ -80,11 +80,11 @@ class WebilderDesktopWindow(UITricks):
             self.current_collection_iter = iter
             rootdir=self.tree.get_model().get_value(iter, TV_PATH_COLUMN)
             kind=self.tree.get_model().get_value(iter, TV_KIND_COLUMN)
-            if kind==TV_KIND_DIR:    
+            if kind==TV_KIND_DIR:
                 self.load_directory_collection(rootdir)
             else:
                 self.load_recent_photos()
- 
+
     def load_directory_collection(self, l):
         images = glob.glob(os.path.join(l,'*.jpg'))
         self.load_collection(images, monitor_dir=l)
@@ -101,7 +101,7 @@ class WebilderDesktopWindow(UITricks):
     def load_collection(self, images, monitor_dir=None):
         from webshots import wbz
         model = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf, gobject.TYPE_PYOBJECT)
-        
+
         image_list = []
         self.icons = []
         for image in images:
@@ -109,7 +109,7 @@ class WebilderDesktopWindow(UITricks):
             basename, ext = os.path.splitext(filename)
             thumb = os.path.join(dirname,
                             '.thumbs', basename+'.thumbnail'+ext)
-                
+
             info_file = os.path.join(dirname, basename)+'.inf'
             try:
                 f = open(info_file, 'r')
@@ -121,12 +121,12 @@ class WebilderDesktopWindow(UITricks):
             album = inf.get('albumTitle', dirname)
             credit = inf.get('credit', _('Not available'))
             tags = inf.get('tags', '')
-            
+
             title = html_escape(title)
             album = html_escape(album)
             credit= html_escape(credit)
             tags = html_escape(tags)
-            
+
 
             data = dict(title=title,
                         filename=image,
@@ -137,7 +137,7 @@ class WebilderDesktopWindow(UITricks):
                         tags = tags,
                         file_time = os.path.getctime(image),
                         credit = credit)
-            
+
             if len(title)>24:
                 title=title[:21]+'...'
             if 0<=time.time()-os.path.getmtime(image)<24*3600:
@@ -168,13 +168,13 @@ class WebilderDesktopWindow(UITricks):
         # print len([x for x in gc.get_objects() if isinstance(x, gtk.ListStore)])
 
     def on_set_as_wallpaper__activate(self, menu_item):
-         selected = self.iconview.get_selected_items()
-         if selected:
-             selected=selected[-1]
-         if selected:
-             self.on_iconview__item_activated(
-                 self.iconview, 
-                 selected)
+        selected = self.iconview.get_selected_items()
+        if selected:
+            selected=selected[-1]
+        if selected:
+            self.on_iconview__item_activated(
+                self.iconview,
+                selected)
 
     def on_iconview__item_activated(self, icon_view, path):
         import gconf
@@ -182,13 +182,13 @@ class WebilderDesktopWindow(UITricks):
         data = icon_view.get_model().get_value(iter, IV_DATA_COLUMN)
         set_wallpaper(data['filename'])
         gc.collect()
-        
-         
+
+
     def on_view_fullscreen__activate(self, menu_item):
         selected = self.iconview.get_selected_items()
         if selected:
             # FIXME: Make a nice slideshow here, maybe?
-            selected=selected[-1]            
+            selected=selected[-1]
             path = selected;
             iter = self.iconview.get_model().get_iter(path)
             data = self.iconview.get_model().get_value(iter,
@@ -206,7 +206,7 @@ class WebilderDesktopWindow(UITricks):
             self.download_dialog.show()
         else:
             self.download_dialog._top.present()
-    
+
     def on_iconview__selection_changed(self, icon_view):
         selection = icon_view.get_selected_items()
         if len(selection)>0:
@@ -219,7 +219,7 @@ class WebilderDesktopWindow(UITricks):
             album = data['album']
             credit = data['credit']
             tags = data['tags']
-                    
+
         self.photo_title.set_markup(title)
         self.photo_album.set_markup(album)
         self.photo_credit.set_markup(credit)
@@ -230,7 +230,7 @@ class WebilderDesktopWindow(UITricks):
 
     def on_preferences__activate(self, menu_item):
         configure()
-            
+
     def on_iconview__button_press_event(self, icon_view, event):
         if event.button==3:
             x, y = map(int, [event.x, event.y])
@@ -244,14 +244,14 @@ class WebilderDesktopWindow(UITricks):
             self.image_popup._top.popup(None, None, None, event.button,
                     event.time)
         return False
-        
+
     def collection_tree_changed(self, *args):
         """Called when the collection tree changes."""
         self.load_collection_tree(config.get('collection.dir'))
 
     def on_quit__activate(self, event):
         self.on_WebilderDesktopWindow__delete_event(None, None)
-        
+
     def on_about__activate(self, event):
         import AboutDialog
         AboutDialog.ShowAboutDialog('Webilder Desktop')
@@ -260,7 +260,7 @@ class WebilderDesktopWindow(UITricks):
         self.save_window_state()
         self.destroy()
         return False
-        
+
     def save_window_state(self):
         top = self._top
         layout = {'window_position': top.get_position(),
@@ -269,7 +269,7 @@ class WebilderDesktopWindow(UITricks):
                   'info_expander': self.photo_info_expander.get_expanded(),}
         config.set('webilder.layout', layout)
         config.save_config()
-    
+
     def restore_window_state(self):
         d = config.get('webilder.layout')
         if d.has_key('window_position'):
@@ -280,7 +280,7 @@ class WebilderDesktopWindow(UITricks):
             self.hpaned.set_position(d['hpaned_position'])
         if d.has_key('info_expander'):
             self.photo_info_expander.set_expanded(d['info_expander'])
-      
+
     def on_file_webshots_import__activate(self, event):
         dlg = gtk.FileChooserDialog(
             _('Choose files to import'),
@@ -295,8 +295,8 @@ class WebilderDesktopWindow(UITricks):
             else:
                 files = []
         finally:
-            dlg.destroy()        
-        
+            dlg.destroy()
+
         import wbz_handler
         for afile in files:
             wbz_handler.handle_file(afile)
@@ -312,7 +312,7 @@ class WebilderDesktopWindow(UITricks):
             return
 
         win = UITricks('ui/webilder.glade', 'PhotoPropertiesDialog')
-        selected=selected[-1]            
+        selected=selected[-1]
         path = selected;
         iter = self.iconview.get_model().get_iter(path)
         data = self.iconview.get_model().get_value(iter,
@@ -324,7 +324,7 @@ class WebilderDesktopWindow(UITricks):
         win.size.set_text(_('%.1f KB') % (os.path.getsize(data['filename'])/1024.0))
         win.date.set_text(time.strftime('%c', time.localtime(os.path.getctime(data['filename']))))
         win.url.set_text(data['inf'].get('url', ''))
-        
+
         win.closebutton.connect('clicked', lambda *args: win.destroy())
         win.show()
 
@@ -376,8 +376,8 @@ def delete_files(main_window, forever):
         else:
             message = _('Would you like to delete the selected images?')
 
-        dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, 
-            buttons=gtk.BUTTONS_YES_NO, 
+        dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION,
+            buttons=gtk.BUTTONS_YES_NO,
             message_format=message)
         response = dlg.run()
         dlg.destroy()
@@ -412,7 +412,7 @@ def delete_files(main_window, forever):
 
     banned.close()
 
-    
+
 
 html_escape_table = {
     "&": "&amp;",
@@ -440,18 +440,18 @@ for you and changed your wallpaper <b>%(rotations)d times</b>.
 
 It takes a lot of time and hard work to develop and maintain Webilder.
 
-If you'd like to see Webilder becomes even better, you can help us 
-a lot by making a small donation. 
+If you'd like to see Webilder becomes even better, you can help us
+a lot by making a small donation.
 
 Any donation will be GREATLY appreciated. You can even donate $5.
 
-After clicking on the <i>Yes</i> button below you'll be taken to 
+After clicking on the <i>Yes</i> button below you'll be taken to
 the donation page. If the page does not appear, please visit:
 %(url)s
 
 Would you like to donate to Webilder?
 ''')
-    
+
         stats = config.get('webilder.stats')
         self.url = 'http://www.webilder.org/donate.html'
         context = dict(
@@ -504,4 +504,3 @@ def main():
 
 if __name__=="__main__":
     main()
-

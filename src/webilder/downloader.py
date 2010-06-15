@@ -12,7 +12,7 @@ from config import config, reload_config
 _recently_filtered = {}
 
 def get_full_download_list(config):
-    # get list of all photos    
+    # get list of all photos
     all_photos=[]
     for plugin, module in plugins.plugins.iteritems():
         photos = module.get_download_list(config)
@@ -27,7 +27,7 @@ def clear_recently_filtered():
 
 def clear_old_filtered():
     now = time.time()
-    clear = [] 
+    clear = []
     for name, block_time in _recently_filtered.iteritems():
         if now-block_time>24*3600:
             clear.append(name)
@@ -37,9 +37,9 @@ def clear_old_filtered():
 def filter_photos(config, photos):
     clear_old_filtered()
     # load photo names of permanently deleted photos...
-    banned_photos_file = os.path.expanduser('~/.webilder/banned_photos') 
+    banned_photos_file = os.path.expanduser('~/.webilder/banned_photos')
     if os.path.exists(banned_photos_file):
-        banned_photos = open(banned_photos_file, 'r').readlines() 
+        banned_photos = open(banned_photos_file, 'r').readlines()
         banned_photos = [line.strip() for line in banned_photos]
     else:
         banned_photos = []
@@ -61,7 +61,7 @@ def filter_photos(config, photos):
             continue
         if photo['name'] in _recently_filtered and config.get('filter.only_landscape'):
             # currently photos filtered only if only_landscape is set. to prevent
-            # photos from being blocked by this cache soon after only_landscape has 
+            # photos from being blocked by this cache soon after only_landscape has
             # set to false, the right term of the 'and' above was added.
             filtered_photos.append(photo)
             print _("Skipping previously filtered photo '%s'.") % photo['title']
@@ -112,7 +112,7 @@ def save_photo(config, photo, image, metadata):
         os.mkdir(dest_thumb_dir)
     elif not os.path.isdir(dest_thumb_dir):
         os.mkdir(dest_thumb_dir)
-    
+
     fjpg = open(dest_img, 'wb')
     fjpg.write(image)
     fjpg.close()
@@ -128,7 +128,7 @@ def save_photo(config, photo, image, metadata):
 
     finf.writelines(lines)
     finf.close()
- 
+
 def download_all(notify=lambda *args: None, terminate=lambda: False):
     notify(0, '', _('Downloading list of photos (may take some time)'))
     photos = get_full_download_list(config)
@@ -160,7 +160,7 @@ def download_all(notify=lambda *args: None, terminate=lambda: False):
             pass
         else:
             completed += 1
-   
+
     stats = config.get('webilder.stats')
     stats['downloads'] += completed
     config.set('webilder.stats', stats)

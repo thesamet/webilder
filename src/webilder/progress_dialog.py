@@ -60,7 +60,7 @@ class ProgressThread(threading.Thread):
             if self._pdialog._top:
                 self._pdialog.progressbar.set_fraction(fraction)
                 self._pdialog.progressbar.set_text(progress_text)
-                self._pdialog.statustext.set_markup('<i>%s</i>' % status_text)                
+                self._pdialog.statustext.set_markup('<i>%s</i>' % status_text)
         finally:
             gtk.gdk.threads_leave()
 
@@ -71,4 +71,3 @@ class ProgressThread(threading.Thread):
         mbval = mb.run()
         mb.destroy()
         gtk.gdk.threads_leave()
-
