@@ -78,6 +78,20 @@ def get_photo_stream(config, photo):
     resp = opener.open(url)
     if 'text/html' in resp.info().getheader('content-type'):
         r = resp.read()
+        if 'Credit Card Information' in r:
+            raise LeechPremiumOnlyPhotoError(
+                "This photo can be downloaded at resolution '%s' only by "
+                "Premium members." % config.get('webshots.quality'))
+        if 'NO, THANK YOU.' in r:
+            match = re.search(
+                r'<a href="(.*?)" class="no-btn">NO, THANK YOU.', r)
+            if not match:
+                raise ValueError, "Unable to download photo %s" % photo['name']
+            opener = urllib.FancyURLopener()
+            opener.addheader('Cookie', headers['Cookie'])
+            r = opener.open(match.groups()[0]).read()
+            print "clicked"
+
         match = re.search(r'click <a href="(.*?)">here</a>', r)
         if not match:
             raise ValueError, "Unable to download photo %s" % photo['name']
