@@ -1,3 +1,4 @@
 src/Webilder.egg-info
 *.pyc
 *.mo
+*.swp
