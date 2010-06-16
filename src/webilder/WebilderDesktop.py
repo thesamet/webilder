@@ -193,7 +193,7 @@ class WebilderDesktopWindow(UITricks):
             iter = self.iconview.get_model().get_iter(path)
             data = self.iconview.get_model().get_value(iter,
                 IV_DATA_COLUMN)
-            WebilderFullscreen.FullscreenViewer(data).run()
+            WebilderFullscreen.FullscreenViewer(self._top, data).run()
         gc.collect()
 
     def on_download_photos__activate(self, menu_item):
