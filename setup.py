@@ -134,7 +134,7 @@ Installation completed successfully.
 
 
 setup(name='Webilder',
-      version='0.6.4',
+      version='0.6.5',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',
