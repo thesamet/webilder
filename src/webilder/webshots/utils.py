@@ -18,12 +18,14 @@ def get_cookie(user, password):
     cj = cookielib.CookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     response = opener.open(
-        'http://daily.webshots.com/login',
-        urllib.urlencode({'username': user,
-                         'password': password,
-                         'done': 'http://www.webshots.com/login'}))
+        'http://www.webshots.com/login',
+        urllib.urlencode({'done': '',
+                          'username': user,
+                          'password': password,
+                          'lbReferer': 'http://www.webshots.com/',
+                          'action': 'lb'}))
     r = response.read().lower()
-    if 'username or password' in r or 'username and password' in r:
+    if '"c":-1' in r:
         raise WBZLoginException, 'Incorrect username or password.'
 
     for cookie in cj:
@@ -35,25 +37,21 @@ def get_cookie(user, password):
 def get_download_list(config):
     if not config.get('webshots.enabled'):
         return []
-    DAILYPIC_RE = r'(http://www.webshots.com/g/d.*/.*/([0-9]*).html)'
-    PHOTO_DESCRIPTION = r'alt="([^"]+)" src="http://p.webshots.com/ProThumbs/[0-9]+/%s_wallpaper150.jpg.*\n.*<em(.*)\n'
-    page = urllib.urlopen('http://www.webshots.com').read()
-    photos = re.findall(DAILYPIC_RE, page)
+    IMAGE_REGEX = r'<a href="(/pro/photo/([0-9]+)\?path=/archive)".*?<p title.*?>(.*?)</p>.*?<a href="(/entry.*?)" class="hiResLink"'
+
+    page = urllib.urlopen(
+        'http://www.webshots.com/pro/category/archive?sort=newest').read()
+
+    photos = re.findall(IMAGE_REGEX, page, re.DOTALL)
     l = []
-    for image_link, photo in photos:
-        match = re.search(PHOTO_DESCRIPTION % photo, page)
-        if match:
-            title, nextline = match.groups()
-            is_premium = 'Premium Only' in nextline
-        else:
-            title, is_premium = '', False
+    for image_link, photo, title, high_res_link in photos:
         l.append({
             'name': 'webshots_d%s.jpg' % photo,
             'title': title,
             'data': {
                 'photo': photo,
                 'image_link': image_link,
-                'is_premium': is_premium,
+                'high_res_link': high_res_link
                 }
             });
     return l
@@ -67,31 +65,28 @@ def get_photo_stream(config, photo):
         config.set('webshots.cookie', cookie)
         config.save_config()
 
-    args = urllib.urlencode({
-        'res' : config.get('webshots.quality'),
-        'targetmode' : 'daily',
-        'photos' : photo['data']['photo']})
     headers = {'Cookie':
-        'daily='+config.get('webshots.cookie'),
+        'daily='+config.get('webshots.cookie')+';desktop-client=unknown;site-visits=1',
     }
+
+    url = 'http://www.webshots.com' + photo['data']['high_res_link'].replace(
+        'res=high',
+        'res=%s' % config.get('webshots.quality'))
 
     opener = urllib.FancyURLopener()
     opener.addheader('Cookie',headers['Cookie'])
-    resp = opener.open('http://www.webshots.com/scripts/PhotoDownload.fcgi?'+args)
-
+    resp = opener.open(url)
     if 'text/html' in resp.info().getheader('content-type'):
         r = resp.read()
-        if 'r/Premium/Popup/Exclusive' in r:
-            raise LeechPremiumOnlyPhotoError, "Only Webshots premium members can download this photo."
-        if ('r/Premium/Popup/Wide' in r) or ('r/Premium/Popup/High' in r):
-            raise LeechHighQualityForPremiumOnlyError, "Only Webshots Premium members can download highest quality or wide photos."
-        match = re.search("document.location.href='([^']+)'", r)
-        if match:
-            req = urllib2.Request('http://www.webshots.com' +
-                    match.groups()[0], '', headers)
-            resp = urllib2.urlopen(req)
-        else:
+        match = re.search(r'click <a href="(.*?)">here</a>', r)
+        if not match:
             raise ValueError, "Unable to download photo %s" % photo['name']
+        url = match.groups()[0]
+        if not url.startswith('http://p.webshots.net/'):
+            raise ValueError, "Unable to download photo %s" % photo['name']
+        req = urllib2.Request(url, '', headers)
+        resp = urllib2.urlopen(req)
+
     return resp
 
 def process_photo(config, photo, f):
