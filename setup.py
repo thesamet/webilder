@@ -8,6 +8,7 @@ import glob
 
 from distutils.core import Command
 from distutils.command.build import build as build_
+from distutils.command.clean import clean as clean_
 from setuptools.command.develop import develop as develop_
 from setuptools.command.install import install as install_
 
@@ -133,6 +134,19 @@ Installation completed successfully.
         install_.change_roots(self, *names)
 
 
+class clean(clean_):
+    def run(self):
+        if self.dry_run:
+            return
+        for mo in glob.glob(os.path.join(LOCALE_DIR, '*/*/*.mo')):
+            os.unlink(mo)
+        bonobo_server = os.path.join(
+            os.path.dirname(sys.argv[0]),
+            'servers/GNOME_WebilderApplet.server')
+        if os.path.exists(bonobo_server):
+            os.unlink(bonobo_server)
+
+
 setup(name='Webilder',
       version='0.6.6',
       description='Webilder Desktop',
@@ -153,6 +167,7 @@ setup(name='Webilder',
         'build': build,
         'build_server': build_server,
         'build_i18n': build_i18n,
+        'clean': clean,
         'develop': develop,
         'install': install},
       entry_points = {
