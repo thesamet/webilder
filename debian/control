@@ -1,5 +1,5 @@
 Source: webilder
-Section: main
+Section: graphics
 Priority: optional
 Maintainer: Nadav Samet <thesamet@gmail.com>
 Build-Depends: cdbs (>= 0.4.43), python | python-support (>= 0.3), debhelper (>= 5.0.37.2), python-gtk2, python-gnome2, libglib2.0-0, python-gnomeapplet
