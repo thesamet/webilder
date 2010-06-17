@@ -11,6 +11,7 @@ from distutils.command.build import build as build_
 from distutils.command.clean import clean as clean_
 from setuptools.command.develop import develop as develop_
 from setuptools.command.install import install as install_
+from distutils.errors import DistutilsError
 
 import gettext
 
