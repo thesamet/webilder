@@ -16,7 +16,7 @@ class UITricks:
         for widget_name, widget in widgets.iteritems():
             setattr(self, widget_name, widget)
         for name in dir(controller):
-            match = re.match('on_([a-zA-Z0-9_]+)__([a-zA-Z0-9_]+)', name)
+            match = re.match('on_([a-zA-Z0-9_]+)_handle_([a-zA-Z0-9_]+)', name)
             callback = getattr(controller, name)
             if match:
                 widget, signal = match.groups()

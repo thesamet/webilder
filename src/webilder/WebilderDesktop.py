@@ -46,7 +46,7 @@ class WebilderDesktopWindow(UITricks):
         self.load_collection_tree(config.get('collection.dir'))
         self.iconview.set_pixbuf_column(IV_PIXBUF_COLUMN)
         self.iconview.set_markup_column(IV_TEXT_COLUMN)
-        self.on_iconview__selection_changed(self.iconview)
+        self.on_iconview_handle_selection_changed(self.iconview)
         self.collection_monitor = dict(monitor=None, dir=None)
         self.image_popup = ImagePopup(self)
 
@@ -73,7 +73,7 @@ class WebilderDesktopWindow(UITricks):
                 model.append(None, (entry, fullpath, TV_KIND_DIR))
         self.tree.set_model(model)
 
-    def on_tree__selection_changed(self, tree_selection):
+    def on_tree_handle_selection_changed(self, tree_selection):
         model, selection = tree_selection.get_selected_rows()
         for path in selection:
             iter=model.get_iter(path)
@@ -152,7 +152,7 @@ class WebilderDesktopWindow(UITricks):
         self.sort_photos(model)
         self.iconview.set_model(model)
         gobject.idle_add(ThumbLoader(self.iconview, model, reversed(image_list)))
-        self.on_iconview__selection_changed(self.iconview)
+        self.on_iconview_handle_selection_changed(self.iconview)
         if gnomevfs:
             if self.collection_monitor['monitor'] is not None:
                 gobject.idle_add(gnomevfs.monitor_cancel, self.collection_monitor['monitor'])
@@ -167,16 +167,16 @@ class WebilderDesktopWindow(UITricks):
         # this proves that pygtk has a memory leak, and it is related to sorting.
         # print len([x for x in gc.get_objects() if isinstance(x, gtk.ListStore)])
 
-    def on_set_as_wallpaper__activate(self, menu_item):
+    def on_set_as_wallpaper_handle_activate(self, menu_item):
         selected = self.iconview.get_selected_items()
         if selected:
             selected=selected[-1]
         if selected:
-            self.on_iconview__item_activated(
+            self.on_iconview_handle_item_activated(
                 self.iconview,
                 selected)
 
-    def on_iconview__item_activated(self, icon_view, path):
+    def on_iconview_handle_item_activated(self, icon_view, path):
         import gconf
         iter = icon_view.get_model().get_iter(path)
         data = icon_view.get_model().get_value(iter, IV_DATA_COLUMN)
@@ -184,7 +184,7 @@ class WebilderDesktopWindow(UITricks):
         gc.collect()
 
 
-    def on_view_fullscreen__activate(self, menu_item):
+    def on_view_fullscreen_handle_activate(self, menu_item):
         selected = self.iconview.get_selected_items()
         if selected:
             # FIXME: Make a nice slideshow here, maybe?
@@ -196,7 +196,7 @@ class WebilderDesktopWindow(UITricks):
             WebilderFullscreen.FullscreenViewer(self.top_widget, data).run()
         gc.collect()
 
-    def on_download_photos__activate(self, menu_item):
+    def on_download_photos_handle_activate(self, menu_item):
         def remove_reference(*args):
             del self.download_dialog
 
@@ -207,7 +207,7 @@ class WebilderDesktopWindow(UITricks):
         else:
             self.download_dialog._top.present()
 
-    def on_iconview__selection_changed(self, icon_view):
+    def on_iconview_handle_selection_changed(self, icon_view):
         selection = icon_view.get_selected_items()
         if len(selection)>0:
             selection=selection[-1]
@@ -226,12 +226,12 @@ class WebilderDesktopWindow(UITricks):
         self.photo_tags.set_markup(tags)
 
     def collection_directory_changed(self, *args):
-        self.on_tree__selection_changed(self.tree.get_selection())
+        self.on_tree_handle_selection_changed(self.tree.get_selection())
 
-    def on_preferences__activate(self, menu_item):
+    def on_preferences_handle_activate(self, menu_item):
         configure()
 
-    def on_iconview__button_press_event(self, icon_view, event):
+    def on_iconview_handle_button_press_event(self, icon_view, event):
         if event.button==3:
             x, y = map(int, [event.x, event.y])
             path = icon_view.get_path_at_pos(x, y)
@@ -249,14 +249,14 @@ class WebilderDesktopWindow(UITricks):
         """Called when the collection tree changes."""
         self.load_collection_tree(config.get('collection.dir'))
 
-    def on_quit__activate(self, event):
-        self.on_WebilderDesktopWindow__delete_event(None, None)
+    def on_quit_handle_activate(self, event):
+        self.on_WebilderDesktopWindow_handle_delete_event(None, None)
 
-    def on_about__activate(self, event):
+    def on_about_handle_activate(self, event):
         import AboutDialog
         AboutDialog.ShowAboutDialog('Webilder Desktop')
 
-    def on_WebilderDesktopWindow__delete_event(self, widget, event):
+    def on_WebilderDesktopWindow_handle_delete_event(self, widget, event):
         self.save_window_state()
         self.destroy()
         return False
@@ -281,7 +281,7 @@ class WebilderDesktopWindow(UITricks):
         if d.has_key('info_expander'):
             self.photo_info_expander.set_expanded(d['info_expander'])
 
-    def on_file_webshots_import__activate(self, event):
+    def on_file_webshots_import_handle_activate(self, event):
         dlg = gtk.FileChooserDialog(
             _('Choose files to import'),
             None,
@@ -301,12 +301,12 @@ class WebilderDesktopWindow(UITricks):
         for afile in files:
             wbz_handler.handle_file(afile)
 
-    def on_donate__activate(self, widget):
+    def on_donate_handle_activate(self, widget):
         donate_dialog = DonateDialog()
         val = donate_dialog.run()
         donate_dialog.destroy()
 
-    def on_photo_properties__activate(self, event):
+    def on_photo_properties_handle_activate(self, event):
         selected = self.iconview.get_selected_items()
         if not selected:
             return
@@ -347,24 +347,24 @@ class WebilderDesktopWindow(UITricks):
         model.set_sort_column_id(-1, gtk.SORT_ASCENDING)
         del model
 
-    def on_sort_combo__changed(self, widget):
+    def on_sort_combo_handle_changed(self, widget):
         self.sort_photos(self.iconview.get_model())
 
-    def on_delete__activate(self, widget):
+    def on_delete_handle_activate(self, widget):
         delete_files(self, forever=False)
 
 class ImagePopup(UITricks):
     def __init__(self, main_window):
         self.main_window = main_window
-        self.on_view_full_screen__activate = main_window.on_view_fullscreen__activate
-        self.on_set_as_wallpaper__activate = main_window.on_set_as_wallpaper__activate
-        self.on_photo_properties__activate = main_window.on_photo_properties__activate
+        self.on_view_full_screen_handle_activate = main_window.on_view_fullscreen_handle_activate
+        self.on_set_as_wallpaper_handle_activate = main_window.on_set_as_wallpaper_handle_activate
+        self.on_photo_properties_handle_activate = main_window.on_photo_properties_handle_activate
         UITricks.__init__(self, 'ui/webilder_desktop.glade', 'WebilderImagePopup')
 
-    def on_delete_images__activate(self, event):
+    def on_delete_images_handle_activate(self, event):
         delete_files(self.main_window, forever=False)
 
-    def on_delete_forever__activate(self, event):
+    def on_delete_forever_handle_activate(self, event):
         delete_files(self.main_window, forever=True)
 
 def delete_files(main_window, forever):

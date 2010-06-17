@@ -26,11 +26,11 @@ QUALITY_NAMES = ['high', 'wide', 'low']
 class ConfigDialog(UITricks):
     def __init__(self):
         UITricks.__init__(self, 'ui/config.glade', 'config_dialog')
-        self.on_flickr_enabled__toggled()
-        self.on_webshots_enabled__toggled()
-        self.on_autodownload_bool__toggled()
-        self.on_rotate_bool__toggled()
-        self.on_wallpaper_use_script__toggled()
+        self.on_flickr_enabled_handle_toggled()
+        self.on_webshots_enabled_handle_toggled()
+        self.on_autodownload_bool_handle_toggled()
+        self.on_rotate_bool_handle_toggled()
+        self.on_wallpaper_use_script_handle_toggled()
 
         cell = gtk.CellRendererToggle()
         cell.set_property('activatable', True)
@@ -67,7 +67,7 @@ class ConfigDialog(UITricks):
         self.notebook.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)],
                 gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
 
-    def on_notebook__drag_data_received(self, _widget, _context, _xpos, _ypos,
+    def on_notebook_handle_drag_data_received(self, _widget, _context, _xpos, _ypos,
                                         selection, target_type, _time):
         if target_type == 1:
             url = selection.data.split()[0]
@@ -198,32 +198,32 @@ class ConfigDialog(UITricks):
         config.set('filter.only_landscape', self.only_landscape.get_active())
 
 
-    def on_rotate_bool__toggled(self, *_args):
+    def on_rotate_bool_handle_toggled(self, *_args):
         self.rotate_interval.set_sensitive(self.rotate_bool.get_active())
 
-    def on_autodownload_bool__toggled(self, *_args):
+    def on_autodownload_bool_handle_toggled(self, *_args):
         self.autodownload_interval.set_sensitive(self.autodownload_bool.get_active())
 
-    def on_flickr_enabled__toggled(self, *_args):
+    def on_flickr_enabled_handle_toggled(self, *_args):
         for frame in (self.flickr_interestingness_frame, self.flickr_tags_frame):
             frame.set_sensitive(self.flickr_enabled.get_active())
 
-    def on_webshots_enabled__toggled(self, *_args):
+    def on_webshots_enabled_handle_toggled(self, *_args):
         self.webshots_login_frame.set_sensitive(self.webshots_enabled.get_active())
         self.webshots_res_frame.set_sensitive(self.webshots_enabled.get_active())
 
-    def on_wallpaper_use_script__toggled(self, *_args):
+    def on_wallpaper_use_script_handle_toggled(self, *_args):
         self.script.set_sensitive(self.wallpaper_use_script.get_active())
 
-    def on_add__clicked(self, _widget):
+    def on_add_handle_clicked(self, _widget):
         self.flickr_rules.get_model().append([_('Album Name'),'tag1,tag2','', True, 'Interestingness'])
 
-    def on_remove__clicked(self, _widget):
+    def on_remove_handle_clicked(self, _widget):
         model, iterator = self.flickr_rules.get_selection().get_selected()
         if iterator:
             model.remove(iterator)
 
-    def on_flickr_rules__selection_changed(self, *_args):
+    def on_flickr_rules_handle_selection_changed(self, *_args):
         self.remove.set_sensitive(
                 self.flickr_rules.get_selection().get_selected()[1] is not None)
 
@@ -242,14 +242,14 @@ class ConfigDialog(UITricks):
     def on_rule_toggled(self, _cell, path, column):
         self.flickr_rules.get_model()[path][column] = not self.flickr_rules.get_model()[path][column]
 
-    def on_directory_browse__clicked(self, _sender):
+    def on_directory_browse_handle_clicked(self, _sender):
         fs = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK))
         if fs.run()==gtk.RESPONSE_OK:
             self.collection_dir.set_text(fs.get_filename())
         fs.destroy()
 
-    def on_tips__clicked(self, _widget):
+    def on_tips_handle_clicked(self, _widget):
         text = _("""
         Getting started with flickr is easy.
 
@@ -280,7 +280,7 @@ class ConfigDialog(UITricks):
         mb.run()
         mb.destroy()
 
-    def on_flickr_recommend__clicked(self, _widget):
+    def on_flickr_recommend_handle_clicked(self, _widget):
         recommend_dialog = progress_dialog.ProgressDialog(text=_('Sending your recommendations...'))
         rules = list(self.flickr_rules.get_model())
         class RecommendingThread(progress_dialog.ProgressThread):
@@ -307,7 +307,7 @@ class ConfigDialog(UITricks):
         thread.start()
         recommend_dialog.top_widget.run()
 
-    def on_flickr_get_more_albums__clicked(self, _widget):
+    def on_flickr_get_more_albums_handle_clicked(self, _widget):
         url = 'http://www.webilder.org/channels/'
         open_browser(url = url,
                 no_browser_title = _('Could not open browser'),
