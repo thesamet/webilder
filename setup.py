@@ -145,6 +145,7 @@ class clean(clean_):
             'servers/GNOME_WebilderApplet.server')
         if os.path.exists(bonobo_server):
             os.unlink(bonobo_server)
+        clean_.run(self)
 
 
 setup(name='Webilder',
