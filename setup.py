@@ -130,7 +130,7 @@ Installation completed successfully.
             attr = 'install_' + name
             backup_attr = '_original_install_' + name
             setattr(self, backup_attr, getattr(self, attr))
-        _install.change_roots(self, *names)
+        install_.change_roots(self, *names)
 
 
 setup(name='Webilder',
