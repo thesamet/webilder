@@ -1,0 +1,31 @@
+=head1 NAME
+
+wbz_handler - Imports a new webshots archive to a webilder collection.
+
+=head1 SYNOPSIS
+
+wbz_handler [wbz_or_wbp_file]
+
+=head1 DESCRIPTION
+
+B<webilder_desktop> extract files from the given archive into the user's
+webilder collection.
+
+One possible use for this command is to associate it in a browser with
+wbz and wbp files so wallpapers can be directly downloaded and imported from
+Webshots' website.
+
+=head1 FILES
+
+F<$HOME/.webilder/webilder.conf>: user settings file.
+
+
+=head1 BUGS
+
+Please report bugs in http://github.com/thesamet/webilder/issues
+
+=head1 AUTHORS
+
+B<Webilder> was written by Nadav Samet <thesamet@gmail.com>.
+
+Webilder is released under the BSD License.

@@ -1,0 +1,26 @@
+=head1 NAME
+
+webilder_desktop - Graphical user interface for webilder.
+
+=head1 SYNOPSIS
+
+webilder_desktop
+
+=head1 DESCRIPTION
+
+B<webilder_desktop> is a graphical program that lets you download and set wallpapers from
+Webshots and Flickr.
+
+=head1 FILES
+
+F<$HOME/.webilder/webilder.conf>: user settings file.
+
+=head1 BUGS
+
+Please report bugs in http://github.com/thesamet/webilder/issues
+
+=head1 AUTHORS
+
+B<Webilder> was written by Nadav Samet <thesamet@gmail.com>.
+
+Webilder is released under the BSD License.

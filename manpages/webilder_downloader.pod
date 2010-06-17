@@ -1,0 +1,28 @@
+=head1 NAME
+
+webilder_downloader - downloads wallpapers and saves them in user's webilder collection.
+
+=head1 SYNOPSIS
+
+webilder_downloader
+
+=head1 DESCRIPTION
+
+B<webilder_downloader> Downloads wallpapers according to the user settings
+file (see below). The photos are saved the the webilder collection directory
+specified in this file.
+
+=head1 FILES
+
+F<$HOME/.webilder/webilder.conf>: user settings file.
+
+
+=head1 BUGS
+
+Please report bugs in http://github.com/thesamet/webilder/issues
+
+=head1 AUTHORS
+
+B<Webilder> was written by Nadav Samet <thesamet@gmail.com>.
+
+Webilder is released under the BSD License.

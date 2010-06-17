@@ -13,8 +13,11 @@ ChangeLog for Webilder !
 08-Oct-2006: Switched from autotools to distutils
 13-Oct-2006: Fixed bug to prevent sudden deletion of configuration file.
 13-Oct-2006: Default flickr sorting method is now by Interestingness, and it
-			 can be modified to be by Date.
+             an be modified to be by Date.
 05-Mar-2007: Bug fixes.
 02-May-2009: Added Italian and French translations.
              Works with Python 2.6.
-			 Delete current photo menu item for the applet.
+             Delete current photo menu item for the applet.
+16-Jun-2010: Fix webshots support.
+             Use setuptools.
+             License changed to BSD.
