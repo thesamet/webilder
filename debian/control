@@ -1,0 +1,16 @@
+Source: webilder
+Section: main
+Priority: optional
+Maintainer: Nadav Samet <thesamet@gmail.com>
+Build-Depends: cdbs (>= 0.4.43), python | python-support (>= 0.3), debhelper (>= 5.0.37.2), python-gtk2, python-gnome2, libglib2.0-0, python-gnomeapplet
+Standards-Version: 3.8.3
+Homepage: http://www.webilder.org/
+
+
+Package: webilder
+Architecture: all
+Depends: ${python:Depends}, python-gtk2, python-glade2, python-imaging
+Description: Wallpaper downloader and rotator that uses Flickr and Webshots.
+  Webilder enables you to download photos from Webshots and Flickr into your
+  photo collection. The package includes a GNOME panel applet that can notify
+  you whenever new daily photos are ready to be downloaded.
