@@ -17,17 +17,17 @@ class ProgressDialog(uitricks.UITricks):
 
     def on_closebutton__clicked(self, widget):
         self._terminate.set()
-        self._top.destroy()
-        self._top = None
+        self.top_widget.destroy()
+        self.top_widget = None
 
     def on_ProgressDialog__destroy(self, *args):
         self._terminate.set()
-        self._top = None
+        self.top_widget = None
         return False
 
     def on_closebutton__clicked(self, widget):
-        self._top.destroy()
-        self._top = None
+        self.top_widget.destroy()
+        self.top_widget = None
 
 
 def progress_thread_run(func):

@@ -1,19 +1,16 @@
 from webilder import __version__
 import urllib
-import pygtk
 import gtk
 import os
 
-from uitricks import UITricks, open_browser
+from webilder.uitricks import UITricks, open_browser
 
-from progress_dialog import *
+from webilder import progress_dialog
 
 class WebilderAgent(urllib.FancyURLopener):
     version = 'Webilder/%s' % __version__
 
-# pygtk.require("2.0")
-
-rotation_consts = {
+ROTATION_CONSTS = {
     1: _('1 minute'),
     2: _('2 minutes'),
     5: _('5 minutes'),
@@ -24,7 +21,7 @@ rotation_consts = {
     120: _('2 hours'),
     240: _('4 hours'),
     24*60: _('1 day')}
-quality_names = ['high', 'wide', 'low']
+QUALITY_NAMES = ['high', 'wide', 'low']
 
 class ConfigDialog(UITricks):
     def __init__(self):
@@ -62,21 +59,20 @@ class ConfigDialog(UITricks):
         cell.connect('edited', self.on_cell_edited, 4)
         self.rotate_interval.get_model().clear()
 
-        for time in sorted(rotation_consts.keys()):
-            self.rotate_interval.append_text(rotation_consts[time])
+        for time in sorted(ROTATION_CONSTS.keys()):
+            self.rotate_interval.append_text(ROTATION_CONSTS[time])
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
                 kde=self.wallpaper_use_kde,
                 script=self.wallpaper_use_script)
         self.notebook.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP, [('text/plain', 0, 0), ('text/uri-list', 0, 1)],
                 gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
 
-    def on_notebook__drag_data_received(self, widget, context, x, y,
-            selection, targetType, time):
-        if targetType == 1:
+    def on_notebook__drag_data_received(self, _widget, _context, _xpos, _ypos,
+                                        selection, target_type, _time):
+        if target_type == 1:
             url = selection.data.split()[0]
         else:
             url = selection.data
-        import urllib
         data = WebilderAgent().open(url).read()
         for channel in parse_cid_file(data):
             self.flickr_rules.get_model().append((channel['name'],channel['terms'],'', True, _('Interestingness')))
@@ -92,10 +88,11 @@ class ConfigDialog(UITricks):
 
             cdir = self.collection_dir.get_text()
             if not os.path.exists(cdir):
-                mb = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION, buttons=gtk.BUTTONS_YES_NO, message_format=
+                mbox = gtk.MessageDialog(
+                    type=gtk.MESSAGE_QUESTION, buttons=gtk.BUTTONS_YES_NO, message_format=
                     _("Collection directory %s does not exist. Would you like it to be created?") % cdir)
-                mbval = mb.run()
-                mb.destroy()
+                mbval = mbox.run()
+                mbox.destroy()
                 if (mbval == gtk.RESPONSE_YES):
                     os.mkdir(cdir)
                 else:
@@ -103,26 +100,26 @@ class ConfigDialog(UITricks):
                     continue
 
             if not os.path.isdir(cdir):
-                mb = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK, message_format=_("%s is not a directory.") % cdir)
-                mb.run()
-                mb.destroy()
+                mbox = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK, message_format=_("%s is not a directory.") % cdir)
+                mbox.run()
+                mbox.destroy()
                 self.collection_dir.grab_focus()
                 continue
 
             self.update_config(config)
             config.save_config()
             break
-        self._top.destroy()
+        self.top_widget.destroy()
 
     def load_config(self, config):
         # general tab
         self.rotate_bool.set_active(config.get('rotate.enabled'))
         interval = config.get('rotate.interval')
-        if interval not in rotation_consts:
+        if interval not in ROTATION_CONSTS:
             if interval<=0:
                 interval = 1
-            interval = max([t for t in rotation_consts.keys() if t<=interval])
-        interval = sorted(rotation_consts.keys()).index(interval)
+            interval = max([t for t in ROTATION_CONSTS.keys() if t<=interval])
+        interval = sorted(ROTATION_CONSTS.keys()).index(interval)
         self.rotate_interval.set_active(interval)
 
         self.autodownload_bool.set_active(config.get('autodownload.enabled'))
@@ -148,7 +145,7 @@ class ConfigDialog(UITricks):
         self.webshots_username.set_text(config.get('webshots.username'))
         self.webshots_password.set_text(config.get('webshots.password'))
         quality = config.get('webshots.quality')
-        if quality not in quality_names:
+        if quality not in QUALITY_NAMES:
             quality = 'low'
         getattr(self, quality).set_active(True)
 
@@ -164,7 +161,7 @@ class ConfigDialog(UITricks):
     def update_config(self, config):
         # rotator tab
         config.set('rotate.enabled', self.rotate_bool.get_active())
-        config.set('rotate.interval', sorted(rotation_consts.keys())[
+        config.set('rotate.interval', sorted(ROTATION_CONSTS.keys())[
             self.rotate_interval.get_active()])
 
         config.set('autodownload.enabled', self.autodownload_bool.get_active())
@@ -185,9 +182,9 @@ class ConfigDialog(UITricks):
         config.set('webshots.cookie', '')
 
         res = 'low'
-        for q in quality_names:
-            if getattr(self, q).get_active():
-                res = q
+        for quality in QUALITY_NAMES:
+            if getattr(self, quality).get_active():
+                res = quality
         config.set('webshots.quality', res)
 
         # advanced tab
@@ -201,37 +198,36 @@ class ConfigDialog(UITricks):
         config.set('filter.only_landscape', self.only_landscape.get_active())
 
 
-    def on_rotate_bool__toggled(self, *args):
+    def on_rotate_bool__toggled(self, *_args):
         self.rotate_interval.set_sensitive(self.rotate_bool.get_active())
 
-    def on_autodownload_bool__toggled(self, *args):
+    def on_autodownload_bool__toggled(self, *_args):
         self.autodownload_interval.set_sensitive(self.autodownload_bool.get_active())
 
-    def on_flickr_enabled__toggled(self, *args):
+    def on_flickr_enabled__toggled(self, *_args):
         for frame in (self.flickr_interestingness_frame, self.flickr_tags_frame):
             frame.set_sensitive(self.flickr_enabled.get_active())
 
-    def on_webshots_enabled__toggled(self, *args):
+    def on_webshots_enabled__toggled(self, *_args):
         self.webshots_login_frame.set_sensitive(self.webshots_enabled.get_active())
         self.webshots_res_frame.set_sensitive(self.webshots_enabled.get_active())
 
-    def on_wallpaper_use_script__toggled(self, *args):
+    def on_wallpaper_use_script__toggled(self, *_args):
         self.script.set_sensitive(self.wallpaper_use_script.get_active())
 
-    def on_add__clicked(self, widget):
-        iter = self.flickr_rules.get_model().append([_('Album Name'),'tag1,tag2','', True, 'Interestingness'])
-        # self.flickr_rules.scroll_to_cell(path)
+    def on_add__clicked(self, _widget):
+        self.flickr_rules.get_model().append([_('Album Name'),'tag1,tag2','', True, 'Interestingness'])
 
-    def on_remove__clicked(self, widget):
-        model, iter = self.flickr_rules.get_selection().get_selected()
-        if iter:
-            model.remove(iter)
+    def on_remove__clicked(self, _widget):
+        model, iterator = self.flickr_rules.get_selection().get_selected()
+        if iterator:
+            model.remove(iterator)
 
-    def on_flickr_rules__selection_changed(self, *args):
+    def on_flickr_rules__selection_changed(self, *_args):
         self.remove.set_sensitive(
                 self.flickr_rules.get_selection().get_selected()[1] is not None)
 
-    def on_cell_edited(self, cell, path, new_text, data):
+    def on_cell_edited(self, _cell, path, new_text, data):
         if data==1:
             terms = new_text.split(';')
             terms = [[tag.strip() for tag in term.split(',')] for term in terms]
@@ -243,17 +239,17 @@ class ConfigDialog(UITricks):
 
         self.flickr_rules.get_model()[path][data] = new_text
 
-    def on_rule_toggled(self, cell, path, column):
+    def on_rule_toggled(self, _cell, path, column):
         self.flickr_rules.get_model()[path][column] = not self.flickr_rules.get_model()[path][column]
 
-    def on_directory_browse__clicked(self, sender):
+    def on_directory_browse__clicked(self, _sender):
         fs = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
                 buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK))
         if fs.run()==gtk.RESPONSE_OK:
             self.collection_dir.set_text(fs.get_filename())
         fs.destroy()
 
-    def on_tips__clicked(self, widget):
+    def on_tips__clicked(self, _widget):
         text = _("""
         Getting started with flickr is easy.
 
@@ -281,16 +277,15 @@ class ConfigDialog(UITricks):
         mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
 
         mb.set_markup(text)
-        mbval = mb.run()
+        mb.run()
         mb.destroy()
 
-    def on_flickr_recommend__clicked(self, widget):
-        recommend_dialog = ProgressDialog(text=_('Sending your recommendations...'))
+    def on_flickr_recommend__clicked(self, _widget):
+        recommend_dialog = progress_dialog.ProgressDialog(text=_('Sending your recommendations...'))
         rules = list(self.flickr_rules.get_model())
-        class RecommendingThread(ProgressThread):
-            @progress_thread_run
+        class RecommendingThread(progress_dialog.ProgressThread):
+            @progress_dialog.progress_thread_run
             def run(self):
-                import urllib
                 recommend = [rule for rule in rules if (not rule[2]) or (not rule[3])]
                 size = len(recommend)
                 for index, rule in enumerate(recommend):
@@ -301,18 +296,18 @@ class ConfigDialog(UITricks):
                     self.status_notify(float(index)/size,
                             progress_text=_('Sending rule %d of %d') % (index+1, size))
                     try:
-                        rsp = WebilderAgent().open('http://api.webilder.org/submit_channel', data).read()
-                    except e:
-                        print str(e)
+                        WebilderAgent().open('http://api.webilder.org/submit_channel', data).read()
+                    except IOError, e:
+                        print e
                 else:
                     self.status_notify(1.0, progress_text='Done')
                     self.safe_message_dialog(_('Thank you for recommending your albums!'), gtk.MESSAGE_INFO)
 
         thread=RecommendingThread(recommend_dialog)
         thread.start()
-        recommend_dialog._top.run()
+        recommend_dialog.top_widget.run()
 
-    def on_flickr_get_more_albums__clicked(self, widget):
+    def on_flickr_get_more_albums__clicked(self, _widget):
         url = 'http://www.webilder.org/channels/'
         open_browser(url = url,
                 no_browser_title = _('Could not open browser'),

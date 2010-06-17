@@ -10,7 +10,7 @@ class UITricks:
         self._wTree = gtk.glade.XML(
             pkg_resources.resource_filename(__name__,
             gladefile), toplevel)
-        self._top = self._wTree.get_widget(toplevel)
+        self.top_widget = self._wTree.get_widget(toplevel)
         widgets = dict([(widget.get_name(),widget) for widget in
             self._wTree.get_widget_prefix('')])
         for widget_name, widget in widgets.iteritems():
@@ -31,13 +31,13 @@ class UITricks:
                     raise RuntimeWarning(_('Widget %s not found when trying to register callback %s') % (widget, name))
 
     def run(self):
-        return self._top.run()
+        return self.top_widget.run()
 
     def show(self):
-        return self._top.show()
+        return self.top_widget.show()
 
     def destroy(self):
-        self._top.destroy()
+        self.top_widget.destroy()
 
 def open_browser(url, no_browser_title, no_browser_markup):
     import os

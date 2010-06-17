@@ -57,7 +57,7 @@ class WebilderDesktopWindow(UITricks):
                 self.collection_tree_changed)
 
         self.restore_window_state()
-        self._top.show_all()
+        self.top_widget.show_all()
 
         self.hand_cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
         # self.donate_button_box.window.set_cursor(self.hand_cursor)
@@ -193,7 +193,7 @@ class WebilderDesktopWindow(UITricks):
             iter = self.iconview.get_model().get_iter(path)
             data = self.iconview.get_model().get_value(iter,
                 IV_DATA_COLUMN)
-            WebilderFullscreen.FullscreenViewer(self._top, data).run()
+            WebilderFullscreen.FullscreenViewer(self.top_widget, data).run()
         gc.collect()
 
     def on_download_photos__activate(self, menu_item):
@@ -262,7 +262,7 @@ class WebilderDesktopWindow(UITricks):
         return False
 
     def save_window_state(self):
-        top = self._top
+        top = self.top_widget
         layout = {'window_position': top.get_position(),
                   'window_size': top.get_size(),
                   'hpaned_position': self.hpaned.get_position(),
@@ -273,9 +273,9 @@ class WebilderDesktopWindow(UITricks):
     def restore_window_state(self):
         d = config.get('webilder.layout')
         if d.has_key('window_position'):
-            self._top.move(*d['window_position'])
+            self.top_widget.move(*d['window_position'])
         if d.has_key('window_size'):
-            self._top.resize(*d['window_size'])
+            self.top_widget.resize(*d['window_size'])
         if d.has_key('hpaned_position'):
             self.hpaned.set_position(d['hpaned_position'])
         if d.has_key('info_expander'):
