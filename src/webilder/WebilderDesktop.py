@@ -464,7 +464,7 @@ def delete_files(main_window, forever):
                 pass
         if forever:
             banned.write(os.path.basename(data['filename'])+'\n')
-        model.remove(iter)
+        model.remove(iterator)
 
     if monitor['dir']:
         monitor['monitor'] = gnomevfs.monitor_add(
@@ -486,10 +486,10 @@ HTML_ESCAPE_TABLE = {
 
 def html_escape(text):
     """Produce entities within text."""
-    text = []
+    output = []
     for char in text:
-        text.append(HTML_ESCAPE_TABLE.get(char, char))
-    return "".join(text)
+        output.append(HTML_ESCAPE_TABLE.get(char, char))
+    return "".join(output)
 
 class DonateDialog(UITricks):
     """Controller for the Donate dialog."""

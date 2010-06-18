@@ -75,9 +75,9 @@ class ConfigObject:
         """Saves config to a file."""
         if not filename:
             filename = self._filename
-        org_cfg = ConfigObject(file)
+        org_cfg = ConfigObject(filename)
 
-        fileobj = open(file, 'w')
+        fileobj = open(filename, 'w')
         for key, _unused_value in DEFAULT_CONFIG:
             try:
                 if key in self._dirty_keys:
