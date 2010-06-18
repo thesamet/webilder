@@ -1,3 +1,11 @@
+'''
+File    : config.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
+
+Description : Webilder configur object and its load and save methods.
+'''
 import os, time
 
 #Gettext Support
@@ -5,70 +13,81 @@ import gettext
 gettext.install('webilder')
 
 class ConfigObject:
-    def __init__(self, file=None):
+    """Represents webilder user's perferences."""
+    def __init__(self, filename=None):
         self._dict = dict(DEFAULT_CONFIG)
         self._dirty_keys = set()
-        if file:
-            if os.path.exists(file):
-                self.load_config(file)
+        if filename:
+            if os.path.exists(filename):
+                self.load_config(filename)
             else:
-                self._filename = file
+                self._filename = filename
 
-        if not os.path.exists(os.path.dirname(file)):
-            os.mkdir(os.path.dirname(file))
+        if not os.path.exists(os.path.dirname(filename)):
+            os.mkdir(os.path.dirname(filename))
             os.mkdir(self.get('collection.dir'))
-            self.save_config(file);
+            self.save_config(filename)
 
         if not os.path.isdir(self.get('collection.dir')):
-            raise ValueError, _("collection.dir is set to a non-directory, check your config file.")
+            raise ValueError, _("collection.dir is set to a non-directory, "
+                                "check your config file.")
 
     def get(self, key, *args):
+        """Get a preference by key."""
         return self._dict.get(key, *args)
 
     def set(self, key, value):
+        """Set a preference given key and value."""
         self._dirty_keys.add(key)
         self._dict[key] = value
 
-    def load_config(self, file):
-        self._filename = file
-        f = open(file, 'r')
-        for lineno, line in enumerate(f):
+    def load_config(self, filename):
+        """Loads config from a file."""
+        self._filename = filename
+        fileobj = open(filename, 'r')
+        for lineno, line in enumerate(fileobj):
             line = line.strip()
             if not line:
                 continue
             index = line.find('=')
-            if index<0:
-                raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
+            if index < 0:
+                raise ValueError(
+                    _('Error parsing line %d of config file %s') % (lineno,
+                                                                    filename))
             key, value = line[:index].strip(), line[index+1:].strip()
             if key in self._dict:
                 try:
                     self._dict[key] = eval(value)
-                except:
-                    if key == 'webilder.installation_date' and value.startswith('time.struct_time'):
-                        # repr(time.localtime()) stopped looking like a tuple in Python 2.6
+                except Exception:  # pylint: disable=W0703
+                    if (key == 'webilder.installation_date' and
+                        value.startswith('time.struct_time')):
                         self._dict[key] = time.localtime()[:3]
                     else:
-                        raise ValueError(_('Error parsing line %d of config file %s') % (lineno, file))
+                        raise ValueError(_('Error parsing line %d of config'
+                            ' file %s') % (lineno, filename))
             else:
-                raise ValueError(_('Unrecognized key in line %d of config file %s') % (lineno, file))
-        f.close()
+                raise ValueError(
+                    _('Unrecognized key in line %d of config file %s') % (
+                      lineno, filename))
+        fileobj.close()
 
-    def save_config(self, file=None):
-        if not file:
-            file = self._filename
+    def save_config(self, filename=None):
+        """Saves config to a file."""
+        if not filename:
+            filename = self._filename
         org_cfg = ConfigObject(file)
 
-        f = open(file, 'w')
-        for key,v in DEFAULT_CONFIG:
+        fileobj = open(file, 'w')
+        for key, _unused_value in DEFAULT_CONFIG:
             try:
                 if key in self._dirty_keys:
                     value = self._dict[key]
                 else:
                     value = org_cfg.get(key, None)
-                f.write('%s = %r\n' % (key, value))
-            except e:
-                f.write('# '+str(e))
-        f.close()
+                fileobj.write('%s = %r\n' % (key, value))
+            except (KeyError, ValueError, TypeError), exc:
+                fileobj.write('# '+str(exc))
+        fileobj.close()
         self._dirty_keys.clear()
 
 DEFAULT_CONFIG = [
@@ -101,23 +120,25 @@ DEFAULT_CONFIG = [
 
 DEFAULT_CONFIG_FILE = os.path.expanduser('~/.webilder/webilder.conf')
 
-config = ConfigObject(DEFAULT_CONFIG_FILE)
+config = ConfigObject(DEFAULT_CONFIG_FILE)  # pylint: disable=C0103
 
 def reload_config():
+    """Reloads the config file."""
     config.load_config(DEFAULT_CONFIG_FILE)
 
 def set_wallpaper(filename):
+    """Sets the wallpaper to the given filename."""
     use = config.get('webilder.wallpaper_set_method')
-    if use=="gnome":
+    if use == "gnome":
         import gconf
         conf_client = gconf.client_get_default()
         conf_client.set_string('/desktop/gnome/background/picture_filename',
             filename)
-    elif use=="kde":
+    elif use == "kde":
         script = 'dcop kdesktop KBackgroundIface setWallpaper "%f" 4'
         script = script.replace('%f', filename)
         os.popen2(script)
-    elif use=="script":
+    elif use == "script":
         script = config.get('webilder.wallpaper_script')
         script = script.replace('%f', filename)
         os.popen2(script)

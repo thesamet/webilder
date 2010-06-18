@@ -1,21 +1,30 @@
 #!/usr/bin/env python
+'''
+File    : webilder_gnome_applet.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
+
+Description : Webilder panel applet for GNOME.
+'''
 import pygtk
 pygtk.require('2.0')
 import pkg_resources
 
+from webilder.base_applet import BaseApplet
+from webilder.config import config
+from webilder import AboutDialog
+from webilder import config_dialog
+from webilder import DownloadDialog
 from webilder import __version__
+from webilder import WebilderDesktop
 
 import sys
-import os
-import time
-import glob
 import gtk
 import gnomeapplet
 import gnome
 import gobject
-from base_applet import BaseApplet
 
-from config import config, set_wallpaper, reload_config
 
 # Set this to False if you don't want the software to check
 # for updates.
@@ -24,7 +33,8 @@ from config import config, set_wallpaper, reload_config
 # to Webilder's server.
 
 class WebilderApplet(BaseApplet):
-    def __init__(self, applet, iid):
+    """Implementation for Webilder GNOME panel applet."""
+    def __init__(self, applet, _iid):
         BaseApplet.__init__(self)
         gnome.init('WebilderApplet', __version__)
         self.applet = applet
@@ -45,7 +55,7 @@ class WebilderApplet(BaseApplet):
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.evtbox.add(self.applet_icon)
         self.applet.add(self.evtbox)
-        self.propxml=_("""
+        self.propxml = _("""
     <popup name="button3">
         <menuitem name="Item 1" verb="Browse" label="_Browse Collection" pixtype="stock"
 pixname="gtk-directory"/>
@@ -80,35 +90,40 @@ pixname="gtk-preferences"/>
         self.tooltips.enable()
         self.tooltips.set_tip(self.applet, text)
 
-    def preferences(self, object, menu):
-        import config_dialog
+    def preferences(self, _object, _menu):
+        """Opens the preferences dialog."""
         config_dialog.ConfigDialog().run_dialog(config)
 
-    def about(self, object, menu):
-        import AboutDialog
+    def about(self, _object, _menu):
+        """Opens the about dialog."""
         AboutDialog.show_about_dialog(_('Webilder Applet'))
 
-    def leech(self, object, menu):
-        def remove_reference(*args):
+    def leech(self, _object, _menu):
+        """Starts downloading photos."""
+        def remove_reference(*_args):
+            """Removes reference to the download dialog so we will not it is
+            not running."""
             self.download_dlg = None
 
         if self.download_dlg:
             return
-        import DownloadDialog
         self.download_dlg = DownloadDialog.DownloadProgressDialog(config)
         self.download_dlg.top_widget.connect('destroy', remove_reference)
         self.download_dlg.show()
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.tooltips.disable()
 
-    def on_resize_panel(self, widget, size):
+    def on_resize_panel(self, _widget, size):
+        """Called when the panel is resized so we can scale our icon."""
         self.scaled_icon = self.icon.scale_simple(size - 4, size - 4,
             gtk.gdk.INTERP_BILINEAR)
-        self.scaled_icon_green = self.icon_green.scale_simple(size - 4, size - 4,
+        self.scaled_icon_green = self.icon_green.scale_simple(size - 4,
+                                                              size - 4,
             gtk.gdk.INTERP_BILINEAR)
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
 
-    def on_button_press(self, widget, event):
+    def on_button_press(self, _widget, event):
+        """Called when the user clicks on the applet icon."""
         if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
             return False
         elif event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
@@ -117,23 +132,27 @@ pixname="gtk-preferences"/>
             else:
                 toggle_window_visibility(self.photo_browser.top_widget)
 
-    def browse(self, object, menu):
-        import WebilderDesktop
+    def browse(self, _object, _menu):
+        """Opens the photo browser."""
         if not self.photo_browser:
             self.photo_browser = WebilderDesktop.WebilderDesktopWindow()
-            self.photo_browser.top_widget.connect("destroy", self.photo_browser_destroy)
+            self.photo_browser.top_widget.connect("destroy",
+                                                  self.photo_browser_destroy)
         else:
             self.photo_browser.top_widget.show_all()
 
-    def photo_browser_destroy(self, event):
+    def photo_browser_destroy(self, _event):
+        """Called when the photo browser is closed."""
         self.photo_browser.destroy()
         self.photo_browser = None
 
 def webilder_applet_factory(applet, iid):
+    """Instantiates a webilder applet."""
     WebilderApplet(applet, iid)
     return True
 
 def toggle_window_visibility(window):
+    """Hides and show the photo browser."""
     visible = window.get_property('visible')
     if visible:
         window.hide()
@@ -141,6 +160,7 @@ def toggle_window_visibility(window):
         window.show_all()
 
 def main():
+    """Entrypoint for the panel applet."""
     gtk.gdk.threads_init()
 
     if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":
