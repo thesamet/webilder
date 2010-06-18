@@ -1,22 +1,31 @@
-import httplib
+'''
+File    : utils.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
+
+Description : Webshots scraping functionality
+'''
+
+from webilder.webshots import wbz
 import urllib, urllib2
 import cookielib
 import re
-import wbz
 
 class WBZLoginException(Exception):
-    pass
+    """Exception raised when login failed."""
 
 class LeechPremiumOnlyPhotoError(Exception):
-    pass
+    """Exception raised when attempting to download premium only photo."""
 
 class LeechHighQualityForPremiumOnlyError(Exception):
-    pass
+    """Exception raised when attempting to download high quality photo which
+    the user is not allowed to download."""
 
 def get_cookie(user, password):
     """Returns a webshots daily cookie given a user and a password."""
-    cj = cookielib.CookieJar()
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+    cookie_jar = cookielib.CookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie_jar))
     response = opener.open(
         'http://www.webshots.com/login',
         urllib.urlencode({'done': '',
@@ -24,28 +33,31 @@ def get_cookie(user, password):
                           'password': password,
                           'lbReferer': 'http://www.webshots.com/',
                           'action': 'lb'}))
-    r = response.read().lower()
-    if '"c":-1' in r:
+    resp = response.read().lower()
+    if '"c":-1' in resp:
         raise WBZLoginException, 'Incorrect username or password.'
 
-    for cookie in cj:
-        if cookie.name=='daily':
+    for cookie in cookie_jar:
+        if cookie.name == 'daily':
             return cookie.value
     else:
         raise WBZLoginException, "Cookie not found!"
 
+IMAGE_REGEX = (r'<a href="(/pro/photo/([0-9]+)\?path=/archive)".*?<p title.*?>'
+               r'(.*?)</p>.*?<a href="(/entry.*?)" class="hiResLink"')
+
 def get_download_list(config):
+    """Returns a list of photos available to download."""
     if not config.get('webshots.enabled'):
         return []
-    IMAGE_REGEX = r'<a href="(/pro/photo/([0-9]+)\?path=/archive)".*?<p title.*?>(.*?)</p>.*?<a href="(/entry.*?)" class="hiResLink"'
 
     page = urllib.urlopen(
         'http://www.webshots.com/pro/category/archive?sort=newest').read()
 
     photos = re.findall(IMAGE_REGEX, page, re.DOTALL)
-    l = []
+    result = []
     for image_link, photo, title, high_res_link in photos:
-        l.append({
+        result.append({
             'name': 'webshots_d%s.jpg' % photo,
             'title': title,
             'data': {
@@ -53,10 +65,11 @@ def get_download_list(config):
                 'image_link': image_link,
                 'high_res_link': high_res_link
                 }
-            });
-    return l
+            })
+    return result
 
 def get_photo_stream(config, photo):
+    """Starts downloading the given photo."""
     cookie = config.get('webshots.cookie')
     if not cookie:
         cookie = get_cookie(
@@ -66,7 +79,8 @@ def get_photo_stream(config, photo):
         config.save_config()
 
     headers = {'Cookie':
-        'daily='+config.get('webshots.cookie')+';desktop-client=unknown;site-visits=1',
+        'daily='+config.get('webshots.cookie')+
+        ';desktop-client=unknown;site-visits=1',
     }
 
     url = 'http://www.webshots.com' + photo['data']['high_res_link'].replace(
@@ -74,25 +88,24 @@ def get_photo_stream(config, photo):
         'res=%s' % config.get('webshots.quality'))
 
     opener = urllib.FancyURLopener()
-    opener.addheader('Cookie',headers['Cookie'])
-    resp = opener.open(url)
-    if 'text/html' in resp.info().getheader('content-type'):
-        r = resp.read()
-        if 'Credit Card Information' in r:
+    opener.addheader('Cookie', headers['Cookie'])
+    conn = opener.open(url)
+    if 'text/html' in conn.info().getheader('content-type'):
+        resp = conn.read()
+        if 'Credit Card Information' in resp:
             raise LeechPremiumOnlyPhotoError(
                 "This photo can be downloaded at resolution '%s' only by "
                 "Premium members." % config.get('webshots.quality'))
-        if 'NO, THANK YOU.' in r:
+        if 'NO, THANK YOU.' in resp:
             match = re.search(
-                r'<a href="(.*?)" class="no-btn">NO, THANK YOU.', r)
+                r'<a href="(.*?)" class="no-btn">NO, THANK YOU.', resp)
             if not match:
                 raise ValueError, "Unable to download photo %s" % photo['name']
             opener = urllib.FancyURLopener()
             opener.addheader('Cookie', headers['Cookie'])
-            r = opener.open(match.groups()[0]).read()
-            print "clicked"
+            resp = opener.open(match.groups()[0]).read()
 
-        match = re.search(r'click <a href="(.*?)">here</a>', r)
+        match = re.search(r'click <a href="(.*?)">here</a>', resp)
         if not match:
             raise ValueError, "Unable to download photo %s" % photo['name']
         url = match.groups()[0]
@@ -103,8 +116,9 @@ def get_photo_stream(config, photo):
 
     return resp
 
-def process_photo(config, photo, f):
-    img = wbz.open(f, 'r')
+def process_photo(_config, photo, fileobj):
+    """Process a photo filestream."""
+    img = wbz.open(fileobj, 'r')
     metadata = img.get_metadata()
     metadata['url'] = photo['data']['image_link']
     data = img.get_image_data()
