@@ -36,8 +36,8 @@ def progress_thread_run(func):
             func(self, *args, **kwargs)
         finally:
             gtk.gdk.threads_enter()
-            if self._pdialog._top:
-                self._pdialog._top.destroy()
+            if self._pdialog.top_widget:
+                self._pdialog.top_widget.destroy()
             print _("Thread done")
             gtk.gdk.threads_leave()
     return newfunc
@@ -57,7 +57,7 @@ class ProgressThread(threading.Thread):
     def status_notify(self, fraction, progress_text, status_text=''):
         gtk.gdk.threads_enter()
         try:  # coupling...
-            if self._pdialog._top:
+            if self._pdialog.top_widget:
                 self._pdialog.progressbar.set_fraction(fraction)
                 self._pdialog.progressbar.set_text(progress_text)
                 self._pdialog.statustext.set_markup('<i>%s</i>' % status_text)

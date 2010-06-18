@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 """Add a wbz to our collection"""
 
+from webilder.config import config
+from webilder import downloader
+from webilder.webshots import wbz
+from webilder.webshots import wbp
+
 import sys
-import os
-from webshots import wbz
-from webshots import wbp
 import struct
 
-import downloader
-from config import config
-
 def handle_wbz(wbzfile):
-    f = wbz.open(wbzfile, 'r')
-    handle_image(f)
+    """Imports the given wbz filename."""
+    fileobj = wbz.open(wbzfile, 'r')
+    handle_image(fileobj)
 
 def handle_image(img):
+    """Handled a parsed wbz object."""
     metadata = img.get_metadata()
     title = (metadata.get('title') or metadata.get('STR_ImageTitle'))
     album = (metadata.get('albumTitle') or metadata.get('STR_CollectionTitle'))
@@ -31,25 +32,28 @@ def handle_image(img):
     print _("Extracted: %s/%s") % (album, title)
 
 def handle_wbp(wbpfile):
-    f = wbp.open(wbpfile, 'r')
-    res = []
-    return [handle_image(picture.image) for picture in f.pictures]
+    """Imports the given wbp filename."""
+    wbpfile = wbp.open(wbpfile, 'r')
+    return [handle_image(picture.image) for picture in wbpfile.pictures]
 
 
 def handle_file(filename):
-    f = open(filename, 'rb')
-    magic, = struct.unpack('=L', f.read(4))
-    f.close()
-    if magic==wbz.WBZ_ID:
+    """Handles a filename. Checks whethers it is wbz or wbp."""
+    fileobj = open(filename, 'rb')
+    magic, = struct.unpack('=L', fileobj.read(4))
+    fileobj.close()
+    if magic == wbz.WBZ_ID:
         handle_wbz(filename)
-    elif magic==wbp.WBP_ID:
+    elif magic == wbp.WBP_ID:
         handle_wbp(filename)
     else:
         raise IOError, _("Unrecognized file type")
 
 def main():
+    """Command line interface to wbz_handler."""
     if len(sys.argv)!=2:
-        print _("""wbz_handler will extract webshots archives into your collection.
+        print _(
+        """wbz_handler will extract webshots archives into your collection.
 
 Usage:
 
@@ -59,5 +63,5 @@ Where filename.wbz is a Webshots archive.""")
         sys.exit(1)
     handle_file(sys.argv[1])
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()

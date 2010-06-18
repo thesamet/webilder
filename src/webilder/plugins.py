@@ -1,6 +1,14 @@
-plugin_names = ['flickr', 'webshots']
+'''
+File    : plugins.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
 
-plugins = {}
+Description : List of available webilder plugins.
+'''
+PLUGIN_NAMES = ['flickr', 'webshots']
 
-for plugin in plugin_names:
-    plugins[plugin] = __import__(plugin, globals(), locals())
+PLUGINS = {}
+
+for plugin in PLUGIN_NAMES:
+    PLUGINS[plugin] = __import__(plugin, globals(), locals())

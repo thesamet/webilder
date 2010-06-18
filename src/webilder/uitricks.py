@@ -1,18 +1,29 @@
+'''
+File    : uitricks.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
+
+Description : Base class for Glade XML based controllers.
+'''
 import pkg_resources
 import gtk
 import gtk.glade
 import re
 
 class UITricks:
+    """Base class for Glade XML based controllers."""
+
     def __init__(self, gladefile, toplevel, controller = None):
+        """Loads a glade file and connects signal handlers to widgets."""
         if controller is None:
             controller = self
-        self._wTree = gtk.glade.XML(
+        widget_tree = gtk.glade.XML(
             pkg_resources.resource_filename(__name__,
             gladefile), toplevel)
-        self.top_widget = self._wTree.get_widget(toplevel)
-        widgets = dict([(widget.get_name(),widget) for widget in
-            self._wTree.get_widget_prefix('')])
+        self.top_widget = widget_tree.get_widget(toplevel)
+        widgets = dict([(widget.get_name(), widget) for widget in
+            widget_tree.get_widget_prefix('')])
         for widget_name, widget in widgets.iteritems():
             setattr(self, widget_name, widget)
         for name in dir(controller):
@@ -23,31 +34,38 @@ class UITricks:
                 signal = signal.replace('_', '-')
                 if widget in widgets:
                     widget = widgets[widget]
-                    if signal=='selection-changed' and isinstance(widget, gtk.TreeView):
+                    if (signal == 'selection-changed' and
+                        isinstance(widget, gtk.TreeView)):
                         widget = widget.get_selection()
                         signal = 'changed'
                     widget.connect(signal, callback)
                 else:
-                    raise RuntimeWarning(_('Widget %s not found when trying to register callback %s') % (widget, name))
+                    raise RuntimeWarning(
+                      _('Widget %s not found when trying to register '
+                        'callback %s') % (widget, name))
 
     def run(self):
+        """Calls run() of the top widget."""
         return self.top_widget.run()
 
     def show(self):
+        """Calls show() of the top widget."""
         return self.top_widget.show()
 
     def destroy(self):
+        """Calls top_widget() of the top widget."""
         self.top_widget.destroy()
 
 def open_browser(url, no_browser_title, no_browser_markup):
+    """Opens a webbrowser with the given URL."""
     import os
     def _iscommand(cmd):
         """Return True if cmd can be found on the executable search path."""
         path = os.environ.get("PATH")
         if not path:
             return False
-        for d in path.split(os.pathsep):
-            exe = os.path.join(d, cmd)
+        for dirname in path.split(os.pathsep):
+            exe = os.path.join(dirname, cmd)
             if os.path.isfile(exe):
                 return True
         return False
@@ -61,8 +79,8 @@ def open_browser(url, no_browser_title, no_browser_markup):
     elif _iscommand('mozilla-firefox'):
         os.system('mozilla-firefox %s' % url)
     else:
-        mb = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-        mb.set_title(no_browser_title)
-        mb.set_markup(no_browser_markup)
-        mbval = mb.run()
-        mb.destroy()
+        mbox = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+        mbox.set_title(no_browser_title)
+        mbox.set_markup(no_browser_markup)
+        mbox.run()
+        mbox.destroy()

@@ -1,40 +1,50 @@
-import os.path
-import glob
+'''
+File    : downloader.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
+
+Description : Implements the download logic. Also works as a standalone script.
+'''
+
+from webilder import plugins
+from webilder.webshots.utils import LeechPremiumOnlyPhotoError
+from webilder.config import config
+
 import cStringIO
-import plugins
-import time
+import glob
 import os
+import os.path
+import time
 
-from webshots.utils import LeechPremiumOnlyPhotoError
+__recently_filtered__ = {}
 
-from config import config, reload_config
-
-_recently_filtered = {}
-
-def get_full_download_list(config):
-    # get list of all photos
-    all_photos=[]
-    for plugin, module in plugins.plugins.iteritems():
-        photos = module.get_download_list(config)
+def get_full_download_list(config_obj):
+    """Get list of all photos avaialable for download."""
+    all_photos = []
+    for plugin, module in plugins.PLUGINS.iteritems():
+        photos = module.get_download_list(config_obj)
         for photo in photos:
             photo['_plugin'] = {'name': plugin, 'module': module}
         all_photos.extend(photos)
     return all_photos
 
 def clear_recently_filtered():
-    print "clearing"
-    _recently_filtered.clear()
+    """Clears the list of recently filtered photos."""
+    __recently_filtered__.clear()
 
 def clear_old_filtered():
+    """Clears the lsit of photos which were filtered yesterday."""
     now = time.time()
     clear = []
-    for name, block_time in _recently_filtered.iteritems():
-        if now-block_time>24*3600:
+    for name, block_time in __recently_filtered__.iteritems():
+        if now-block_time > 24*3600:
             clear.append(name)
     for name in clear:
-        del _recently_filtered[name]
+        del __recently_filtered__[name]
 
-def filter_photos(config, photos):
+def filter_photos(config_obj, photos):
+    """Filter photos (removed banned, not landscape, etc)."""
     clear_old_filtered()
     # load photo names of permanently deleted photos...
     banned_photos_file = os.path.expanduser('~/.webilder/banned_photos')
@@ -46,8 +56,8 @@ def filter_photos(config, photos):
 
     # check if we already have any of the photos
 
-    files = glob.glob(os.path.join(config.get('collection.dir'), '*', '*'))
-    files=[os.path.basename(file) for file in files]
+    files = glob.glob(os.path.join(config_obj.get('collection.dir'), '*', '*'))
+    files = [os.path.basename(filename) for filename in files]
 
     filtered_photos = []
     for photo in photos:
@@ -59,41 +69,45 @@ def filter_photos(config, photos):
             print _("Skipping banned photo '%s'.") % photo['title']
             filtered_photos.append(photo)
             continue
-        if photo['name'] in _recently_filtered and config.get('filter.only_landscape'):
-            # currently photos filtered only if only_landscape is set. to prevent
-            # photos from being blocked by this cache soon after only_landscape has
-            # set to false, the right term of the 'and' above was added.
+        if (photo['name'] in __recently_filtered__ and
+            config_obj.get('filter.only_landscape')):
+            # currently photos filtered only if only_landscape is set. to
+            # prevent # photos from being blocked by this cache soon after
+            # only_landscape has set to false, the right term of the 'and'
+            # above was added.
             filtered_photos.append(photo)
             print _("Skipping previously filtered photo '%s'.") % photo['title']
             continue
 
-        photo['_plugin']['module'].fetch_photo_info(config, photo)
-        if config.get('filter.only_landscape'):
-            if 'aspect_ratio' in photo['data'] and photo['data']['aspect_ratio']<1.1:
+        photo['_plugin']['module'].fetch_photo_info(config_obj, photo)
+        if config_obj.get('filter.only_landscape'):
+            if ('aspect_ratio' in photo['data'] and
+                photo['data']['aspect_ratio'] < 1.1):
                 filtered_photos.append(photo)
                 print _("Skipping non-landscape photo '%s'") % photo['title']
-                _recently_filtered[photo['name']] = time.time()
+                __recently_filtered__[photo['name']] = time.time()
                 continue
         files.append(photo['name'])
 
     for photo in filtered_photos:
         photos.remove(photo)
 
-def download_photo(config, photo, notify):
+def download_photo(config_obj, photo, notify):
+    """Downloads a given photo object."""
     print _("%s: Downloading '%s'") % (
         photo['_plugin']['name'], photo['title'])
-    stream = photo['_plugin']['module'].get_photo_stream(config, photo)
+    stream = photo['_plugin']['module'].get_photo_stream(config_obj, photo)
     memfile = cStringIO.StringIO()
     try:
         content_length = int(stream.headers['Content-Length'])
-    except:
+    except ValueError:
         content_length = 2**37
 
     size = 0
     while True:
         notify(float(size)/content_length)
         block = stream.read(16384)
-        size+=len(block)
+        size += len(block)
         if not block:
             break
         memfile.write(block)
@@ -101,9 +115,10 @@ def download_photo(config, photo, notify):
     memfile.seek(0)
     return memfile
 
-def save_photo(config, photo, image, metadata):
+def save_photo(config_obj, photo, image, metadata):
+    """Saves the given photo file and metadata."""
     album_dirname = metadata['albumTitle'].replace(os.sep, '_')
-    dest_dir = os.path.join(config.get('collection.dir'), album_dirname)
+    dest_dir = os.path.join(config_obj.get('collection.dir'), album_dirname)
     dest_thumb_dir = os.path.join(dest_dir, '.thumbs')
     dest_img = os.path.join(dest_dir, photo['name'])
     dest_inf = os.path.splitext(dest_img)[0]+'.inf'
@@ -130,6 +145,7 @@ def save_photo(config, photo, image, metadata):
     finf.close()
 
 def download_all(notify=lambda *args: None, terminate=lambda: False):
+    """Downloads all photos available to us."""
     notify(0, '', _('Downloading list of photos (may take some time)'))
     photos = get_full_download_list(config)
     if terminate():
@@ -142,7 +158,8 @@ def download_all(notify=lambda *args: None, terminate=lambda: False):
     for index, photo in enumerate(photos):
         download_notifier = lambda fraction: notify(
                 (float(index+1)+fraction)/(len(photos)+1),
-                    _('Downloading photo %d of %d from %s.') % (index+1, len(photos), photo['_plugin']['name']),
+                    _('Downloading photo %d of %d from %s.') % (
+                        index+1, len(photos), photo['_plugin']['name']),
                     _('Downloading <b><i>"%s"</i></b>') % photo['title'])
         try:
             memfile = download_photo(config, photo, download_notifier)
@@ -153,11 +170,11 @@ def download_all(notify=lambda *args: None, terminate=lambda: False):
         if terminate():
             break
         try:
-            image, metadata = photo['_plugin']['module'].process_photo(config, photo, memfile)
+            image, metadata = photo['_plugin']['module'].process_photo(
+                config, photo, memfile)
             save_photo(config, photo, image, metadata)
-        except IOError, e:
-            print "IOError: ",str(e)
-            pass
+        except IOError, exc:
+            print "IOError: ", str(exc)
         else:
             completed += 1
 
@@ -171,10 +188,11 @@ import socket
 socket.setdefaulttimeout(120)
 
 def main():
-    import config
-    def notify(fraction, status, message):
+    """Command line interface for photo downloader."""
+    def notify(_fraction, status, message):
+        """Called when the download logic wants to notify us."""
         print message, status
     download_all(notify)
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

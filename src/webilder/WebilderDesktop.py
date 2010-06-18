@@ -1,19 +1,33 @@
-import sys, os, time, glob, gc
+'''
+File    : WebilderDesktop.py
+Author  : Nadav Samet
+Contact : thesamet@gmail.com
+Date    : 2010 Jun 17
 
+Description : Controller for the photo browser. Can work as a
+              standalone program.
+'''
+
+from webilder import AboutDialog
+from webilder import config_dialog
+from webilder import DownloadDialog
+from webilder import wbz_handler
+from webilder import WebilderFullscreen
+from webilder.thumbs import ThumbLoader
+from webilder.uitricks import UITricks, open_browser
+from webilder.webshots import wbz
+
+import sys, os, time, glob, gc
 import gtk, gobject
 import pkg_resources
 
-from uitricks import UITricks, open_browser
-from thumbs import ThumbLoader
-import WebilderFullscreen
-import DownloadDialog
 
 try:
     import gnomevfs
 except ImportError:
-    gnomevfs = None
+    gnomevfs = None  # pylint: disable=C0103
 
-from config import config, set_wallpaper, reload_config
+from webilder.config import config, set_wallpaper, reload_config
 
 # Iconview column constants
 IV_TEXT_COLUMN = 0
@@ -28,13 +42,15 @@ TV_KIND_COLUMN = 2
 TV_KIND_DIR = "dir"
 TV_KIND_RECENT = "recent"
 
-empty_picture = gtk.gdk.pixbuf_new_from_file_at_size(
+EMPTY_PICTURE = gtk.gdk.pixbuf_new_from_file_at_size(
     pkg_resources.resource_filename(__name__, 'ui/camera48.png'), 160, 120)
 
-def connect_to_menu(wTree, item, callback):
-    wTree.get_widget(item).connect('activate', callback)
+def connect_to_menu(wtree, item, callback):
+    """Connects a callback to a menu item."""
+    wtree.get_widget(item).connect('activate', callback)
 
 class WebilderDesktopWindow(UITricks):
+    """Implementation of photo browser controller."""
     def __init__(self):
         UITricks.__init__(self, 'ui/webilder_desktop.glade',
             'WebilderDesktopWindow')
@@ -49,6 +65,7 @@ class WebilderDesktopWindow(UITricks):
         self.on_iconview_handle_selection_changed(self.iconview)
         self.collection_monitor = dict(monitor=None, dir=None)
         self.image_popup = ImagePopup(self)
+        self.download_dialog = None
 
         if gnomevfs:
             self.tree_monitor = gnomevfs.monitor_add(
@@ -63,47 +80,53 @@ class WebilderDesktopWindow(UITricks):
         # self.donate_button_box.window.set_cursor(self.hand_cursor)
 
     def load_collection_tree(self, root):
-        model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING)
+        """Loads the collection in the given root to the model."""
+        model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
+                              gobject.TYPE_STRING)
         model.append(None, (_('<b>Recent Photos</b>'), '', TV_KIND_RECENT))
-        l = os.listdir(root)
-        for entry in sorted(l):
+        dirlist = os.listdir(root)
+        for entry in sorted(dirlist):
             fullpath = os.path.join(root, entry)
             entry = html_escape(entry)
             if os.path.isdir(fullpath):
                 model.append(None, (entry, fullpath, TV_KIND_DIR))
         self.tree.set_model(model)
 
+    # pylint: disable=C0103
+
     def on_tree_handle_selection_changed(self, tree_selection):
+        """Called when the selection in the tree changed."""
         model, selection = tree_selection.get_selected_rows()
         for path in selection:
-            iter=model.get_iter(path)
-            self.current_collection_iter = iter
-            rootdir=self.tree.get_model().get_value(iter, TV_PATH_COLUMN)
-            kind=self.tree.get_model().get_value(iter, TV_KIND_COLUMN)
-            if kind==TV_KIND_DIR:
+            iterator = model.get_iter(path)
+            rootdir = self.tree.get_model().get_value(iterator, TV_PATH_COLUMN)
+            kind = self.tree.get_model().get_value(iterator, TV_KIND_COLUMN)
+            if kind == TV_KIND_DIR:
                 self.load_directory_collection(rootdir)
             else:
                 self.load_recent_photos()
 
-    def load_directory_collection(self, l):
-        images = glob.glob(os.path.join(l,'*.jpg'))
-        self.load_collection(images, monitor_dir=l)
+    def load_directory_collection(self, dirname):
+        """Loads the file inside dirname into the photo browser."""
+        images = glob.glob(os.path.join(dirname, '*.jpg'))
+        self.load_collection(images, monitor_dir=dirname)
 
     def load_recent_photos(self):
+        """Loads the most recent photos (72hrs)."""
         images = glob.glob(
             os.path.join(config.get('collection.dir'), '*', '*.jpg'))
         recent_time = time.time() - 72*3600
         images = [(os.path.getmtime(fname), fname) for fname in images]
-        images = [pair for pair in images if pair[0]>recent_time]
+        images = [pair for pair in images if pair[0] > recent_time]
         images = [pair[1] for pair in sorted(images, reverse=True)]
         self.load_collection(images)
 
     def load_collection(self, images, monitor_dir=None):
-        from webshots import wbz
-        model = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf, gobject.TYPE_PYOBJECT)
+        """Loads a list of images into the photo browser."""
+        model = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf,
+                              gobject.TYPE_PYOBJECT)
 
         image_list = []
-        self.icons = []
         for image in images:
             dirname, filename = os.path.split(image)
             basename, ext = os.path.splitext(filename)
@@ -112,9 +135,9 @@ class WebilderDesktopWindow(UITricks):
 
             info_file = os.path.join(dirname, basename)+'.inf'
             try:
-                f = open(info_file, 'r')
-                inf = wbz.parse_metadata(f.read())
-                f.close()
+                fileobj = open(info_file, 'r')
+                inf = wbz.parse_metadata(fileobj.read())
+                fileobj.close()
             except IOError:
                 inf = {}
             title = inf.get('title', basename)
@@ -124,7 +147,7 @@ class WebilderDesktopWindow(UITricks):
 
             title = html_escape(title)
             album = html_escape(album)
-            credit= html_escape(credit)
+            credit = html_escape(credit)
             tags = html_escape(tags)
 
 
@@ -139,10 +162,10 @@ class WebilderDesktopWindow(UITricks):
                         credit = credit)
 
             if len(title)>24:
-                title=title[:21]+'...'
-            if 0<=time.time()-os.path.getmtime(image)<24*3600:
-                title=_('<b>*New* %s</b>') % title
-            position = model.append((title, empty_picture, data))
+                title = title[:21] + '...'
+            if 0 <= time.time() - os.path.getmtime(image) < 24*3600:
+                title = _('<b>*New* %s</b>') % title
+            position = model.append((title, EMPTY_PICTURE, data))
             image_list.append(dict(
                 position=position,
                 data=data))
@@ -151,11 +174,13 @@ class WebilderDesktopWindow(UITricks):
             old_model.clear()
         self.sort_photos(model)
         self.iconview.set_model(model)
-        gobject.idle_add(ThumbLoader(self.iconview, model, reversed(image_list)))
+        gobject.idle_add(ThumbLoader(self.iconview, model,
+                         reversed(image_list)))
         self.on_iconview_handle_selection_changed(self.iconview)
         if gnomevfs:
             if self.collection_monitor['monitor'] is not None:
-                gobject.idle_add(gnomevfs.monitor_cancel, self.collection_monitor['monitor'])
+                gobject.idle_add(gnomevfs.monitor_cancel,
+                                 self.collection_monitor['monitor'])
                 self.collection_monitor = dict(monitor=None, dir=None)
             if monitor_dir:
                 self.collection_monitor['dir'] = monitor_dir
@@ -164,57 +189,64 @@ class WebilderDesktopWindow(UITricks):
                     gnomevfs.MONITOR_DIRECTORY,
                     self.collection_directory_changed)
         gc.collect()
-        # this proves that pygtk has a memory leak, and it is related to sorting.
-        # print len([x for x in gc.get_objects() if isinstance(x, gtk.ListStore)])
+        # this proves that pygtk has a memory leak, and it is related to
+        # sorting.
+        # print len([x for x in gc.get_objects() if
+        #           isinstance(x, gtk.ListStore)])
 
-    def on_set_as_wallpaper_handle_activate(self, menu_item):
+    def on_set_as_wallpaper_handle_activate(self, _menu_item):
+        """Sets the current photo as wallpaper."""
         selected = self.iconview.get_selected_items()
         if selected:
-            selected=selected[-1]
+            selected = selected[-1]
         if selected:
             self.on_iconview_handle_item_activated(
                 self.iconview,
                 selected)
 
     def on_iconview_handle_item_activated(self, icon_view, path):
-        import gconf
-        iter = icon_view.get_model().get_iter(path)
-        data = icon_view.get_model().get_value(iter, IV_DATA_COLUMN)
+        """Implements an item activations: sets as wallpaper."""
+        iterator = icon_view.get_model().get_iter(path)
+        data = icon_view.get_model().get_value(iterator, IV_DATA_COLUMN)
         set_wallpaper(data['filename'])
         gc.collect()
 
 
-    def on_view_fullscreen_handle_activate(self, menu_item):
+    def on_view_fullscreen_handle_activate(self, _menu_item):
+        """Called when fullscreen menuitem is clicked."""
         selected = self.iconview.get_selected_items()
         if selected:
             # FIXME: Make a nice slideshow here, maybe?
-            selected=selected[-1]
-            path = selected;
-            iter = self.iconview.get_model().get_iter(path)
-            data = self.iconview.get_model().get_value(iter,
+            selected = selected[-1]
+            path = selected
+            iterator = self.iconview.get_model().get_iter(path)
+            data = self.iconview.get_model().get_value(iterator,
                 IV_DATA_COLUMN)
             WebilderFullscreen.FullscreenViewer(self.top_widget, data).run()
         gc.collect()
 
-    def on_download_photos_handle_activate(self, menu_item):
-        def remove_reference(*args):
-            del self.download_dialog
+    def on_download_photos_handle_activate(self, _menu_item):
+        """Called when download photos is clicked."""
+        def remove_reference(*_args):
+            """Called when download dialog is closed."""
+            self.download_dialog = None
 
-        if not hasattr(self, 'download_dialog'):
+        if not self.download_dialog:
             self.download_dialog = DownloadDialog.DownloadProgressDialog(config)
-            self.download_dialog._top.connect('destroy', remove_reference)
+            self.download_dialog.top_widget.connect('destroy', remove_reference)
             self.download_dialog.show()
         else:
-            self.download_dialog._top.present()
+            self.download_dialog.top_widget.present()
 
     def on_iconview_handle_selection_changed(self, icon_view):
+        """Called when the photo selection changed."""
         selection = icon_view.get_selected_items()
         if len(selection)>0:
-            selection=selection[-1]
+            selection = selection[-1]
         title = album = credit = tags = ""
         if selection:
-            iter = icon_view.get_model().get_iter(selection)
-            data = icon_view.get_model().get_value(iter, IV_DATA_COLUMN)
+            iterator = icon_view.get_model().get_iter(selection)
+            data = icon_view.get_model().get_value(iterator, IV_DATA_COLUMN)
             title = "<b>%s</b>" % data['title']
             album = data['album']
             credit = data['credit']
@@ -225,43 +257,50 @@ class WebilderDesktopWindow(UITricks):
         self.photo_credit.set_markup(credit)
         self.photo_tags.set_markup(tags)
 
-    def collection_directory_changed(self, *args):
+    def collection_directory_changed(self, *_args):
+        """Called when a file changed under the collection directory."""
         self.on_tree_handle_selection_changed(self.tree.get_selection())
 
-    def on_preferences_handle_activate(self, menu_item):
+    def on_preferences_handle_activate(self, _menu_item):
+        """Called when the preferences menu item was clicked."""
         configure()
 
     def on_iconview_handle_button_press_event(self, icon_view, event):
-        if event.button==3:
-            x, y = map(int, [event.x, event.y])
-            path = icon_view.get_path_at_pos(x, y)
+        """Handle mouse click events on the photo browser. Used for the right
+        click popup menu."""
+        if event.button == 3:
+            xpos, ypos = [int(event.x), int(event.y)]
+            path = icon_view.get_path_at_pos(xpos, ypos)
             if not path:
                 return
             if not (event.state & gtk.gdk.CONTROL_MASK):
                 icon_view.unselect_all()
             icon_view.select_path(path)
 
-            self.image_popup._top.popup(None, None, None, event.button,
+            self.image_popup.top_widget.popup(None, None, None, event.button,
                     event.time)
         return False
 
-    def collection_tree_changed(self, *args):
+    def collection_tree_changed(self, *_args):
         """Called when the collection tree changes."""
         self.load_collection_tree(config.get('collection.dir'))
 
-    def on_quit_handle_activate(self, event):
+    def on_quit_handle_activate(self, _event):
+        """Handles click on the quit menu item."""
         self.on_WebilderDesktopWindow_handle_delete_event(None, None)
 
-    def on_about_handle_activate(self, event):
-        import AboutDialog
-        AboutDialog.ShowAboutDialog('Webilder Desktop')
+    def on_about_handle_activate(self, _event):
+        """Hanles the About menu item."""
+        AboutDialog.show_about_dialog('Webilder Desktop')
 
-    def on_WebilderDesktopWindow_handle_delete_event(self, widget, event):
+    def on_WebilderDesktopWindow_handle_delete_event(self, _widget, _event):
+        """"Handle window close event."""
         self.save_window_state()
         self.destroy()
         return False
 
     def save_window_state(self):
+        """Save windows location and layout to config."""
         top = self.top_widget
         layout = {'window_position': top.get_position(),
                   'window_size': top.get_size(),
@@ -271,6 +310,7 @@ class WebilderDesktopWindow(UITricks):
         config.save_config()
 
     def restore_window_state(self):
+        """Restores windows location and layout from config."""
         d = config.get('webilder.layout')
         if d.has_key('window_position'):
             self.top_widget.move(*d['window_position'])
@@ -281,64 +321,73 @@ class WebilderDesktopWindow(UITricks):
         if d.has_key('info_expander'):
             self.photo_info_expander.set_expanded(d['info_expander'])
 
-    def on_file_webshots_import_handle_activate(self, event):
+    def on_file_webshots_import_handle_activate(self, _event):
+        """Handle Import menu item."""
         dlg = gtk.FileChooserDialog(
             _('Choose files to import'),
             None,
             action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons=(_("_Import"), gtk.RESPONSE_OK, _("_Cancel"), gtk.RESPONSE_CANCEL))
+            buttons = (_("_Import"), gtk.RESPONSE_OK, _("_Cancel"),
+                       gtk.RESPONSE_CANCEL))
         dlg.set_select_multiple(True)
         try:
             response = dlg.run()
-            if response==gtk.RESPONSE_OK:
+            if response == gtk.RESPONSE_OK:
                 files = dlg.get_filenames()
             else:
                 files = []
         finally:
             dlg.destroy()
 
-        import wbz_handler
         for afile in files:
             wbz_handler.handle_file(afile)
 
-    def on_donate_handle_activate(self, widget):
+    def on_donate_handle_activate(self, _widget):
+        """Donate menu item clicked."""
         donate_dialog = DonateDialog()
-        val = donate_dialog.run()
+        donate_dialog.run()
         donate_dialog.destroy()
 
-    def on_photo_properties_handle_activate(self, event):
+    def on_photo_properties_handle_activate(self, _event):
+        """Called when photo properties has been clicked."""
         selected = self.iconview.get_selected_items()
         if not selected:
             return
 
         win = UITricks('ui/webilder.glade', 'PhotoPropertiesDialog')
-        selected=selected[-1]
-        path = selected;
-        iter = self.iconview.get_model().get_iter(path)
-        data = self.iconview.get_model().get_value(iter,
+        selected = selected[-1]
+        path = selected
+        iterator = self.iconview.get_model().get_iter(path)
+        data = self.iconview.get_model().get_value(iterator,
             IV_DATA_COLUMN)
         win.title.set_markup('<b>%s</b>' % data['title'])
         win.album.set_markup(data['album'])
         win.file.set_text(data['filename'])
         win.tags.set_text(data['tags'])
-        win.size.set_text(_('%.1f KB') % (os.path.getsize(data['filename'])/1024.0))
-        win.date.set_text(time.strftime('%c', time.localtime(os.path.getctime(data['filename']))))
+        win.size.set_text(_('%.1f KB') % (os.path.getsize(data['filename']) /
+                                          1024.0))
+        win.date.set_text(time.strftime('%c', time.localtime(os.path.getctime(
+            data['filename']))))
         win.url.set_text(data['inf'].get('url', ''))
 
         win.closebutton.connect('clicked', lambda *args: win.destroy())
         win.show()
 
     def sort_photos(self, model):
+        """Sorts the photoso in the model."""
         if model is None:
             return
 
         def sort_by_date(data1, data2):
+            """Use date sorting"""
             return -cmp(data1['file_time'], data2['file_time'])
 
         def sort_by_title(data1, data2):
+            """Use title sorting"""
             return cmp(data1['title'], data2['title'])
 
-        sort_func = {0: sort_by_title, 1: sort_by_date}[self.sort_combo.get_active()]
+        sort_func = {0: sort_by_title,
+                     1: sort_by_date}[self.sort_combo.get_active()]
         model.set_default_sort_func(lambda m, iter1, iter2:
                 sort_func(
                     m.get_value(iter1, IV_DATA_COLUMN),
@@ -347,32 +396,45 @@ class WebilderDesktopWindow(UITricks):
         model.set_sort_column_id(-1, gtk.SORT_ASCENDING)
         del model
 
-    def on_sort_combo_handle_changed(self, widget):
+    def on_sort_combo_handle_changed(self, _widget):
+        """Called when the sort method changed."""
         self.sort_photos(self.iconview.get_model())
 
-    def on_delete_handle_activate(self, widget):
+    def on_delete_handle_activate(self, _widget):
+        """Called when photo delete menu item was clicked."""
         delete_files(self, forever=False)
 
 class ImagePopup(UITricks):
+    """Controller for the popup menu shown when a photo is right clicked."""
+
+    # pylint: disable=C0103
     def __init__(self, main_window):
         self.main_window = main_window
-        self.on_view_full_screen_handle_activate = main_window.on_view_fullscreen_handle_activate
-        self.on_set_as_wallpaper_handle_activate = main_window.on_set_as_wallpaper_handle_activate
-        self.on_photo_properties_handle_activate = main_window.on_photo_properties_handle_activate
-        UITricks.__init__(self, 'ui/webilder_desktop.glade', 'WebilderImagePopup')
+        self.on_view_full_screen_handle_activate = (
+            main_window.on_view_fullscreen_handle_activate)
+        self.on_set_as_wallpaper_handle_activate = (
+            main_window.on_set_as_wallpaper_handle_activate)
+        self.on_photo_properties_handle_activate = (
+            main_window.on_photo_properties_handle_activate)
+        UITricks.__init__(self, 'ui/webilder_desktop.glade',
+                          'WebilderImagePopup')
 
-    def on_delete_images_handle_activate(self, event):
+    def on_delete_images_handle_activate(self, _event):
+        """Called when delete images menu item was clicked."""
         delete_files(self.main_window, forever=False)
 
-    def on_delete_forever_handle_activate(self, event):
+    def on_delete_forever_handle_activate(self, _event):
+        """Called when 'delete forever' images menu item was clicked."""
         delete_files(self.main_window, forever=True)
 
 def delete_files(main_window, forever):
+    """Delete the selected files."""
     iconview = main_window.iconview
     selected = iconview.get_selected_items()
     if selected and len(selected)>1:
         if forever:
-            message = _('Would you like to permanently delete the selected images?')
+            message = _('Would you like to permanently delete the '
+                        'selected images?')
         else:
             message = _('Would you like to delete the selected images?')
 
@@ -392,13 +454,13 @@ def delete_files(main_window, forever):
         gnomevfs.monitor_cancel(monitor['monitor'])
 
     for path in selected:
-        iter = model.get_iter(path)
-        data = model.get_value(iter,
+        iterator = model.get_iter(path)
+        data = model.get_value(iterator,
             IV_DATA_COLUMN)
         for fname in (data['filename'], data['info_file'], data['thumb']):
             try:
                 os.remove(fname)
-            except:
+            except (IOError, OSError):
                 pass
         if forever:
             banned.write(os.path.basename(data['filename'])+'\n')
@@ -414,7 +476,7 @@ def delete_files(main_window, forever):
 
 
 
-html_escape_table = {
+HTML_ESCAPE_TABLE = {
     "&": "&amp;",
     '"': "&quot;",
     "'": "&apos;",
@@ -424,12 +486,13 @@ html_escape_table = {
 
 def html_escape(text):
     """Produce entities within text."""
-    L=[]
-    for c in text:
-        L.append(html_escape_table.get(c,c))
-    return "".join(L)
+    text = []
+    for char in text:
+        text.append(HTML_ESCAPE_TABLE.get(char, char))
+    return "".join(text)
 
 class DonateDialog(UITricks):
+    """Controller for the Donate dialog."""
     def __init__(self):
         UITricks.__init__(self, 'ui/webilder.glade', 'DonateDialog')
         text = _('''
@@ -465,42 +528,36 @@ Would you like to donate to Webilder?
 
     def run(self):
         val = UITricks.run(self)
-        if val==0:
-            open_browser(self.url,no_browser_title=_('Thank You!'),
-                             no_browser_markup=_("<b>Thanks for your interest in supporting Webilder.</b>\n\n"
-                            'Please follow this link to send us a donation:\n\n%s') % self.url)
+        if val == 0:
+            open_browser(self.url, no_browser_title=_('Thank You!'),
+                         no_browser_markup=_(
+                             '<b>Thanks for your interest in supporting '
+                             'Webilder.</b>\n\n'
+                             'Please follow this link to send us a '
+                             'donation:\n\n%s') % self.url)
 
 
 def configure():
-    import config_dialog
+    """Shows the configuration dialog."""
     reload_config()
-    dlg = config_dialog.ConfigDialog().run_dialog(config)
+    config_dialog.ConfigDialog().run_dialog(config)
 
-
-def on_input_available(*args):
-    line = sys.stdin.readline()
-    if 'present' in line:
-        main_window._top.present()
-    return True
 
 def main():
+    """Command line entrypoint."""
     gtk.gdk.threads_init()
     if '--configure' in sys.argv:
         configure()
     elif '--download' in sys.argv:
-        if '--kwebilder' in sys.argv:
-            gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
         download_dialog = DownloadDialog.DownloadProgressDialog(config)
         main_window = download_dialog
-        download_dialog._top.connect('destroy', gtk.main_quit)
+        download_dialog.top_widget.connect('destroy', gtk.main_quit)
         download_dialog.show()
         gtk.main()
     else:
-        if '--kwebilder' in sys.argv:
-            gobject.io_add_watch(sys.stdin.fileno(), gobject.IO_IN, on_input_available)
         main_window = WebilderDesktopWindow()
-        main_window._top.connect("destroy", gtk.main_quit)
+        main_window.top_widget.connect("destroy", gtk.main_quit)
         gtk.main()
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

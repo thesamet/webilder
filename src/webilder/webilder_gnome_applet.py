@@ -86,7 +86,7 @@ pixname="gtk-preferences"/>
 
     def about(self, object, menu):
         import AboutDialog
-        AboutDialog.ShowAboutDialog(_('Webilder Applet'))
+        AboutDialog.show_about_dialog(_('Webilder Applet'))
 
     def leech(self, object, menu):
         def remove_reference(*args):
@@ -96,7 +96,7 @@ pixname="gtk-preferences"/>
             return
         import DownloadDialog
         self.download_dlg = DownloadDialog.DownloadProgressDialog(config)
-        self.download_dlg._top.connect('destroy', remove_reference)
+        self.download_dlg.top_widget.connect('destroy', remove_reference)
         self.download_dlg.show()
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.tooltips.disable()
@@ -115,15 +115,15 @@ pixname="gtk-preferences"/>
             if not self.photo_browser:
                 self.browse(None, None)
             else:
-                toggle_window_visibility(self.photo_browser._top)
+                toggle_window_visibility(self.photo_browser.top_widget)
 
     def browse(self, object, menu):
         import WebilderDesktop
         if not self.photo_browser:
             self.photo_browser = WebilderDesktop.WebilderDesktopWindow()
-            self.photo_browser._top.connect("destroy", self.photo_browser_destroy)
+            self.photo_browser.top_widget.connect("destroy", self.photo_browser_destroy)
         else:
-            self.photo_browser._top.show_all()
+            self.photo_browser.top_widget.show_all()
 
     def photo_browser_destroy(self, event):
         self.photo_browser.destroy()
