@@ -7,7 +7,7 @@ import struct
 def from_c_string(cstr):
     """Returns the substring of the given string until the first NUL (chr(0))
     is encountered."""
-    return str[:cstr.find('\x00')]
+    return cstr[:cstr.find('\x00')]
 
 def unpack(self, fmt, fileobj):
     """unpack binary data from the file object fileobj, formatted by fmt.
