@@ -74,6 +74,7 @@ class ConfigDialog(UITricks):
             self.rotate_interval.append_text(ROTATION_CONSTS[time])
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
                 kde=self.wallpaper_use_kde,
+                xfce=self.wallpaper_use_xfce,
                 script=self.wallpaper_use_script)
         self.notebook.drag_dest_set(
             gtk.DEST_DEFAULT_MOTION |

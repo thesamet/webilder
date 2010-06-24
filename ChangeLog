@@ -21,3 +21,4 @@ ChangeLog for Webilder !
 16-Jun-2010: Fix webshots support.
              Use setuptools.
              License changed to BSD.
+23-Jun-2010: Add XFCE support (thanks m8t!)

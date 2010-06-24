@@ -138,6 +138,11 @@ def set_wallpaper(filename):
         script = 'dcop kdesktop KBackgroundIface setWallpaper "%f" 4'
         script = script.replace('%f', filename)
         os.popen2(script)
+    elif use == "xfce":
+        script = ('xfconf-query -c xfce4-desktop '
+                  '-p /backdrop/screen0/monitor0/image-path -s "%f"')
+        script = script.replace('%f', filename)
+        os.popen2(script)
     elif use == "script":
         script = config.get('webilder.wallpaper_script')
         script = script.replace('%f', filename)

@@ -852,6 +852,21 @@ sign up for a free basic account. </property>
                               </packing>
                             </child>
                             <child>
+                              <widget class="GtkRadioButton" id="wallpaper_use_xfce">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes" context="yes">Use _Xfce settings</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">wallpaper_use_gnome</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
                               <widget class="GtkRadioButton" id="wallpaper_use_script">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -863,7 +878,7 @@ sign up for a free basic account. </property>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
@@ -881,7 +896,7 @@ sign up for a free basic account. </property>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </widget>
