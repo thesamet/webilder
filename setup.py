@@ -158,7 +158,7 @@ class clean(clean_):
 
 
 setup(name='Webilder',
-      version='0.6.6',
+      version='0.6.7',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',

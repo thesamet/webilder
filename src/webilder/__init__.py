@@ -21,6 +21,6 @@ gtk.glade.bindtextdomain(
     pkg_resources.resource_filename(__name__, 'locale'))
 gtk.glade.textdomain('webilder')
 
-__version__ = '0.6.6'
+__version__ = '0.6.7'
 
 gettext.install('webilder')
