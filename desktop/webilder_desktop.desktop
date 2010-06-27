@@ -5,8 +5,6 @@ Comment=Download and display photos from Flickr and Webshots
 Comment[fr]=Télécharge et affiche des photos depuis Flickr et Webshots
 Comment[it]=Scarica e imposta come sfondo le foto da Flickr e Webshots
 
-Encoding=UTF-8
-
 Type=Application
 Categories=Application;Graphics;
 
