@@ -10,6 +10,7 @@ from distutils.core import Command
 from distutils.command.build import build as build_
 from distutils.command.clean import clean as clean_
 from setuptools.command.develop import develop as develop_
+from setuptools.command.egg_info import egg_info as egg_info_
 from setuptools.command.install import install as install_
 from distutils.errors import DistutilsError
 
@@ -58,6 +59,13 @@ class build_server(file_build_command):
     dir = 'servers'
     filename = 'GNOME_WebilderApplet.server'
     get_dest_dir = lambda self: 'servers'
+
+
+class egg_info(egg_info_):
+    def find_sources(self):
+        egg_info_.find_sources(self)
+        # Prune debian/ control directory.
+        self.filelist.exclude_pattern(None, prefix='debian')
 
 
 class build(build_):
@@ -160,6 +168,9 @@ setup(name='Webilder',
       package_data = {
         '': ['ui/*.glade', 'ui/*.png', 'ui/*.xpm', 'locale/*/*/*.mo'],
       },
+      exclude_package_data = {
+        '': ['debian/*',],
+      },
       data_files = [
           (os.path.join('share', 'pixmaps'), ['src/webilder/ui/camera48.png']),
           (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
@@ -171,6 +182,7 @@ setup(name='Webilder',
         'build_i18n': build_i18n,
         'clean': clean,
         'develop': develop,
+        'egg_info': egg_info,
         'install': install},
       entry_points = {
         'console_scripts': [
