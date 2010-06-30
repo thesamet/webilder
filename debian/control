@@ -3,7 +3,7 @@ Section: graphics
 Priority: optional
 Maintainer: Nadav Samet <thesamet@gmail.com>
 Build-Depends: cdbs (>= 0.4.43), perl, python (>=2.4), python-support, debhelper (>= 7.0.15), python-setuptools (>=0.6), python-gtk2, python-gnome2, python-gnomeapplet
-Standards-Version: 3.9.0
+Standards-Version: 3.8.4
 Homepage: http://www.webilder.org/
 
 
