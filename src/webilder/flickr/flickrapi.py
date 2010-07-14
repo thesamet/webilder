@@ -43,7 +43,7 @@ class FlickrProxy(object):
         """Search for photos satisfying the given criteria."""
         photos = self.call('flickr.photos.search', **kwargs)
         photos = photos.getElementsByTagName('photo')
-        return self.make_photo_list(photos)
+        return self._make_photo_list(photos)
 
     def interestingness_search(self, **kwargs):
         """Search for photos by interestingness."""
