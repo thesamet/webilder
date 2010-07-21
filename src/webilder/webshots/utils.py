@@ -7,6 +7,7 @@ Date    : 2010 Jun 17
 Description : Webshots scraping functionality
 '''
 
+from xml.dom import minidom
 from webilder.webshots import wbz
 import urllib, urllib2
 import cookielib
@@ -52,18 +53,27 @@ def get_download_list(config):
         return []
 
     page = urllib.urlopen(
-        'http://www.webshots.com/pro/category/archive?sort=newest').read()
-
-    photos = re.findall(IMAGE_REGEX, page, re.DOTALL)
+        'http://www.webshots.com/rss?type=daily').read()
+    doc = minidom.parseString(page)
+    items = doc.getElementsByTagName('item')
+    titles = [item.getElementsByTagName('title')[0].childNodes[0].data for item
+              in items]
+    links = [item.getElementsByTagName('link')[0].childNodes[0].data for item
+              in items]
+    assert len(titles)==len(links)
+    photo_ids = [re.match(
+        r'http://www.webshots.com/pro/photo/(\d+)', link).group(1) for
+        link in links]
     result = []
-    for image_link, photo, title, high_res_link in photos:
+    for image_link, photo, title in zip(links, photo_ids, titles):
         result.append({
             'name': 'webshots_d%s.jpg' % photo,
             'title': title,
             'data': {
                 'photo': photo,
                 'image_link': image_link,
-                'high_res_link': high_res_link
+                'high_res_link': 'https://subs.webshots.com/regsub?vhost=www'
+                                 '&photos=%s&res=high' % photo
                 }
             })
     return result
@@ -83,7 +93,7 @@ def get_photo_stream(config, photo):
         ';desktop-client=unknown;site-visits=1',
     }
 
-    url = 'http://www.webshots.com' + photo['data']['high_res_link'].replace(
+    url = photo['data']['high_res_link'].replace(
         'res=high',
         'res=%s' % config.get('webshots.quality'))
 
