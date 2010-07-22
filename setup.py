@@ -174,7 +174,6 @@ setup(name='Webilder',
       data_files = [
           (os.path.join('share', 'pixmaps'), ['src/webilder/ui/camera48.png']),
           (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
-          (os.path.join('lib', 'bonobo', 'servers'), ['servers/GNOME_WebilderApplet.server']),
       ],
       cmdclass = {
         'build': build,
