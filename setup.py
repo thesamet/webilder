@@ -158,7 +158,7 @@ class clean(clean_):
 
 
 setup(name='Webilder',
-      version='0.6.8',
+      version='0.6.9',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',
@@ -172,8 +172,12 @@ setup(name='Webilder',
         '': ['debian/*',],
       },
       data_files = [
-          (os.path.join('share', 'pixmaps'), ['src/webilder/ui/camera48.png']),
-          (os.path.join('share', 'applications'), ['desktop/webilder_desktop.desktop']),
+          (os.path.join('share', 'pixmaps'),
+                        ['src/webilder/ui/camera48.png']),
+          (os.path.join('share', 'applications'),
+                        ['desktop/webilder_desktop.desktop']),
+          (os.path.join('lib', 'bonobo', 'servers'),
+                        ['servers/GNOME_WebilderApplet.server'])
       ],
       cmdclass = {
         'build': build,
