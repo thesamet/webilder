@@ -13,6 +13,7 @@ def handle_wbz(wbzfile):
     """Imports the given wbz filename."""
     fileobj = wbz.open(wbzfile, 'r')
     handle_image(fileobj)
+    return 1
 
 def handle_image(img):
     """Handled a parsed wbz object."""
@@ -34,7 +35,7 @@ def handle_image(img):
 def handle_wbp(wbpfile):
     """Imports the given wbp filename."""
     wbpfile = wbp.open(wbpfile, 'r')
-    return [handle_image(picture.image) for picture in wbpfile.pictures]
+    return len([handle_image(picture.image) for picture in wbpfile.pictures])
 
 
 def handle_file(filename):
@@ -43,11 +44,11 @@ def handle_file(filename):
     magic, = struct.unpack('=L', fileobj.read(4))
     fileobj.close()
     if magic == wbz.WBZ_ID:
-        handle_wbz(filename)
+        return handle_wbz(filename)
     elif magic == wbp.WBP_ID:
-        handle_wbp(filename)
+        return handle_wbp(filename)
     else:
-        raise IOError, _("Unrecognized file type")
+        raise IOError("Unrecognized file type")
 
 def main():
     """Command line interface to wbz_handler."""
@@ -57,9 +58,9 @@ def main():
 
 Usage:
 
-    wbz_handler filename.wbz
+    wbz_handler filename.wbz|filename.wbp
 
-Where filename.wbz is a Webshots archive.""")
+Where the argument is a Webshots wbz or wbp archive.""")
         sys.exit(1)
     handle_file(sys.argv[1])
 
