@@ -1,20 +1,20 @@
 =head1 NAME
 
-WebilderApplet - GNOME panel applet for Webilder.
+webilder_applet - GNOME panel applet for Webilder.
 
 =head1 SYNOPSIS
 
-WebilderApplet [[run-in-window]]
+webilder_applet [[run-in-window]]
 
 =head1 DESCRIPTION
 
-B<WebilderApplet> is a GNOME panel applet that automatically downloads
+B<webilder_applet> is a GNOME panel applet that automatically downloads
 wallpapers on regular intervals. It can also be used to change the current
 wallpaper or to open B<webilder_desktop>.
 
 =head1 OPTIONS
 
-WebilderApplet can be run as a (tiny) window if it is given the optional
+webilder_applet can be run as a (tiny) window if it is given the optional
 command line argument I<run-in-window>.
 
 =head1 BUGS

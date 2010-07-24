@@ -191,7 +191,7 @@ setup(name='Webilder',
         'console_scripts': [
           'webilder_downloader = webilder.downloader:main',
           'wbz_handler = webilder.wbz_handler:main',
-          'WebilderApplet = webilder.webilder_gnome_applet:main',
+          'webilder_applet = webilder.webilder_gnome_applet:main',
         ],
         'gui_scripts': [
           'webilder_desktop = webilder.WebilderDesktop:main'
