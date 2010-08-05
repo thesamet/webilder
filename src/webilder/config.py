@@ -126,6 +126,8 @@ def reload_config():
     """Reloads the config file."""
     config.load_config(DEFAULT_CONFIG_FILE)
 
+_compiz_config_next_screen_face = (0, 0)
+
 def set_wallpaper(filename):
     """Sets the wallpaper to the given filename."""
     use = config.get('webilder.wallpaper_set_method')
@@ -143,6 +145,35 @@ def set_wallpaper(filename):
                   '-p /backdrop/screen0/monitor0/image-path -s "%f"')
         script = script.replace('%f', filename)
         os.popen2(script)
+    elif use == "compiz-wallpaper":
+        import gconf
+        conf_client = gconf.client_get_default()
+        global _compiz_config_next_screen_face
+        screen, face = _compiz_config_next_screen_face
+        wallpapers = conf_client.get_list('/apps/compiz/plugins/wallpaper/'
+            'screen%d/options/bg_image' % screen,
+            gconf.VALUE_STRING)
+        wallpapers[face] = filename
+        conf_client.set_list('/apps/compiz/plugins/wallpaper/screen%d/'
+            'options/bg_image' % screen,
+            gconf.VALUE_STRING, wallpapers)
+        if face >= len(wallpapers) - 1:
+            screens = [ii for ii in conf_client.all_dirs(
+                '/apps/compiz/plugins/wallpaper') 
+                if ii.split("/")[-1][:6] == "screen"]
+            try:
+                index = screens.index("screen%d") % screen
+            except ValueError:
+                index = 0
+            screen_str = screens[(index + 1) % len(screens)]
+            try:
+                screen = int(screen_str[7:])
+            except ValueError:
+                screen = 0
+            face = 0
+        else:
+            face += 1
+        _compiz_config_next_screen_face = (screen, face)
     elif use == "script":
         script = config.get('webilder.wallpaper_script')
         script = script.replace('%f', filename)
