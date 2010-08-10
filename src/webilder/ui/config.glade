@@ -238,7 +238,7 @@ Future versions will add more options here, such as selecting which collections 
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="draw_indicator">False</property>
+                    <property name="draw_indicator">True</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
