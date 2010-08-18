@@ -85,13 +85,9 @@ class BaseApplet:
         if not self.wallpaper_list:
             self.wallpaper_list = glob.glob(
                 os.path.join(croot, '*', '*.jpg'))
-
-            # PNG patch
             png_images = glob.glob(
-                os.path.join(croot, '*', '*.png')) # Get list of PNG images.
-            self.wallpaper_list.extend(png_images) # Append the list of PNG images to the JPG images.
-            # ---
-            
+                os.path.join(croot, '*', '*.png'))
+            self.wallpaper_list.extend(png_images)
             random.shuffle(self.wallpaper_list)
         if self.wallpaper_list:
             self.last_rotate = time.time()-15 # to ensure next time...
