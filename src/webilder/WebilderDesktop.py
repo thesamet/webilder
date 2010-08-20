@@ -18,6 +18,7 @@ from webilder.uitricks import UITricks, open_browser
 from webilder.webshots import wbz
 
 import sys, os, time, glob, gc
+import optparse
 import gtk, gobject
 import pkg_resources
 
@@ -338,9 +339,7 @@ class WebilderDesktopWindow(UITricks):
                 files = []
         finally:
             dlg.destroy()
-
-        for afile in files:
-            wbz_handler.handle_file(afile)
+        import_files(files)
 
     def on_donate_handle_activate(self, _widget):
         """Donate menu item clicked."""
@@ -543,21 +542,60 @@ def configure():
     config_dialog.ConfigDialog().run_dialog(config)
 
 
+def import_files(files):
+    success_count = 0
+    for afile in files:
+        try:
+            success_count += wbz_handler.handle_file(afile)
+        except (IOError, KeyError, ValueError), e:
+            mbox = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
+                                     buttons=gtk.BUTTONS_OK)
+            mbox.set_title(_("File import error."))
+            mbox.set_markup(_("Could not import '%s': %s") % (afile, e))
+            mbox.run()
+            mbox.destroy()
+
+    if success_count:
+        mbox = gtk.MessageDialog(type=gtk.MESSAGE_INFO,
+                                 buttons=gtk.BUTTONS_OK)
+        mbox.set_title(_("Import complete."))
+        mbox.set_markup(_("%d photos have been added to your collection.")
+                        % success_count)
+        mbox.run()
+        mbox.destroy()
+
+
 def main():
     """Command line entrypoint."""
+    parser = optparse.OptionParser()
+    parser.add_option(
+        '--configure', dest="configure", help="Open configuration dialog"
+        "and quit.", action="store_true", default=False)
+    parser.add_option(
+        '--download', dest="download", help="Download photos and quit.",
+        action="store_true", default=False)
+    options, args = parser.parse_args()
+
     gtk.gdk.threads_init()
-    if '--configure' in sys.argv:
+    if options.configure:
         configure()
-    elif '--download' in sys.argv:
+        return
+
+    if options.download:
         download_dialog = DownloadDialog.DownloadProgressDialog(config)
         main_window = download_dialog
         download_dialog.top_widget.connect('destroy', gtk.main_quit)
         download_dialog.show()
         gtk.main()
-    else:
-        main_window = WebilderDesktopWindow()
-        main_window.top_widget.connect("destroy", gtk.main_quit)
-        gtk.main()
+        return
+
+    if args:
+        import_files(args)
+        return
+
+    main_window = WebilderDesktopWindow()
+    main_window.top_widget.connect("destroy", gtk.main_quit)
+    gtk.main()
 
 if __name__ == "__main__":
     main()

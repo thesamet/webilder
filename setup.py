@@ -158,7 +158,7 @@ class clean(clean_):
 
 
 setup(name='Webilder',
-      version='0.6.8',
+      version='0.6.9',
       description='Webilder Desktop',
       author='Nadav Samet',
       author_email='thesamet@gmail.com',
@@ -187,7 +187,7 @@ setup(name='Webilder',
         'console_scripts': [
           'webilder_downloader = webilder.downloader:main',
           'wbz_handler = webilder.wbz_handler:main',
-          'WebilderApplet = webilder.webilder_gnome_applet:main',
+          'webilder_applet = webilder.webilder_gnome_applet:main',
         ],
         'gui_scripts': [
           'webilder_desktop = webilder.WebilderDesktop:main'

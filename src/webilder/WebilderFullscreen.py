@@ -48,7 +48,14 @@ class FullscreenViewer(gtk.Window):
         monitor = gtk.gdk.Screen().get_monitor_at_point(xpos, ypos)
         rect = gtk.gdk.Screen().get_monitor_geometry(monitor)
 
-        self.window_width, self.window_height = rect.width, rect.height
+        if rect.width:
+            self.window_width, self.window_height = rect.width, rect.height
+        else:
+            # Workaroun for VESA on xorg<1.4.99. The monitor data structure
+            # may be uninitialized. See
+            # https://bugs.launchpad.net/ubuntu/+source/xorg-server/+bug/246585
+            self.window_width, self.window_height = (gtk.gdk.screen_width(),
+                                                     gtk.gdk.screen_height())
         self.p_title = self._data['title']
         self.p_album = self._data['album']
         self.p_credit = self._data['credit']

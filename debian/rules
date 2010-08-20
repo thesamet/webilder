@@ -10,7 +10,7 @@ build/webilder::
 	pod2man --section=1  --release=$(VERSION) --center "" manpages/webilder_desktop.pod > manpages/webilder_desktop.1
 	pod2man --section=1  --release=$(VERSION) --center "" manpages/webilder_downloader.pod > manpages/webilder_downloader.1
 	pod2man --section=1  --release=$(VERSION) --center "" manpages/wbz_handler.pod > manpages/wbz_handler.1
-	pod2man --section=1  --release=$(VERSION) --center "" manpages/WebilderApplet.pod > manpages/WebilderApplet.1
+	pod2man --section=1  --release=$(VERSION) --center "" manpages/webilder_applet.pod > manpages/webilder_applet.1
 
 cleanbuilddir/webilder::
 	rm -f manpages/*.1
@@ -18,4 +18,4 @@ cleanbuilddir/webilder::
 DEB_INSTALL_MANPAGES_webilder = manpages/webilder_desktop.1 \
 				manpages/webilder_downloader.1 \
 				manpages/wbz_handler.1 \
-				manpages/WebilderApplet.1
+				manpages/webilder_applet.1

@@ -22,3 +22,4 @@ ChangeLog for Webilder !
              Use setuptools.
              License changed to BSD.
 23-Jun-2010: Add XFCE support (thanks m8t!)
+24-Jul-2010: added mime-type handling.

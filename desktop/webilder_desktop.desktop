@@ -13,3 +13,4 @@ TryExec=webilder_desktop
 Terminal=false
 Icon=camera48.png
 
+MimeType=application/x-webshots;

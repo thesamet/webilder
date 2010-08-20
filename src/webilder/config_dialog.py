@@ -75,6 +75,7 @@ class ConfigDialog(UITricks):
         self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
                 kde=self.wallpaper_use_kde,
                 xfce=self.wallpaper_use_xfce,
+                compiz_wallpaper=self.wallpaper_use_compiz_wallpaper,
                 script=self.wallpaper_use_script)
         self.notebook.drag_dest_set(
             gtk.DEST_DEFAULT_MOTION |
