@@ -100,7 +100,10 @@ def get_photo_stream(config, photo):
     opener = urllib.FancyURLopener()
     opener.addheader('Cookie', headers['Cookie'])
     conn = opener.open(url)
-    if 'text/html' in conn.info().getheader('content-type'):
+    content_type = conn.info().getheader('content-type')
+    if content_type == 'application/x-webshots-package':
+        return conn
+    elif content_type.startswith('text/html'):
         resp = conn.read()
         if 'Credit Card Information' in resp:
             raise LeechPremiumOnlyPhotoError(
@@ -111,11 +114,14 @@ def get_photo_stream(config, photo):
                 r'<a href="(.*?)" class="no-btn">NO, THANK YOU.', resp)
             if not match:
                 raise ValueError, "Unable to download photo %s" % photo['name']
-            opener = urllib.FancyURLopener()
-            opener.addheader('Cookie', headers['Cookie'])
-            resp = opener.open(match.groups()[0]).read()
+            url = match.groups()[0]
+            req = urllib2.Request(url, '', headers)
+            resp = urllib2.urlopen(req).read()
+            match = re.search(
+                r'<a href="(.*\.wbz)">', resp)
+        else:
+            match = re.search(r'<a href="http://(.*?)">here</a>', resp)
 
-        match = re.search(r'click <a href="(.*?)">here</a>', resp)
         if not match:
             raise ValueError, "Unable to download photo %s" % photo['name']
         url = match.groups()[0]
@@ -123,8 +129,10 @@ def get_photo_stream(config, photo):
             raise ValueError, "Unable to download photo %s" % photo['name']
         req = urllib2.Request(url, '', headers)
         resp = urllib2.urlopen(req)
+        return resp
+    else:
+        raise ValueError("Unexpected content type header: '%s'" % content_type)
 
-    return resp
 
 def process_photo(_config, photo, fileobj):
     """Process a photo filestream."""
