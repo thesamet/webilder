@@ -23,3 +23,5 @@ ChangeLog for Webilder !
              License changed to BSD.
 23-Jun-2010: Add XFCE support (thanks m8t!)
 24-Jul-2010: added mime-type handling.
+08-Aug-2010: added support for Compiz's wallpaper login (thanks Flimm)
+18-Aug-2010: added PNG image support (thanks figure002)

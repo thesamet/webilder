@@ -110,12 +110,17 @@ class WebilderDesktopWindow(UITricks):
     def load_directory_collection(self, dirname):
         """Loads the file inside dirname into the photo browser."""
         images = glob.glob(os.path.join(dirname, '*.jpg'))
+        png_images = glob.glob(os.path.join(dirname,'*.png'))
+        images.extend(png_images)
         self.load_collection(images, monitor_dir=dirname)
 
     def load_recent_photos(self):
         """Loads the most recent photos (72hrs)."""
         images = glob.glob(
             os.path.join(config.get('collection.dir'), '*', '*.jpg'))
+        png_images = glob.glob(
+            os.path.join(config.get('collection.dir'), '*', '*.png'))
+        images.extend(png_images)
         recent_time = time.time() - 72*3600
         images = [(os.path.getmtime(fname), fname) for fname in images]
         images = [pair for pair in images if pair[0] > recent_time]
