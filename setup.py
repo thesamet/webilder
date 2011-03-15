@@ -24,6 +24,16 @@ if sys.argv[-1] == 'setup.py':
     print
 
 
+def GetBonoboPath():
+    """Extract the bonono path from the command line."""
+    for flag in sys.argv[1:]:
+        if flag.startswith('--bonobo_path'):
+            sys.argv.remove(flag)
+            return flag.split('=', 1)[1]
+    else:
+        return 'lib/bonobo/servers'
+
+
 class file_build_command(Command):
     def initialize_options(self):
         self.build_lib = None
@@ -176,7 +186,7 @@ setup(name='Webilder',
                         ['src/webilder/ui/camera48.png']),
           (os.path.join('share', 'applications'),
                         ['desktop/webilder_desktop.desktop']),
-          (os.path.join('lib', 'bonobo', 'servers'),
+          (GetBonoboPath(),
                         ['servers/GNOME_WebilderApplet.server'])
       ],
       cmdclass = {
