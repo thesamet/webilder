@@ -11,6 +11,7 @@ applets.)
 from webilder.config import config, set_wallpaper, reload_config
 from webilder import __version__
 from webilder import downloader
+from webilder import infofile
 from webilder.webshots.wbz import parse_metadata
 
 import glob, random, os, time
@@ -98,15 +99,9 @@ class BaseApplet:
 
             dirname, base = os.path.split(image_file)
             basename, _unused_ext = os.path.splitext(base)
-            info_file = os.path.join(dirname, basename)+'.inf'
-            try:
-                fileobj = open(info_file, 'r')
-                inf = parse_metadata(fileobj.read())
-                fileobj.close()
-            except IOError:
-                inf = {}
+            self.info_file = os.path.join(dirname, basename)+'.inf'
+            self.image_info = infofile.parse_info_file(self.info_file)
             self.image_file = image_file
-            self.info_file = info_file
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             self.set_tooltip_for_photo('%s - %s' % (title, album))
