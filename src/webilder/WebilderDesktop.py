@@ -11,11 +11,11 @@ Description : Controller for the photo browser. Can work as a
 from webilder import AboutDialog
 from webilder import config_dialog
 from webilder import DownloadDialog
+from webilder import infofile
 from webilder import wbz_handler
 from webilder import WebilderFullscreen
 from webilder.thumbs import ThumbLoader
 from webilder.uitricks import UITricks, open_browser
-from webilder.webshots import wbz
 
 import sys, os, time, glob, gc
 import optparse
@@ -138,14 +138,8 @@ class WebilderDesktopWindow(UITricks):
             basename, ext = os.path.splitext(filename)
             thumb = os.path.join(dirname,
                             '.thumbs', basename+'.thumbnail'+ext)
-
-            info_file = os.path.join(dirname, basename)+'.inf'
-            try:
-                fileobj = open(info_file, 'r')
-                inf = wbz.parse_metadata(fileobj.read())
-                fileobj.close()
-            except IOError:
-                inf = {}
+            inf = infofile.parse_info_file(os.path.join(dirname,
+                                                        basename)+'.inf')
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             credit = inf.get('credit', _('Not available'))
