@@ -154,7 +154,6 @@ class WebilderDesktopWindow(UITricks):
             data = dict(title=title,
                         filename=image,
                         thumb=thumb,
-                        info_file=info_file,
                         inf = inf,
                         album = album,
                         tags = tags,
