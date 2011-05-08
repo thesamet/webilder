@@ -102,8 +102,8 @@ class BaseApplet:
             self.info_file = os.path.join(dirname, basename)+'.inf'
             self.image_info = infofile.parse_info_file(self.info_file)
             self.image_file = image_file
-            title = inf.get('title', basename)
-            album = inf.get('albumTitle', dirname)
+            title = self.image_info.get('title', basename)
+            album = self.image_info.get('albumTitle', dirname)
             self.set_tooltip_for_photo('%s - %s' % (title, album))
 
     def delete_current(self, *_args):
