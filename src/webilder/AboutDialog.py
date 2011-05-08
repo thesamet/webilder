@@ -18,7 +18,7 @@ def show_about_dialog(name):
     about = gtk.AboutDialog()
     about.set_name(name)
     about.set_version(__version__)
-    about.set_copyright('Nadav Samet, 2005-2010')
+    about.set_copyright('Nadav Samet, 2005-2011')
     about.set_website('http://www.webilder.org')
     about.set_authors(['Nadav Samet <thesamet@gmail.com>'])
     about.set_translator_credits(
