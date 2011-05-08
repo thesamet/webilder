@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Webilder Indicator Applet
+Comment=Webilder indicator applet
+GenericName=Webilder
+Categories=Application;Graphics;
+Exec=webilder_unity_indicator
+Icon=%(data_dir)s/camera48.png
+NoDisplay=true
+Type=Application

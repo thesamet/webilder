@@ -71,6 +71,13 @@ class build_server(file_build_command):
     get_dest_dir = lambda self: 'servers'
 
 
+class build_unity_autostart_file(file_build_command):
+    description = _('Builds the unity applet autostart file.')
+    dir = 'servers'
+    filename = 'indicator-webilder.desktop'
+    get_dest_dir = lambda self: 'servers'
+
+
 class egg_info(egg_info_):
     def find_sources(self):
         egg_info_.find_sources(self)
@@ -81,6 +88,7 @@ class egg_info(egg_info_):
 class build(build_):
     sub_commands = build_.sub_commands[:]
     sub_commands.append(('build_server', None))
+    sub_commands.append(('build_unity_autostart_file', None))
     # sub_commands.append(('build_globals', None))
     sub_commands.append(('build_i18n', None))
 
@@ -164,6 +172,11 @@ class clean(clean_):
             'servers/GNOME_WebilderApplet.server')
         if os.path.exists(bonobo_server):
             os.unlink(bonobo_server)
+        indicator = os.path.join(
+            os.path.dirname(sys.argv[0]),
+            'servers/indicator-webilder.desktop')
+        if os.path.exists(indicator):
+            os.unlink(indicator)
         clean_.run(self)
 
 
@@ -192,6 +205,7 @@ setup(name='Webilder',
       cmdclass = {
         'build': build,
         'build_server': build_server,
+        'build_unity_autostart_file': build_unity_autostart_file,
         'build_i18n': build_i18n,
         'clean': clean,
         'develop': develop,
@@ -202,6 +216,7 @@ setup(name='Webilder',
           'webilder_downloader = webilder.downloader:main',
           'wbz_handler = webilder.wbz_handler:main',
           'webilder_applet = webilder.webilder_gnome_applet:main',
+          'webilder_unity_indicator = webilder.webilder_unity_indicator:main',
         ],
         'gui_scripts': [
           'webilder_desktop = webilder.WebilderDesktop:main'
