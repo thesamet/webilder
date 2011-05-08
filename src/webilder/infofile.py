@@ -9,10 +9,10 @@ def parse_info_file(info_file):
     """
     try:
         fileobj = open(info_file, 'r')
-        inf = wbz.parse_metadata(fileobj.read())
+        try:
+            inf = wbz.parse_metadata(fileobj.read())
+        finally:
+            fileobj.close()
     except IOError, e:
-        print e
         inf = {}
-    finally:
-        fileobj.close()
-        return inf
+    return inf
