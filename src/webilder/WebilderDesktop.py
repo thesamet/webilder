@@ -138,8 +138,8 @@ class WebilderDesktopWindow(UITricks):
             basename, ext = os.path.splitext(filename)
             thumb = os.path.join(dirname,
                             '.thumbs', basename+'.thumbnail'+ext)
-            inf = infofile.parse_info_file(os.path.join(dirname,
-                                                        basename)+'.inf')
+            info_file = os.path.join(dirname, basename) + '.inf'
+            inf = infofile.parse_info_file(info_file)
             title = inf.get('title', basename)
             album = inf.get('albumTitle', dirname)
             credit = inf.get('credit', _('Not available'))
@@ -155,6 +155,7 @@ class WebilderDesktopWindow(UITricks):
                         filename=image,
                         thumb=thumb,
                         inf = inf,
+                        info_file = info_file,
                         album = album,
                         tags = tags,
                         file_time = os.path.getctime(image),
@@ -449,6 +450,7 @@ def delete_files(main_window, forever):
     monitor = main_window.collection_monitor
     if monitor['monitor'] is not None:
         gnomevfs.monitor_cancel(monitor['monitor'])
+        monitor['monitor'] = None
 
     for path in selected:
         iterator = model.get_iter(path)
