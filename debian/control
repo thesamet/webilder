@@ -2,10 +2,11 @@ Source: webilder
 Section: graphics
 Priority: optional
 Maintainer: Nadav Samet <thesamet@gmail.com>
-Build-Depends: cdbs (>= 0.4.43), perl, python (>=2.4), python-support, debhelper (>= 7.0.15), python-setuptools (>=0.6), python-gtk2, python-gnome2, python-appindicator
+Build-Depends: cdbs, perl, python (>=2.4), python-support, debhelper (>= 7.0.50~), python-setuptools (>=0.6), python-gtk2, python-gnome2, python-appindicator
 Standards-Version: 3.9.1
 Homepage: http://www.webilder.org/
-
+Vcs-Git: git://github.com/thesamet/webilder.git
+Vcs-Browser: https://github.com/thesamet/webilder
 
 Package: webilder
 Architecture: all
