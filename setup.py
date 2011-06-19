@@ -164,11 +164,6 @@ class clean(clean_):
             'servers/GNOME_WebilderApplet.server')
         if os.path.exists(bonobo_server):
             os.unlink(bonobo_server)
-        indicator = os.path.join(
-            os.path.dirname(sys.argv[0]),
-            'servers/indicator-webilder.desktop')
-        if os.path.exists(indicator):
-            os.unlink(indicator)
         clean_.run(self)
 
 
