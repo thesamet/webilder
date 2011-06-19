@@ -1,3 +1,9 @@
+webilder (0.7.1-1) unstable; urgency=low
+
+  * Upgrade to latest upstream version.
+
+ -- Nadav Samet <thesamet@ubuntu-vb>  Sun, 19 Jun 2011 10:47:40 -0700
+
 webilder (0.7-1) unstable; urgency=low
 
   * Initial release. closes: bug#553184
