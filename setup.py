@@ -68,14 +68,7 @@ class build_server(file_build_command):
     description = _('Builds the bonobo server file representing the applet.')
     dir = 'servers'
     filename = 'GNOME_WebilderApplet.server'
-    get_dest_dir = lambda self: 'servers'
-
-
-class build_unity_autostart_file(file_build_command):
-    description = _('Builds the unity applet autostart file.')
-    dir = 'servers'
-    filename = 'indicator-webilder.desktop'
-    get_dest_dir = lambda self: 'servers'
+    def get_dest_dir(self): return 'servers'
 
 
 class egg_info(egg_info_):
@@ -88,8 +81,6 @@ class egg_info(egg_info_):
 class build(build_):
     sub_commands = build_.sub_commands[:]
     sub_commands.append(('build_server', None))
-    sub_commands.append(('build_unity_autostart_file', None))
-    # sub_commands.append(('build_globals', None))
     sub_commands.append(('build_i18n', None))
 
 
@@ -129,12 +120,13 @@ def check_modules(*modules):
         except ImportError, e:
             raise DistutilsError, _('Could not find module %s. Make sure all dependencies are installed.') % e
 
+
 class install(install_):
     user_options = install_.user_options[:]
     sub_commands = install_.sub_commands[:]
 
     def run(self):
-        check_modules('gtk', 'pygtk', 'gnome', 'gnomeapplet')
+        check_modules('gtk', 'pygtk', 'gnome', 'appindicator')
         install_.run(self)
         print _("""
 Installation completed successfully.
@@ -199,13 +191,16 @@ setup(name='Webilder',
                         ['src/webilder/ui/camera48.png']),
           (os.path.join('share', 'applications'),
                         ['desktop/webilder_desktop.desktop']),
+          (os.path.join('share', 'applications'),
+                        ['desktop/webilder_indicator.desktop']),
+          (os.path.join('share', 'gnome', 'autostart'),
+                        ['autostart/webilder_indicator.desktop']),
           (GetBonoboPath(),
                         ['servers/GNOME_WebilderApplet.server'])
       ],
       cmdclass = {
         'build': build,
         'build_server': build_server,
-        'build_unity_autostart_file': build_unity_autostart_file,
         'build_i18n': build_i18n,
         'clean': clean,
         'develop': develop,

@@ -2,8 +2,8 @@
 Name=Webilder Indicator Applet
 Comment=Webilder indicator applet
 GenericName=Webilder
+Type=Application
 Categories=Application;Graphics;
 Exec=webilder_unity_indicator
-Icon=%(data_dir)s/camera48.png
-NoDisplay=true
-Type=Application
+Terminal=false
+Icon=camera48.png

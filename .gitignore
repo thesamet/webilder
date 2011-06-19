@@ -1,4 +1,5 @@
 src/Webilder.egg-info
+servers/GNOME_WebilderApplet.server
 build/
 *.pyc
 *.mo

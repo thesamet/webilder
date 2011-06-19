@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Webilder Indicator Applet
+Comment=Webilder indicator applet
+GenericName=Webilder
+Type=Application
+Categories=Application;Graphics;
+Exec=webilder_unity_indicator --autostart
+Terminal=false
+Icon=camera48.png
+X-GNOME-Autostart-Delay=8
+X-GNOME-Autostart-Phase=Application

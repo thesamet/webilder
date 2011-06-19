@@ -7,7 +7,6 @@ Comment[it]=Scarica e imposta come sfondo le foto da Flickr e Webshots
 
 Type=Application
 Categories=Application;Graphics;
-
 Exec=webilder_desktop
 TryExec=webilder_desktop
 Terminal=false
