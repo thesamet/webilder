@@ -46,6 +46,7 @@ class WebilderUnityIndicator(BaseApplet):
         <menuitem name="Item 6" action="DeleteCurrent"/>
         <menuitem name="Item 4" action="Pref"/>
         <menuitem name="Item 5" action="About"/>
+        <menuitem name="Item 5" action="Quit"/>
     </popup>
     """
         uimanager = gtk.UIManager()
@@ -64,7 +65,11 @@ class WebilderUnityIndicator(BaseApplet):
               _("Download new photos"), self.leech),
              ("DeleteCurrent", "gtk-delete", _("Delete Current"), None,
               _("Delete the current photo from your collection"),
-               self.delete_current)])
+               self.delete_current),
+             ("Quit", "gtk-quit", _("Quit"), None,
+              _("Quit Webilder Desktop Indicator"),
+               self.quit),
+             ])
         leech_action = action_group.get_action("Leech")
         leech_action.set_gicon(gio.FileIcon(gio.File(
             pkg_resources.resource_filename(__name__,
@@ -127,6 +132,10 @@ class WebilderUnityIndicator(BaseApplet):
         """Called when the photo browser is closed."""
         self.photo_browser.destroy()
         self.photo_browser = None
+
+    def quit(self, _action):
+        """Called when the Quit menu item is chosen."""
+        gtk.main_quit()
 
 
 def main():
