@@ -89,10 +89,10 @@
                       <widget class="GtkMenuItem" id="delete">
                         <property name="visible">True</property>
                         <property name="tooltip" translatable="yes">Delete photo</property>
-                        <property name="label" translatable="yes">_Delete Photo</property>
+                        <property name="label" translatable="yes">Delete Photo</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_delete_photos"/>
-                        <accelerator key="D" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+                        <accelerator key="K" modifiers="GDK_CONTROL_MASK" signal="activate"/>
                       </widget>
                     </child>
                     <child>
