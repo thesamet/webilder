@@ -32,7 +32,8 @@ class ConfigObject:
 
         if not os.path.isdir(self.get('collection.dir')):
             raise ValueError, _("collection.dir is set to a non-directory, "
-                                "check your config file.")
+                                "check your config file. Current value: %s" %
+                                self.get('collectionl.dir'))
 
     def get(self, key, *args):
         """Get a preference by key."""
