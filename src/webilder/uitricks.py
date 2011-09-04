@@ -11,6 +11,19 @@ import gtk
 import gtk.glade
 import re
 
+import gettext
+import locale
+import pkg_resources
+
+locale.setlocale(locale.LC_ALL, '')
+
+gtk.glade.bindtextdomain(
+    'webilder',
+    pkg_resources.resource_filename(__name__, 'locale'))
+gtk.glade.textdomain('webilder')
+
+gettext.install('webilder')
+
 class UITricks:
     """Base class for Glade XML based controllers."""
 

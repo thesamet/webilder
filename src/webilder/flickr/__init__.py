@@ -11,7 +11,7 @@ from webilder.flickr import flickrapi
 import re
 import urllib2
 from datetime import date
-from PIL import Image
+import Image
 import cStringIO
 import gc
 
