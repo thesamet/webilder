@@ -1,3 +1,9 @@
+webilder (0.7.1-2) unstable; urgency=low
+
+  * Build for Ubuntu 11.10.
+
+ -- Nadav Samet <thesamet@gmail.com>  Sat, 15 Oct 2011 10:08:40 -0700
+
 webilder (0.7.1-1) unstable; urgency=low
 
   * Upgrade to latest upstream version.
