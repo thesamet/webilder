@@ -12,7 +12,8 @@ if os.path.exists(ORIG_FILENAME):
     os.unlink(ORIG_FILENAME)
     print("Removed original tarball: %s" % ORIG_FILENAME)
 
-if os.system('git-buildpackage --git-upstream-branch=master -us -uc') != 0:
+if os.system('git-buildpackage --git-upstream-branch=master '
+             '--git-upstream-tree=branch -us -uc') != 0:
     print "git-buildpackage failed"
     sys.exit(1)
 
