@@ -7,7 +7,6 @@ Date    : 2010 Jun 17
 Description : Webilder configur object and its load and save methods.
 '''
 
-import gconf
 import gettext
 import os
 import time
@@ -32,7 +31,8 @@ class ConfigObject:
 
         if not os.path.isdir(self.get('collection.dir')):
             raise ValueError, _("collection.dir is set to a non-directory, "
-                                "check your config file.")
+                                "check your config file. Current value: %s" %
+                                self.get('collection.dir'))
 
     def get(self, key, *args):
         """Get a preference by key."""
@@ -130,6 +130,7 @@ def reload_config():
     config.load_config(DEFAULT_CONFIG_FILE)
 
 def set_wallpaper(filename):
+    import gconf
     """Sets the wallpaper to the given filename."""
     use = config.get('webilder.wallpaper_set_method')
     if use == "gnome":
@@ -160,6 +161,8 @@ def set_compiz_wallpaper(filename):
     """Sets the wallpaper on one of the faces of the cube, as specified
     in webilder.wallpaper_compiz_screen_face configuration key, and sets
     this key to the next face."""
+
+    import gconf
 
     # Get which screen and which face the wallpaper should be set on
     screen_face = config.get('webilder.wallpaper_compiz_screen_face',
