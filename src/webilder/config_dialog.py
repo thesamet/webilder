@@ -9,7 +9,7 @@ Description : Controller for the user configuration dialog.
 
 from webilder import __version__
 import urllib
-import gtk
+from gi.repository import Gtk
 import os
 
 from webilder.uitricks import UITricks, open_browser
@@ -36,36 +36,36 @@ QUALITY_NAMES = ['high', 'wide', 'low']
 class ConfigDialog(UITricks):
     """Controller class for ConfigDialog."""
     def __init__(self):
-        UITricks.__init__(self, 'ui/config.glade', 'config_dialog')
+        UITricks.__init__(self, 'ui/config.ui', 'config_dialog')
         self.on_flickr_enabled_handle_toggled()
         self.on_webshots_enabled_handle_toggled()
         self.on_autodownload_bool_handle_toggled()
         self.on_rotate_bool_handle_toggled()
         self.on_wallpaper_use_script_handle_toggled()
 
-        cell = gtk.CellRendererToggle()
+        cell = Gtk.CellRendererToggle()
         cell.set_property('activatable', True)
-        column = gtk.TreeViewColumn('', cell, active=3)
+        column = Gtk.TreeViewColumn('', cell, active=3)
         self.flickr_rules.append_column(column)
         cell.connect('toggled', self.on_rule_toggled, 3)
 
         for index, value in enumerate([_('Album'), _('Tags'), _('User')]):
-            cell = gtk.CellRendererText()
+            cell = Gtk.CellRendererText()
             cell.set_property('editable', True)
-            column = gtk.TreeViewColumn(value, cell, text=index)
+            column = Gtk.TreeViewColumn(value, cell, text=index)
             column.set_resizable(True)
             self.flickr_rules.append_column(column)
             cell.connect('edited', self.on_cell_edited, index)
 
-        cell = gtk.CellRendererCombo()
+        cell = Gtk.CellRendererCombo()
         cell.set_property('has-entry', False)
-        combo_model = gtk.ListStore(str)
+        combo_model = Gtk.ListStore(str)
         combo_model.append(('Interestingness', ))
         combo_model.append((_('Date'), ))
         cell.set_property('model', combo_model)
         cell.set_property('text-column', 0)
         cell.set_property('editable', True)
-        column = gtk.TreeViewColumn(_('Sort'), cell, text=4)
+        column = Gtk.TreeViewColumn(_('Sort'), cell, text=4)
         self.flickr_rules.append_column(column)
         cell.connect('edited', self.on_cell_edited, 4)
         self.rotate_interval.get_model().clear()
@@ -77,12 +77,12 @@ class ConfigDialog(UITricks):
                 xfce=self.wallpaper_use_xfce,
                 compiz_wallpaper=self.wallpaper_use_compiz_wallpaper,
                 script=self.wallpaper_use_script)
-        self.notebook.drag_dest_set(
-            gtk.DEST_DEFAULT_MOTION |
-            gtk.DEST_DEFAULT_HIGHLIGHT |
-            gtk.DEST_DEFAULT_DROP,
+        self.Gtk.drag_dest_set(notebook, 
+            Gtk.DEST_DEFAULT_MOTION |
+            Gtk.DEST_DEFAULT_HIGHLIGHT |
+            Gtk.DEST_DEFAULT_DROP,
             [('text/plain', 0, 0), ('text/uri-list', 0, 1)],
-            gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
+            Gdk.DragAction.COPY|Gdk.DragAction.MOVE)
 
     def run_dialog(self, config):
         """Drives the configuration dialog."""
@@ -94,22 +94,22 @@ class ConfigDialog(UITricks):
 
             cdir = self.collection_dir.get_text()
             if not os.path.exists(cdir):
-                mbox = gtk.MessageDialog(
-                    type=gtk.MESSAGE_QUESTION, buttons=gtk.BUTTONS_YES_NO,
+                mbox = Gtk.MessageDialog(
+                    type=Gtk.MessageType.QUESTION, buttons=Gtk.ButtonsType.YES_NO,
                     message_format= _("Collection directory %s does not "
                                       "exist. Would you like it to be "
                                       "created?") % cdir)
                 mbval = mbox.run()
                 mbox.destroy()
-                if (mbval == gtk.RESPONSE_YES):
+                if (mbval == Gtk.ResponseType.YES):
                     os.mkdir(cdir)
                 else:
                     self.collection_dir.grab_focus()
                     continue
 
             if not os.path.isdir(cdir):
-                mbox = gtk.MessageDialog(
-                    type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                mbox = Gtk.MessageDialog(
+                    type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK,
                     message_format=_("%s is not a directory.") % cdir)
                 mbox.run()
                 mbox.destroy()
@@ -140,7 +140,7 @@ class ConfigDialog(UITricks):
 
         # flickr tab
         self.flickr_enabled.set_active(config.get('flickr.enabled'))
-        model = gtk.ListStore(str, str, str, bool, str)
+        model = Gtk.ListStore(str, str, str, bool, str)
         for rule in config.get('flickr.rules'):
             model.append((
                 rule['album'],
@@ -299,11 +299,11 @@ class ConfigDialog(UITricks):
     def on_directory_browse_handle_clicked(self, _sender):
         """Called when the browse button has been clicked (collection
         directory chooser)."""
-        file_chooser = gtk.FileChooserDialog(
-            action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-            buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-                     gtk.STOCK_OK,gtk.RESPONSE_OK))
-        if file_chooser.run()==gtk.RESPONSE_OK:
+        file_chooser = Gtk.FileChooserDialog(
+            action=Gtk.FileChooserAction.SELECT_FOLDER,
+            buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,
+                     Gtk.STOCK_OK,Gtk.ResponseType.OK))
+        if file_chooser.run()==Gtk.ResponseType.OK:
             self.collection_dir.set_text(file_chooser.get_filename())
         file_chooser.destroy()
 
@@ -333,7 +333,7 @@ class ConfigDialog(UITricks):
         the most interesting photos. The other option 'Date',
         will make Webilder to download most recent photos.
         """)
-        mbox = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+        mbox = Gtk.MessageDialog(type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK)
 
         mbox.set_markup(text)
         mbox.run()
@@ -369,7 +369,7 @@ class ConfigDialog(UITricks):
                     self.status_notify(1.0, progress_text='Done')
                     self.safe_message_dialog(
                         _('Thank you for recommending your albums!'),
-                        gtk.MESSAGE_INFO)
+                        Gtk.MessageType.INFO)
 
         thread = RecommendingThread(recommend_dialog)
         thread.start()

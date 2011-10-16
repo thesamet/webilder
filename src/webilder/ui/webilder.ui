@@ -1,13 +1,47 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<?xml version="1.0"?>
 <!-- Generated with glade3
 	Version: 3.0.1
 	Date: Mon Oct  2 19:13:22 2006
 	User: thesamet
 	Host: nadav
 -->
-<glade-interface>
-  <widget class="GtkDialog" id="AuthenticationDialog">
+<interface>
+  <object class="GtkUIManager" id="uimanager1">
+    <child>
+      <object class="GtkActionGroup" id="actiongroup1">
+        <child>
+          <object class="GtkAction" id="set_as_wallpaper">
+            <property name="name">set_as_wallpaper</property>
+            <property name="label">Set as _Wallpaper</property>
+            <signal handler="on_set_as_wallpaper_activate" name="activate"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="view_full_screen">
+            <property name="name">view_full_screen</property>
+            <property name="label">View _Full Screen</property>
+            <signal handler="on_view_full_screen_activate" name="activate"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="delete_images">
+            <property name="stock_id">gtk-delete</property>
+            <property name="name">delete_images</property>
+            <signal handler="on_delete_images_activate" name="activate"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <ui>
+      <popup name="WebilderImagePopup">
+        <menuitem action="set_as_wallpaper"/>
+        <menuitem action="view_full_screen"/>
+        <separator/>
+        <menuitem action="delete_images"/>
+      </popup>
+    </ui>
+  </object>
+  <object class="GtkDialog" id="AuthenticationDialog">
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Login to Webshots</property>
     <property name="resizable">False</property>
@@ -17,30 +51,30 @@
     <property name="skip_taskbar_hint">True</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox3">
+      <object class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkHBox" id="hbox5">
+          <object class="GtkHBox" id="hbox5">
             <property name="visible">True</property>
             <property name="border_width">6</property>
             <property name="spacing">12</property>
             <child>
-              <widget class="GtkImage" id="image4">
+              <object class="GtkImage" id="image4">
                 <property name="visible">True</property>
                 <property name="yalign">0.000000</property>
                 <property name="icon_size">6</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="vbox5">
+              <object class="GtkVBox" id="vbox5">
                 <property name="visible">True</property>
                 <property name="spacing">24</property>
                 <child>
-                  <widget class="GtkLabel" id="label12">
+                  <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
                     <property name="xalign">0.000000</property>
                     <property name="yalign">0.000000</property>
@@ -52,129 +86,131 @@ You can sign up for a free account at
 &lt;tt&gt;http://www.webshots.com&lt;/tt&gt;</property>
                     <property name="use_markup">True</property>
                     <property name="wrap">True</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkTable" id="table2">
+                  <object class="GtkTable" id="table2">
                     <property name="visible">True</property>
                     <property name="n_rows">2</property>
                     <property name="n_columns">2</property>
                     <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <widget class="GtkLabel" id="label13">
+                      <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">_Username:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">username</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label14">
+                      <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">_Password:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">password</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="password">
+                      <object class="GtkEntry" id="password">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
                         <property name="activates_default">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="username">
+                      <object class="GtkEntry" id="username">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="y_options"></property>
+                        <property name="y_options"/>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area3">
+          <object class="GtkHButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="cancelbutton3">
+              <object class="GtkButton" id="cancelbutton3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="label">gtk-cancel</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">-6</property>
-              </widget>
+              </object>
             </child>
             <child>
-              <widget class="GtkButton" id="okbutton3">
+              <object class="GtkButton" id="okbutton3">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="label" translatable="yes">_Login</property>
                 <property name="use_underline">True</property>
-                <property name="response_id">-5</property>
-              </widget>
+              </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="pack_type">GTK_PACK_END</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-  <widget class="GtkDialog" id="ProgressDialog">
+    <action-widgets>
+      <action-widget response="-6">cancelbutton3</action-widget>
+      <action-widget response="-5">okbutton3</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="ProgressDialog">
     <property name="border_width">12</property>
     <property name="resizable">False</property>
     <property name="window_position">GTK_WIN_POS_MOUSE</property>
@@ -182,16 +218,16 @@ You can sign up for a free account at
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox4">
+      <object class="GtkVBox" id="dialog-vbox4">
         <property name="visible">True</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkLabel" id="text">
+          <object class="GtkLabel" id="text">
             <property name="visible">True</property>
             <property name="xalign">0.000000</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -199,11 +235,11 @@ You can sign up for a free account at
           </packing>
         </child>
         <child>
-          <widget class="GtkProgressBar" id="progressbar">
+          <object class="GtkProgressBar" id="progressbar">
             <property name="visible">True</property>
             <property name="pulse_step">0.1</property>
-            <property name="text"></property>
-          </widget>
+            <property name="text"/>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -211,7 +247,7 @@ You can sign up for a free account at
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="statustext">
+          <object class="GtkLabel" id="statustext">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="xalign">0.000000</property>
@@ -219,172 +255,147 @@ You can sign up for a free account at
             <property name="use_markup">True</property>
             <property name="selectable">True</property>
             <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="position">3</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area4">
+          <object class="GtkHButtonBox" id="dialog-action_area4">
             <property name="visible">True</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="closebutton">
+              <object class="GtkButton" id="closebutton">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="label">gtk-cancel</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">-6</property>
-              </widget>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="pack_type">GTK_PACK_END</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-  <widget class="GtkMenu" id="WebilderImagePopup">
-    <child>
-      <widget class="GtkMenuItem" id="set_as_wallpaper">
-        <property name="visible">True</property>
-        <property name="label">Set as _Wallpaper</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="on_set_as_wallpaper_activate"/>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkMenuItem" id="view_full_screen">
-        <property name="visible">True</property>
-        <property name="label">View _Full Screen</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="on_view_full_screen_activate"/>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkSeparatorMenuItem" id="separator2">
-        <property name="visible">True</property>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkImageMenuItem" id="delete_images">
-        <property name="visible">True</property>
-        <property name="label">gtk-delete</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <signal name="activate" handler="on_delete_images_activate"/>
-      </widget>
-    </child>
-  </widget>
-  <widget class="GtkDialog" id="DonateDialog">
+    <action-widgets>
+      <action-widget response="-6">closebutton</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkMenu" constructor="uimanager1" id="WebilderImagePopup">
+    
+    
+    
+    
+  </object>
+  <object class="GtkDialog" id="DonateDialog">
     <property name="title" translatable="yes">Webilder needs your help!</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default_width">420</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="vbox5">
+      <object class="GtkVBox" id="vbox5">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
         <property name="spacing">6</property>
         <child>
-          <widget class="GtkImage" id="image1">
+          <object class="GtkImage" id="image1">
             <property name="visible">True</property>
             <property name="pixbuf">logo.png</property>
             <property name="icon_size">0</property>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkFrame" id="frame1">
+          <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="label_xalign">0.000000</property>
             <property name="shadow_type">GTK_SHADOW_NONE</property>
             <child>
-              <widget class="GtkAlignment" id="alignment1">
+              <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkLabel" id="donate_copy">
+                  <object class="GtkLabel" id="donate_copy">
                     <property name="visible">True</property>
                     <property name="xpad">1</property>
                     <property name="selectable">True</property>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
             </child>
-            <child>
-              <widget class="GtkLabel" id="label1">
+            <child type="label">
+              <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">&lt;b&gt;You can help Webilder!&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="type">label_item</property>
-              </packing>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="position">2</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area5">
+          <object class="GtkHButtonBox" id="dialog-action_area5">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="cancel_button">
+              <object class="GtkButton" id="cancel_button">
                 <property name="visible">True</property>
                 <property name="label">gtk-no</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">1</property>
-              </widget>
+              </object>
             </child>
             <child>
-              <widget class="GtkButton" id="ok_button">
+              <object class="GtkButton" id="ok_button">
                 <property name="visible">True</property>
                 <property name="label">gtk-yes</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="pack_type">GTK_PACK_END</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-  <widget class="GtkDialog" id="PhotoPropertiesDialog">
+    <action-widgets>
+      <action-widget response="1">cancel_button</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="PhotoPropertiesDialog">
     <property name="title" translatable="yes">Photo Properties</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox6">
+      <object class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
         <child>
-          <widget class="GtkFrame" id="photo_props">
+          <object class="GtkFrame" id="photo_props">
             <property name="visible">True</property>
             <property name="border_width">6</property>
             <property name="label_xalign">0.000000</property>
             <property name="shadow_type">GTK_SHADOW_NONE</property>
             <child>
-              <widget class="GtkAlignment" id="alignment2">
+              <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <child>
-                  <widget class="GtkTable" id="table1">
+                  <object class="GtkTable" id="table1">
                     <property name="visible">True</property>
                     <property name="border_width">12</property>
                     <property name="n_rows">7</property>
@@ -392,24 +403,24 @@ You can sign up for a free account at
                     <property name="column_spacing">6</property>
                     <property name="row_spacing">12</property>
                     <child>
-                      <widget class="GtkLabel" id="label2">
+                      <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">Title:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label3">
+                      <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">Album:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
@@ -418,12 +429,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label4">
+                      <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">File:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
@@ -432,12 +443,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label5">
+                      <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">Tags:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
@@ -446,14 +457,14 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="title">
+                      <object class="GtkLabel" id="title">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">title</property>
                         <property name="use_markup">True</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -461,14 +472,14 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="album">
+                      <object class="GtkLabel" id="album">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">album</property>
                         <property name="use_markup">True</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -478,13 +489,13 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="file">
+                      <object class="GtkLabel" id="file">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">file</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -494,13 +505,13 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="tags">
+                      <object class="GtkLabel" id="tags">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">tags</property>
                         <property name="selectable">True</property>
                         <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -510,12 +521,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label10">
+                      <object class="GtkLabel" id="label10">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">Size:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
@@ -524,12 +535,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label25">
+                      <object class="GtkLabel" id="label25">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">Date:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
@@ -538,12 +549,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="date">
+                      <object class="GtkLabel" id="date">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">date</property>
                         <property name="selectable">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -553,12 +564,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="size">
+                      <object class="GtkLabel" id="size">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">size</property>
                         <property name="selectable">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -568,12 +579,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label9">
+                      <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label" translatable="yes">URL:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">6</property>
                         <property name="bottom_attach">7</property>
@@ -582,12 +593,12 @@ You can sign up for a free account at
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="url">
+                      <object class="GtkLabel" id="url">
                         <property name="visible">True</property>
                         <property name="xalign">0.000000</property>
                         <property name="label">url</property>
                         <property name="selectable">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -596,44 +607,41 @@ You can sign up for a free account at
                         <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
             </child>
-            <child>
-              <widget class="GtkLabel" id="props_frame_label">
+            <child type="label">
+              <object class="GtkLabel" id="props_frame_label">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">&lt;b&gt;Photo Properties&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="type">label_item</property>
-              </packing>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="position">1</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area6">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="closebutton">
+              <object class="GtkButton" id="closebutton">
                 <property name="visible">True</property>
                 <property name="label">gtk-close</property>
                 <property name="use_stock">True</property>
-              </widget>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="pack_type">GTK_PACK_END</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

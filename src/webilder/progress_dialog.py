@@ -9,13 +9,13 @@ Description : Download that tracks download progess.
 
 from webilder import uitricks
 import threading
-import gtk
+from gi.repository import Gtk
 
 
 class ProgressDialog(uitricks.UITricks):
     """Controller for progress dialog."""
     def __init__(self, text='', statustext=''):
-        uitricks.UITricks.__init__(self, 'ui/webilder.glade', 'ProgressDialog')
+        uitricks.UITricks.__init__(self, 'ui/webilder.ui', 'ProgressDialog')
         self.statustext.set_markup(statustext)
         self.text.set_markup(text)
         self._thread = None
@@ -47,11 +47,11 @@ def progress_thread_run(func):
         try:
             func(self, *args, **kwargs)
         finally:
-            gtk.gdk.threads_enter()
+            Gdk.threads_enter()
             if self._pdialog.top_widget:
                 self._pdialog.top_widget.destroy()
             print _("Thread done")
-            gtk.gdk.threads_leave()
+            Gdk.threads_leave()
     return newfunc
 
 class ProgressThread(threading.Thread):
@@ -71,20 +71,20 @@ class ProgressThread(threading.Thread):
 
     def status_notify(self, fraction, progress_text, status_text=''):
         """Updates the GUI with the given progress."""
-        gtk.gdk.threads_enter()
+        Gdk.threads_enter()
         try:  # coupling...
             if self._pdialog.top_widget:
                 self._pdialog.progressbar.set_fraction(fraction)
                 self._pdialog.progressbar.set_text(progress_text)
                 self._pdialog.statustext.set_markup('<i>%s</i>' % status_text)
         finally:
-            gtk.gdk.threads_leave()
+            Gdk.threads_leave()
 
-    def safe_message_dialog(self, markup, msgtype=gtk.MESSAGE_ERROR):
+    def safe_message_dialog(self, markup, msgtype=Gtk.MessageType.ERROR):
         """Shows a popup message (avoids a threading pitfall here.)"""
-        gtk.gdk.threads_enter()
-        mbox = gtk.MessageDialog(type=msgtype, buttons=gtk.BUTTONS_OK)
+        Gdk.threads_enter()
+        mbox = Gtk.MessageDialog(type=msgtype, buttons=Gtk.ButtonsType.OK)
         mbox.set_markup(markup)
         mbox.run()
         mbox.destroy()
-        gtk.gdk.threads_leave()
+        Gdk.threads_leave()

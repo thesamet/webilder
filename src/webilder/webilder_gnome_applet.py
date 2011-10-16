@@ -7,8 +7,7 @@ Date    : 2010 Jun 17
 
 Description : Webilder panel applet for GNOME.
 '''
-import pygtk
-pygtk.require('2.0')
+from gi.repository import Gtk, GdkPixbuf
 import pkg_resources
 
 from webilder.base_applet import BaseApplet
@@ -20,10 +19,9 @@ from webilder import __version__
 from webilder import WebilderDesktop
 
 import sys
-import gtk
 import gnomeapplet
 import gnome
-import gobject
+from gi.repository import GObject
 
 
 # Set this to False if you don't want the software to check
@@ -38,19 +36,19 @@ class WebilderApplet(BaseApplet):
         BaseApplet.__init__(self)
         gnome.init('WebilderApplet', __version__)
         self.applet = applet
-        self.tooltips = gtk.Tooltips()
+        self.tooltips = Gtk.Tooltips()
         self.tooltips.enable()
-        self.evtbox = gtk.EventBox()
-        self.icon = gtk.gdk.pixbuf_new_from_file(
+        self.evtbox = Gtk.EventBox()
+        self.icon = GdkPixbuf.Pixbuf.new_from_file(
             pkg_resources.resource_filename(__name__, 'ui/camera48.png'))
-        self.icon_green = gtk.gdk.pixbuf_new_from_file(
+        self.icon_green = GdkPixbuf.Pixbuf.new_from_file(
             pkg_resources.resource_filename(__name__, 'ui/camera48_g.png'))
 
-        self.applet_icon = gtk.Image()
+        self.applet_icon = Gtk.Image()
         self.scaled_icon = self.icon.scale_simple(16, 16,
-                gtk.gdk.INTERP_BILINEAR)
+                GdkPixbuf.InterpType.BILINEAR)
         self.scaled_icon_green = self.icon_green.scale_simple(16, 16,
-                gtk.gdk.INTERP_BILINEAR)
+                GdkPixbuf.InterpType.BILINEAR)
 
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
         self.evtbox.add(self.applet_icon)
@@ -82,7 +80,7 @@ pixname="gtk-preferences"/>
             ( "DeleteCurrent", self.delete_current)]
         self.applet.setup_menu(self.propxml, self.verbs, None)
         self.applet.show_all()
-        gobject.timeout_add(60*1000, self.timer_event)
+        GObject.timeout_add(60*1000, self.timer_event)
         self.photo_browser = None
         self.download_dlg = None
 
@@ -116,17 +114,17 @@ pixname="gtk-preferences"/>
     def on_resize_panel(self, _widget, size):
         """Called when the panel is resized so we can scale our icon."""
         self.scaled_icon = self.icon.scale_simple(size - 4, size - 4,
-            gtk.gdk.INTERP_BILINEAR)
+            GdkPixbuf.InterpType.BILINEAR)
         self.scaled_icon_green = self.icon_green.scale_simple(size - 4,
                                                               size - 4,
-            gtk.gdk.INTERP_BILINEAR)
+            GdkPixbuf.InterpType.BILINEAR)
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
 
     def on_button_press(self, _widget, event):
         """Called when the user clicks on the applet icon."""
-        if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
+        if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 3:
             return False
-        elif event.type == gtk.gdk.BUTTON_PRESS and event.button == 1:
+        elif event.type == Gdk.EventType.BUTTON_PRESS and event.button == 1:
             if not self.photo_browser:
                 self.browse(None, None)
             else:
@@ -161,18 +159,18 @@ def toggle_window_visibility(window):
 
 def main():
     """Entrypoint for the panel applet."""
-    gtk.gdk.threads_init()
+    Gdk.threads_init()
 
     if len(sys.argv) == 2 and sys.argv[1] == "run-in-window":
         print "here"
-        main_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        main_window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         main_window.set_title(_("Webilder Applet Window"))
-        main_window.connect("destroy", gtk.main_quit)
+        main_window.connect("destroy", Gtk.main_quit)
         app = gnomeapplet.Applet()
         WebilderApplet(app, None)
         app.reparent(main_window)
         main_window.show_all()
-        gtk.main()
+        Gtk.main()
         sys.exit()
     else:
         gnomeapplet.bonobo_factory("OAFIID:GNOME_WebilderApplet_Factory",

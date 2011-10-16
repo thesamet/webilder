@@ -19,7 +19,7 @@ from webilder.uitricks import UITricks, open_browser
 
 import sys, os, time, glob, gc
 import optparse
-import gtk, gobject
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import pkg_resources
 
 
@@ -27,6 +27,7 @@ try:
     import gnomevfs
 except ImportError:
     gnomevfs = None  # pylint: disable=C0103
+
 
 from webilder.config import config, set_wallpaper, reload_config
 
@@ -43,7 +44,7 @@ TV_KIND_COLUMN = 2
 TV_KIND_DIR = "dir"
 TV_KIND_RECENT = "recent"
 
-EMPTY_PICTURE = gtk.gdk.pixbuf_new_from_file_at_size(
+EMPTY_PICTURE = GdkPixbuf.Pixbuf.new_from_file_at_size(
     pkg_resources.resource_filename(__name__, 'ui/camera48.png'), 160, 120)
 
 def connect_to_menu(wtree, item, callback):
@@ -53,12 +54,12 @@ def connect_to_menu(wtree, item, callback):
 class WebilderDesktopWindow(UITricks):
     """Implementation of photo browser controller."""
     def __init__(self):
-        UITricks.__init__(self, 'ui/webilder_desktop.glade',
+        UITricks.__init__(self, 'ui/webilder_desktop.ui',
             'WebilderDesktopWindow')
         self.sort_combo.set_active(1)       # date
-        renderer = gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
         self.tree.append_column(
-            column=gtk.TreeViewColumn("Album", renderer, markup=0))
+            column=Gtk.TreeViewColumn("Album", renderer, markup=0))
         self.tree.columns_autosize()
         self.load_collection_tree(config.get('collection.dir'))
         self.iconview.set_pixbuf_column(IV_PIXBUF_COLUMN)
@@ -77,13 +78,13 @@ class WebilderDesktopWindow(UITricks):
         self.restore_window_state()
         self.top_widget.show_all()
 
-        self.hand_cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
+        self.hand_cursor = Gdk.Cursor.new(Gdk.CursorType.HAND2)
         # self.donate_button_box.window.set_cursor(self.hand_cursor)
 
     def load_collection_tree(self, root):
         """Loads the collection in the given root to the model."""
-        model = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING,
-                              gobject.TYPE_STRING)
+        model = Gtk.TreeStore(GObject.TYPE_STRING, GObject.TYPE_STRING,
+                              GObject.TYPE_STRING)
         model.append(None, (_('<b>Recent Photos</b>'), '', TV_KIND_RECENT))
         dirlist = os.listdir(root)
         for entry in sorted(dirlist):
@@ -129,8 +130,8 @@ class WebilderDesktopWindow(UITricks):
 
     def load_collection(self, images, monitor_dir=None):
         """Loads a list of images into the photo browser."""
-        model = gtk.ListStore(gobject.TYPE_STRING, gtk.gdk.Pixbuf,
-                              gobject.TYPE_PYOBJECT)
+        model = Gtk.ListStore(GObject.TYPE_STRING, GdkPixbuf.Pixbuf,
+                              GObject.TYPE_PYOBJECT)
 
         image_list = []
         for image in images:
@@ -145,11 +146,13 @@ class WebilderDesktopWindow(UITricks):
             credit = inf.get('credit', _('Not available'))
             tags = inf.get('tags', '')
 
+            if len(title)>24:
+                title = title[:21] + '...'
+
             title = html_escape(title)
             album = html_escape(album)
             credit = html_escape(credit)
             tags = html_escape(tags)
-
 
             data = dict(title=title,
                         filename=image,
@@ -161,8 +164,6 @@ class WebilderDesktopWindow(UITricks):
                         file_time = os.path.getctime(image),
                         credit = credit)
 
-            if len(title)>24:
-                title = title[:21] + '...'
             if 0 <= time.time() - os.path.getmtime(image) < 24*3600:
                 title = _('<b>*New* %s</b>') % title
             position = model.append((title, EMPTY_PICTURE, data))
@@ -174,12 +175,12 @@ class WebilderDesktopWindow(UITricks):
             old_model.clear()
         self.sort_photos(model)
         self.iconview.set_model(model)
-        gobject.idle_add(ThumbLoader(self.iconview, model,
+        GObject.idle_add(ThumbLoader(self.iconview, model,
                          reversed(image_list)))
         self.on_iconview_handle_selection_changed(self.iconview)
         if gnomevfs:
             if self.collection_monitor['monitor'] is not None:
-                gobject.idle_add(gnomevfs.monitor_cancel,
+                GObject.idle_add(gnomevfs.monitor_cancel,
                                  self.collection_monitor['monitor'])
                 self.collection_monitor = dict(monitor=None, dir=None)
             if monitor_dir:
@@ -192,7 +193,7 @@ class WebilderDesktopWindow(UITricks):
         # this proves that pygtk has a memory leak, and it is related to
         # sorting.
         # print len([x for x in gc.get_objects() if
-        #           isinstance(x, gtk.ListStore)])
+        #           isinstance(x, Gtk.ListStore)])
 
     def on_set_as_wallpaper_handle_activate(self, _menu_item):
         """Sets the current photo as wallpaper."""
@@ -251,6 +252,7 @@ class WebilderDesktopWindow(UITricks):
             album = data['album']
             credit = data['credit']
             tags = data['tags']
+            print data
 
         self.photo_title.set_markup(title)
         self.photo_album.set_markup(album)
@@ -273,7 +275,7 @@ class WebilderDesktopWindow(UITricks):
             path = icon_view.get_path_at_pos(xpos, ypos)
             if not path:
                 return
-            if not (event.state & gtk.gdk.CONTROL_MASK):
+            if not (event.get_state() & Gdk.EventMask.CONTROL_MASK):
                 icon_view.unselect_all()
             icon_view.select_path(path)
 
@@ -323,16 +325,16 @@ class WebilderDesktopWindow(UITricks):
 
     def on_file_webshots_import_handle_activate(self, _event):
         """Handle Import menu item."""
-        dlg = gtk.FileChooserDialog(
+        dlg = Gtk.FileChooserDialog(
             _('Choose files to import'),
             None,
-            action=gtk.FILE_CHOOSER_ACTION_OPEN,
-            buttons = (_("_Import"), gtk.RESPONSE_OK, _("_Cancel"),
-                       gtk.RESPONSE_CANCEL))
+            action=Gtk.FileChooserAction.OPEN,
+            buttons = (_("_Import"), Gtk.ResponseType.OK, _("_Cancel"),
+                       Gtk.ResponseType.CANCEL))
         dlg.set_select_multiple(True)
         try:
             response = dlg.run()
-            if response == gtk.RESPONSE_OK:
+            if response == Gtk.ResponseType.OK:
                 files = dlg.get_filenames()
             else:
                 files = []
@@ -352,7 +354,7 @@ class WebilderDesktopWindow(UITricks):
         if not selected:
             return
 
-        win = UITricks('ui/webilder.glade', 'PhotoPropertiesDialog')
+        win = UITricks('ui/webilder.ui', 'PhotoPropertiesDialog')
         selected = selected[-1]
         path = selected
         iterator = self.iconview.get_model().get_iter(path)
@@ -384,14 +386,16 @@ class WebilderDesktopWindow(UITricks):
             """Use title sorting"""
             return cmp(data1['title'], data2['title'])
 
-        sort_func = {0: sort_by_title,
-                     1: sort_by_date}[self.sort_combo.get_active()]
-        model.set_default_sort_func(lambda m, iter1, iter2:
-                sort_func(
-                    m.get_value(iter1, IV_DATA_COLUMN),
-                    m.get_value(iter2, IV_DATA_COLUMN),
-                    ))
-        model.set_sort_column_id(-1, gtk.SORT_ASCENDING)
+        def default_sort_func(model, iter1, iter2, *args):
+            sort_func = {0: sort_by_title,
+                         1: sort_by_date}[self.sort_combo.get_active()]
+            return sort_func(
+                    model.get_value(iter1, IV_DATA_COLUMN),
+                    model.get_value(iter2, IV_DATA_COLUMN),
+                    )
+
+        model.set_default_sort_func(default_sort_func)
+        model.set_sort_column_id(-1, Gtk.SortType.ASCENDING)
         del model
 
     def on_sort_combo_handle_changed(self, _widget):
@@ -414,7 +418,7 @@ class ImagePopup(UITricks):
             main_window.on_set_as_wallpaper_handle_activate)
         self.on_photo_properties_handle_activate = (
             main_window.on_photo_properties_handle_activate)
-        UITricks.__init__(self, 'ui/webilder_desktop.glade',
+        UITricks.__init__(self, 'ui/webilder_desktop.ui',
                           'WebilderImagePopup')
 
     def on_delete_images_handle_activate(self, _event):
@@ -436,12 +440,12 @@ def delete_files(main_window, forever):
         else:
             message = _('Would you like to delete the selected images?')
 
-        dlg = gtk.MessageDialog(type=gtk.MESSAGE_QUESTION,
-            buttons=gtk.BUTTONS_YES_NO,
+        dlg = Gtk.MessageDialog(type=Gtk.MessageType.QUESTION,
+            buttons=Gtk.ButtonsType.YES_NO,
             message_format=message)
         response = dlg.run()
         dlg.destroy()
-        if response != gtk.RESPONSE_YES:
+        if response != Gtk.ResponseType.YES:
             return
 
     banned = open(os.path.expanduser('~/.webilder/banned_photos'), 'a')
@@ -493,7 +497,7 @@ def html_escape(text):
 class DonateDialog(UITricks):
     """Controller for the Donate dialog."""
     def __init__(self):
-        UITricks.__init__(self, 'ui/webilder.glade', 'DonateDialog')
+        UITricks.__init__(self, 'ui/webilder.ui', 'DonateDialog')
         text = _('''
 Webilder is trying hard to make your desktop the coolest in town.
 
@@ -548,16 +552,16 @@ def import_files(files):
         try:
             success_count += wbz_handler.handle_file(afile)
         except (IOError, KeyError, ValueError), e:
-            mbox = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
-                                     buttons=gtk.BUTTONS_OK)
+            mbox = Gtk.MessageDialog(type=Gtk.MessageType.ERROR,
+                                     buttons=Gtk.ButtonsType.OK)
             mbox.set_title(_("File import error."))
             mbox.set_markup(_("Could not import '%s': %s") % (afile, e))
             mbox.run()
             mbox.destroy()
 
     if success_count:
-        mbox = gtk.MessageDialog(type=gtk.MESSAGE_INFO,
-                                 buttons=gtk.BUTTONS_OK)
+        mbox = Gtk.MessageDialog(type=Gtk.MessageType.INFO,
+                                 buttons=Gtk.ButtonsType.OK)
         mbox.set_title(_("Import complete."))
         mbox.set_markup(_("%d photos have been added to your collection.")
                         % success_count)
@@ -576,7 +580,7 @@ def main():
         action="store_true", default=False)
     options, args = parser.parse_args()
 
-    gtk.gdk.threads_init()
+    Gdk.threads_init()
     if options.configure:
         configure()
         return
@@ -584,9 +588,9 @@ def main():
     if options.download:
         download_dialog = DownloadDialog.DownloadProgressDialog(config)
         main_window = download_dialog
-        download_dialog.top_widget.connect('destroy', gtk.main_quit)
+        download_dialog.top_widget.connect('destroy', Gtk.main_quit)
         download_dialog.show()
-        gtk.main()
+        Gtk.main()
         return
 
     if args:
@@ -594,8 +598,8 @@ def main():
         return
 
     main_window = WebilderDesktopWindow()
-    main_window.top_widget.connect("destroy", gtk.main_quit)
-    gtk.main()
+    main_window.top_widget.connect("destroy", Gtk.main_quit)
+    Gtk.main()
 
 if __name__ == "__main__":
     main()

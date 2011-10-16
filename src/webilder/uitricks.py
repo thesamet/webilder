@@ -7,8 +7,7 @@ Date    : 2010 Jun 17
 Description : Base class for Glade XML based controllers.
 '''
 import pkg_resources
-import gtk
-import gtk.glade
+from gi.repository import Gtk
 import re
 
 import gettext
@@ -17,10 +16,10 @@ import pkg_resources
 
 locale.setlocale(locale.LC_ALL, '')
 
-gtk.glade.bindtextdomain(
-    'webilder',
-    pkg_resources.resource_filename(__name__, 'locale'))
-gtk.glade.textdomain('webilder')
+# Gtk.glade.bindtextdomain(
+#     'webilder',
+#     pkg_resources.resource_filename(__name__, 'locale'))
+# Gtk.glade.textdomain('webilder')
 
 gettext.install('webilder')
 
@@ -31,12 +30,22 @@ class UITricks:
         """Loads a glade file and connects signal handlers to widgets."""
         if controller is None:
             controller = self
-        widget_tree = gtk.glade.XML(
-            pkg_resources.resource_filename(__name__,
-            gladefile), toplevel)
-        self.top_widget = widget_tree.get_widget(toplevel)
-        widgets = dict([(widget.get_name(), widget) for widget in
-            widget_tree.get_widget_prefix('')])
+        builder = Gtk.Builder()
+        builder.add_from_file(
+                pkg_resources.resource_filename(__name__, gladefile))
+        self.top_widget = builder.get_object(toplevel)
+
+        widgets = {}
+        for obj in builder.get_objects():
+            try:
+                name = Gtk.Buildable.get_name(obj)
+            except TypeError, e:
+                name = None
+            if not name:
+                print "skipping"
+                continue
+            widgets[name] = obj 
+
         for widget_name, widget in widgets.iteritems():
             setattr(self, widget_name, widget)
         for name in dir(controller):
@@ -48,7 +57,7 @@ class UITricks:
                 if widget in widgets:
                     widget = widgets[widget]
                     if (signal == 'selection-changed' and
-                        isinstance(widget, gtk.TreeView)):
+                        isinstance(widget, Gtk.TreeView)):
                         widget = widget.get_selection()
                         signal = 'changed'
                     widget.connect(signal, callback)
@@ -92,7 +101,7 @@ def open_browser(url, no_browser_title, no_browser_markup):
     elif _iscommand('mozilla-firefox'):
         os.system('mozilla-firefox %s' % url)
     else:
-        mbox = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+        mbox = Gtk.MessageDialog(type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK)
         mbox.set_title(no_browser_title)
         mbox.set_markup(no_browser_markup)
         mbox.run()

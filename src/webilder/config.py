@@ -129,40 +129,39 @@ def reload_config():
     """Reloads the config file."""
     config.load_config(DEFAULT_CONFIG_FILE)
 
-def set_wallpaper(filename):
-    import gconf
-    """Sets the wallpaper to the given filename."""
-    use = config.get('webilder.wallpaper_set_method')
-    if use == "gnome":
-        conf_client = gconf.client_get_default()
-        conf_client.set_string('/desktop/gnome/background/picture_filename',
-            filename)
-    elif use == "kde":
-        script = 'dcop kdesktop KBackgroundIface setWallpaper "%f" 4'
-        script = script.replace('%f', filename)
-        os.popen2(script)
-    elif use == "xfce":
-        script = ('xfconf-query -c xfce4-desktop '
-                  '-p /backdrop/screen0/monitor0/image-path -s "%f"')
-        script = script.replace('%f', filename)
-        os.popen2(script)
-    elif use == "compiz_wallpaper":
-        set_compiz_wallpaper(filename)
-    elif use == "script":
-        script = config.get('webilder.wallpaper_script')
-        script = script.replace('%f', filename)
-        os.popen2(script)
-    stats = config.get('webilder.stats')
-    stats['rotations'] += 1
-    config.set('webilder.stats', stats)
-    config.save_config()
+def set_wallpaper_gnome(filename):
+    from gi.repository import GConf
+    conf_client = GConf.Client.get_default()
+    conf_client.set_string('/desktop/gnome/background/picture_filename',
+                           filename)
 
-def set_compiz_wallpaper(filename):
+def set_wallpaper_gnome32(filename):
+    from gi.repository import Gio
+    settings = Gio.Settings.new("org.gnome.desktop.background")
+    settings.set_string('picture-filename', filename)
+
+def set_wallpaper_kde(filename):
+    script = 'dcop kdesktop KBackgroundIface setWallpaper "%f" 4'
+    script = script.replace('%f', filename)
+    os.popen2(script)
+
+def set_wallpaper_xfce(filename):
+    script = ('xfconf-query -c xfce4-desktop '
+              '-p /backdrop/screen0/monitor0/image-path -s "%f"')
+    script = script.replace('%f', filename)
+    os.popen2(script)
+
+def set_wallpaper_script(filename):
+    script = config.get('webilder.wallpaper_script')
+    script = script.replace('%f', filename)
+    os.popen2(script)
+
+def set_wallpaper_compiz(filename):
     """Sets the wallpaper on one of the faces of the cube, as specified
     in webilder.wallpaper_compiz_screen_face configuration key, and sets
     this key to the next face."""
 
-    import gconf
+    from gi.repository import GConf
 
     # Get which screen and which face the wallpaper should be set on
     screen_face = config.get('webilder.wallpaper_compiz_screen_face',
@@ -174,7 +173,7 @@ def set_compiz_wallpaper(filename):
         screen, face = 'screen0', 0
 
     # Get a list of all compiz screens
-    conf_client = gconf.client_get_default()
+    conf_client = GConf.Client.get_default()
     screens = [s.split('/')[-1]
                for s in conf_client.all_dirs('/apps/compiz/general')
                if s.split('/')[-1][:6] == 'screen']
@@ -191,17 +190,17 @@ def set_compiz_wallpaper(filename):
     # Get the current list of wallpapers on this screen
     wallpapers = conf_client.get_list(
         '/apps/compiz/plugins/wallpaper/%s/options/bg_image' % screen,
-        gconf.VALUE_STRING)
+        GConf.ValueType.STRING)
 
     # If list of wallpapers is too short, populate it to the correct length
     if len(wallpapers) < number_of_faces:
         wallpapers.extend([filename] * (number_of_faces - len(wallpapers)))
         prefix = '/apps/compiz/plugins/wallpaper/%s/options/' % screen
         settings = {
-            'bg_color1'   : (gconf.VALUE_STRING, '#000000ff'),
-            'bg_color2'   : (gconf.VALUE_STRING, '#000000ff'),
-            'bg_fill_type': (gconf.VALUE_INT,    0),
-            'bg_image_pos': (gconf.VALUE_INT,    0),
+            'bg_color1'   : (GConf.ValueType.STRING, '#000000ff'),
+            'bg_color2'   : (GConf.ValueType.STRING, '#000000ff'),
+            'bg_fill_type': (GConf.ValueType.INT,    0),
+            'bg_image_pos': (GConf.ValueType.INT,    0),
         }
         for key, value in settings.items():
             ext_list = conf_client.get_list(prefix + key, value[0])
@@ -216,7 +215,7 @@ def set_compiz_wallpaper(filename):
     wallpapers[face] = filename
     conf_client.set_list(
         '/apps/compiz/plugins/wallpaper/%s/options/bg_image' % screen,
-        gconf.VALUE_STRING,
+        GConf.ValueType.STRING,
         wallpapers)
 
     # Set screen and face to the next value
@@ -228,3 +227,16 @@ def set_compiz_wallpaper(filename):
     config.set('webilder.wallpaper_compiz_screen_face',
         '%s,%d' % (screen, face))
     config.save_config()
+
+def set_wallpaper(filename):
+    """Sets the wallpaper to the given filename."""
+    use = config.get('webilder.wallpaper_set_method')
+    method = globals().get('set_wallpaper_%s' % use)
+    if method is None:
+        raise ValueError("Unsupported wallpaper method: '%s'" % use)
+    method(filename)
+    stats = config.get('webilder.stats')
+    stats['rotations'] += 1
+    config.set('webilder.stats', stats)
+    config.save_config()
+

@@ -7,13 +7,15 @@ Date    : 2010 Jun 17
 Description : Full screen image viewer
 '''
 
-import gtk
-import pango
+from gi.repository import Gdk
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import Pango
 
-class FullscreenViewer(gtk.Window):
+class FullscreenViewer(Gtk.Window):
     """Fullscreen viewer implementation."""
     def __init__(self, parent, data):
-        gtk.Window.__init__(self)
+        GObject.GObject.__init__(self)
         self._data = data
         self._parent = parent
         self.window_width, self.window_height = 0, 0
@@ -32,7 +34,7 @@ class FullscreenViewer(gtk.Window):
     def expose(self, widget, event):
         """Displays the viewer."""
         area = event.area
-        graphics_context = widget.get_style().fg_gc[gtk.STATE_NORMAL]
+        graphics_context = widget.get_style().fg_gc[Gtk.StateType.NORMAL]
         widget.window.draw_drawable(graphics_context,
                                     self.pixmap, area[0], area[1],
             area[0], area[1],
@@ -44,9 +46,9 @@ class FullscreenViewer(gtk.Window):
         # We need to know the width and height of the monitor which is going
         # to show the full screen picture. We try to guess which monitor it is
         # going to be by inspecting where the mouse pointer is at.
-        xpos, ypos, _ = gtk.gdk.get_default_root_window().get_pointer()
-        monitor = gtk.gdk.Screen().get_monitor_at_point(xpos, ypos)
-        rect = gtk.gdk.Screen().get_monitor_geometry(monitor)
+        _, xpos, ypos, _ = Gdk.get_default_root_window().get_pointer()
+        monitor = Gdk.Screen().get_monitor_at_point(xpos, ypos)
+        rect = Gdk.Screen().get_monitor_geometry(monitor)
 
         if rect.width:
             self.window_width, self.window_height = rect.width, rect.height
@@ -54,15 +56,15 @@ class FullscreenViewer(gtk.Window):
             # Workaroun for VESA on xorg<1.4.99. The monitor data structure
             # may be uninitialized. See
             # https://bugs.launchpad.net/ubuntu/+source/xorg-server/+bug/246585
-            self.window_width, self.window_height = (gtk.gdk.screen_width(),
-                                                     gtk.gdk.screen_height())
+            self.window_width, self.window_height = (Gdk.Screen.width(),
+                                                     Gdk.Screen.height())
         self.p_title = self._data['title']
         self.p_album = self._data['album']
         self.p_credit = self._data['credit']
 
-        drawing_area = gtk.DrawingArea()
+        drawing_area = Gtk.DrawingArea()
 
-        evt_box = gtk.EventBox()
+        evt_box = Gtk.EventBox()
         evt_box.add(drawing_area)
         self.add(evt_box)
         evt_box.connect('key-press-event', self.quit)
@@ -70,8 +72,8 @@ class FullscreenViewer(gtk.Window):
         self.connect('key-press-event', self.quit)
         drawing_area.connect('configure-event', self.configure)
         drawing_area.connect('expose-event', self.expose)
-        drawing_area.set_events(gtk.gdk.EXPOSURE_MASK)
-        self.pixbuf = gtk.gdk.pixbuf_new_from_file(
+        drawing_area.set_events(Gdk.EventMask.EXPOSURE_MASK)
+        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file(
             self._data['filename'])
 
         width, height = self.pixbuf.get_width(), self.pixbuf.get_height()
@@ -82,11 +84,11 @@ class FullscreenViewer(gtk.Window):
             self.new_w, self.new_h = (width*self.window_height/height,
                                       self.window_height)
         self.pixbuf = self.pixbuf.scale_simple(self.new_w, self.new_h,
-            gtk.gdk.INTERP_BILINEAR)
+            GdkPixbuf.InterpType.BILINEAR)
 
     def configure(self, widget, _event):
         """Handles window configuration event."""
-        self.pixmap = gtk.gdk.Pixmap(
+        self.pixmap = Gdk.Pixmap(
             self.window, self.window_width, self.window_height)
         graphics_context = widget.get_style().black_gc
         self.pixmap.draw_rectangle(graphics_context, True,
@@ -101,8 +103,8 @@ class FullscreenViewer(gtk.Window):
         font = context.get_font_description()
         font.set_size(fsize)
         context.set_font_description(font)
-        layout = pango.Layout(context)
-        layout.set_alignment(pango.ALIGN_CENTER)
+        layout = Pango.Layout(context)
+        layout.set_alignment(Pango.ALIGN_CENTER)
         layout.set_markup(self.p_title+'\n'+self.p_credit)
         psize_x, _unused_psize_y = layout.get_pixel_size()
         self.pixmap.draw_layout(graphics_context,

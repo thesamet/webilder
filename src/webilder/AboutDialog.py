@@ -9,13 +9,13 @@ Description : Controller for the about dialog.
 
 from webilder import __version__
 
-import gtk
+from gi.repository import Gtk, GdkPixbuf
 import pkg_resources
 
 
 def show_about_dialog(name):
     """Shows the about dialog."""
-    about = gtk.AboutDialog()
+    about = Gtk.AboutDialog()
     about.set_name(name)
     about.set_version(__version__)
     about.set_copyright('Nadav Samet, 2005-2011')
@@ -24,7 +24,7 @@ def show_about_dialog(name):
     about.set_translator_credits(
         'French by Nicolas ELIE <chrystalyst@free.fr>\n'
         'Alessio Leonarduzzi <alessio.leonarduzzi@gmail.com>')
-    icon = gtk.gdk.pixbuf_new_from_file(
+    icon = GdkPixbuf.Pixbuf.new_from_file(
         pkg_resources.resource_filename(__name__, 'ui/camera48.png'))
     about.set_logo(icon),
     about.set_icon(icon),

@@ -7,8 +7,7 @@ Date    : 2011 May 7
 
 Description : Webilder panel indicator for Ubuntu Unity.
 '''
-import pygtk
-pygtk.require('2.0')
+
 import pkg_resources
 
 from webilder.base_applet import BaseApplet
@@ -20,9 +19,9 @@ from webilder import __version__
 from webilder import WebilderDesktop
 
 import appindicator
-import gio
-import gobject
-import gtk
+from gi.repository import Gio
+from gi.repository import GObject
+from gi.repository import Gtk
 import os
 import sys
 
@@ -49,9 +48,9 @@ class WebilderUnityIndicator(BaseApplet):
         <menuitem name="Item 5" action="Quit"/>
     </popup>
     """
-        uimanager = gtk.UIManager()
+        uimanager = Gtk.UIManager()
         uimanager.add_ui_from_string(propxml)
-        action_group = gtk.ActionGroup("WebilderActions")
+        action_group = Gtk.ActionGroup("WebilderActions")
         action_group.add_actions([
              ("Pref", "gtk-preferences",  _("_Preferences"), "<control>P", 
               _("Open the preferences dialog"), self.preferences ),
@@ -71,7 +70,7 @@ class WebilderUnityIndicator(BaseApplet):
                self.quit),
              ])
         leech_action = action_group.get_action("Leech")
-        leech_action.set_gicon(gio.FileIcon(gio.File(
+        leech_action.set_gicon(Gio.FileIcon(Gio.File(
             pkg_resources.resource_filename(__name__,
                                             'ui/camera48.png'))))
 
@@ -80,7 +79,7 @@ class WebilderUnityIndicator(BaseApplet):
         menu = uimanager.get_widget('/button3')
         self.ind.set_menu(menu)
 
-        gobject.timeout_add(60*1000, self.timer_event)
+        GObject.timeout_add(60*1000, self.timer_event)
         self.photo_browser = None
         self.download_dlg = None
 
@@ -113,10 +112,10 @@ class WebilderUnityIndicator(BaseApplet):
     def on_resize_panel(self, _widget, size):
         """Called when the panel is resized so we can scale our icon."""
         self.scaled_icon = self.icon.scale_simple(size - 4, size - 4,
-            gtk.gdk.INTERP_BILINEAR)
+            GdkPixbuf.InterpType.BILINEAR)
         self.scaled_icon_green = self.icon_green.scale_simple(size - 4,
                                                               size - 4,
-            gtk.gdk.INTERP_BILINEAR)
+            GdkPixbuf.InterpType.BILINEAR)
         self.applet_icon.set_from_pixbuf(self.scaled_icon)
 
     def browse(self, _action):
@@ -135,14 +134,14 @@ class WebilderUnityIndicator(BaseApplet):
 
     def quit(self, _action):
         """Called when the Quit menu item is chosen."""
-        gtk.main_quit()
+        Gtk.main_quit()
 
 
 def main():
     """Entrypoint for the panel applet."""
-    gtk.gdk.threads_init()
+    Gdk.threads_init()
     ind = WebilderUnityIndicator()
-    gtk.main()
+    Gtk.main()
 
 
 if __name__ == "__main__":

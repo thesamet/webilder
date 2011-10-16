@@ -6,7 +6,9 @@ Date    : 2010 Jun 17
 
 Description : Thumbnailing functionality.
 '''
-import gtk
+
+# Gdk is needed to get Pixbuf.save
+from gi.repository import Gtk, GdkPixbuf
 import os
 import gc
 
@@ -51,7 +53,7 @@ class ThumbLoader(object):
                     item_data['filename'])):
                 self.thumbnail_na.append(image_dict)
             else:
-                pic = gtk.gdk.pixbuf_new_from_file(thumb)
+                pic = GdkPixbuf.Pixbuf.new_from_file(thumb)
                 # IV_PIXBUF_COLUMN
                 self.model.set_value(image_dict['position'], 1, pic)
                 count += 1
@@ -80,7 +82,7 @@ def thumbnail_generator(image_dict):
     thumb_dir = os.path.dirname(image_dict['data']['thumb'])
     if not os.path.exists(thumb_dir):
         os.mkdir(thumb_dir)
-    loader = gtk.gdk.PixbufLoader()
+    loader = GdkPixbuf.PixbufLoader()
     try:
         fin = open(image_dict['data']['filename'], 'rb')
         while 1:
@@ -90,11 +92,11 @@ def thumbnail_generator(image_dict):
                 yield None
             else:
                 break
+        loader.close()
         pixbuf = loader.get_pixbuf()
         if pixbuf is None:
             raise ValueError(_("Invalid picture"))
         scaled = scale_image(pixbuf, image_dict['data']['thumb'])
-        loader.close()
         loader = None
         fin.close()
         gc.collect()
@@ -107,8 +109,11 @@ def thumbnail_generator(image_dict):
 
 def scale_image(img, thumb):
     """Scales down a loaded image."""
-    width, height = img.get_width(), img.get_height()
-    scaled = img.scale_simple(THUMB_SIZE, THUMB_SIZE*height/width,
-        gtk.gdk.INTERP_BILINEAR)
-    scaled.save(thumb, 'jpeg', {"quality": "75"})
+    try:
+        width, height = img.get_width(), img.get_height()
+        scaled = img.scale_simple(THUMB_SIZE, THUMB_SIZE*height/width,
+                                  GdkPixbuf.InterpType.BILINEAR)
+        scaled.savev(thumb, 'jpeg', ["quality"], ["75"])
+    except Exception, e:
+        print "here111", e
     return scaled
