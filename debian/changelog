@@ -1,3 +1,9 @@
+webilder (0.7.2-1) unstable; urgency=low
+
+  * New build for Ubuntu 11.10. Fixes problem with GnomeShell.
+
+ -- Nadav Samet <thesamet@gmail.com>  Sat, 15 Oct 2011 10:08:40 -0700
+
 webilder (0.7.1-3) unstable; urgency=low
 
   * Build for Ubuntu 11.10.
