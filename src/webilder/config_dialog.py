@@ -72,7 +72,9 @@ class ConfigDialog(UITricks):
 
         for time in sorted(ROTATION_CONSTS.keys()):
             self.rotate_interval.append_text(ROTATION_CONSTS[time])
-        self.wallpaper_widgets = dict(gnome=self.wallpaper_use_gnome,
+        self.wallpaper_widgets = dict(
+                gnome=self.wallpaper_use_gnome,
+                gnome3=self.wallpaper_use_gnome3,
                 kde=self.wallpaper_use_kde,
                 xfce=self.wallpaper_use_xfce,
                 compiz_wallpaper=self.wallpaper_use_compiz_wallpaper,
@@ -166,7 +168,7 @@ class ConfigDialog(UITricks):
         self.collection_dir.set_text(config.get('collection.dir'))
         wallpaper_active_widget = self.wallpaper_widgets.get(
             config.get('webilder.wallpaper_set_method'),
-            self.wallpaper_use_gnome)
+            self.wallpaper_use_gnome3)
         wallpaper_active_widget.set_active(True)
         self.script.set_text(config.get('webilder.wallpaper_script'))
         self.only_landscape.set_active(config.get('filter.only_landscape'))
@@ -208,7 +210,7 @@ class ConfigDialog(UITricks):
 
         # advanced tab
         config.set('collection.dir', self.collection_dir.get_text())
-        use = 'gnome'
+        use = 'gnome3'
         for name, widget in self.wallpaper_widgets.iteritems():
             if widget.get_active():
                 use = name

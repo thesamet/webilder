@@ -114,7 +114,7 @@ DEFAULT_CONFIG = [
     ('autodownload.interval', 24),
     ('autodownload.last_time', None),
     ('webilder.layout', {}),
-    ('webilder.wallpaper_set_method', 'gnome'),
+    ('webilder.wallpaper_set_method', 'gnome3'),
     ('webilder.wallpaper_script', ''),
     ('webilder.wallpaper_compiz_screen_face', 'screen0,0'),
     ('webilder.installation_date', time.localtime()[:3]),
@@ -133,7 +133,11 @@ def set_wallpaper(filename):
     import gconf
     """Sets the wallpaper to the given filename."""
     use = config.get('webilder.wallpaper_set_method')
-    if use == "gnome":
+    if use == "gnome3":
+        script = ('gsettings set org.gnome.desktop.background picture-uri '
+                  'file://"%s"' % filename)
+        os.popen2(script)
+    elif use == "gnome":
         conf_client = gconf.client_get_default()
         conf_client.set_string('/desktop/gnome/background/picture_filename',
             filename)
