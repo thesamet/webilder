@@ -98,7 +98,7 @@ class WebilderDesktopWindow(UITricks):
     def on_tree_handle_selection_changed(self, tree_selection):
         """Called when the selection in the tree changed."""
         if not tree_selection:
-            return False
+            return
         model, selection = tree_selection.get_selected_rows()
         for path in selection:
             iterator = model.get_iter(path)
