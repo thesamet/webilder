@@ -97,16 +97,17 @@ class WebilderDesktopWindow(UITricks):
 
     def on_tree_handle_selection_changed(self, tree_selection):
         """Called when the selection in the tree changed."""
-        if tree_selection:
-            model, selection = tree_selection.get_selected_rows()
-            for path in selection:
-                iterator = model.get_iter(path)
-                rootdir = self.tree.get_model().get_value(iterator, TV_PATH_COLUMN)
-                kind = self.tree.get_model().get_value(iterator, TV_KIND_COLUMN)
-                if kind == TV_KIND_DIR:
-                    self.load_directory_collection(rootdir)
-                else:
-                    self.load_recent_photos()
+        if not tree_selection:
+            return False
+        model, selection = tree_selection.get_selected_rows()
+        for path in selection:
+            iterator = model.get_iter(path)
+            rootdir = self.tree.get_model().get_value(iterator, TV_PATH_COLUMN)
+            kind = self.tree.get_model().get_value(iterator, TV_KIND_COLUMN)
+            if kind == TV_KIND_DIR:
+                self.load_directory_collection(rootdir)
+            else:
+                self.load_recent_photos()
 
     def load_directory_collection(self, dirname):
         """Loads the file inside dirname into the photo browser."""
