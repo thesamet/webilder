@@ -1,0 +1,849 @@
+# Traditional Chinese Messages for webilder.
+# Copyright (C) 2010 The webilder Project (msgids)
+# This file is distributed under the same license as the webilder package.
+# Wei-Lun Chao <william.chao@ossii.com.tw>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: webilder 0.6.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-16 19:46+0200\n"
+"PO-Revision-Date: 2010-07-20 16:47+0800\n"
+"Last-Translator: Wei-Lun Chao <william.chao@ossii.com.tw>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/config_dialog.py:17
+msgid "1 minute"
+msgstr "1 分鐘"
+
+#: src/config_dialog.py:18
+msgid "2 minutes"
+msgstr "2 分鐘"
+
+#: src/config_dialog.py:19
+msgid "5 minutes"
+msgstr "5 分鐘"
+
+#: src/config_dialog.py:20
+msgid "10 minutes"
+msgstr "10 分鐘"
+
+#: src/config_dialog.py:21
+msgid "20 minutes"
+msgstr "20 分鐘"
+
+#: src/config_dialog.py:22
+msgid "30 minutes"
+msgstr "30 分鐘"
+
+#: src/config_dialog.py:23
+msgid "1 hour"
+msgstr "1 小時"
+
+#: src/config_dialog.py:24
+msgid "2 hours"
+msgstr "2 小時"
+
+#: src/config_dialog.py:25
+msgid "4 hours"
+msgstr "4 小時"
+
+#: src/config_dialog.py:26
+msgid "1 day"
+msgstr "1 天"
+
+#: src/config_dialog.py:44
+msgid "Album"
+msgstr "相簿"
+
+#: src/config_dialog.py:44
+msgid "Tags"
+msgstr "標記"
+
+#: src/config_dialog.py:44
+msgid "User"
+msgstr "使用者"
+
+#: src/config_dialog.py:56
+msgid "Date"
+msgstr "日期"
+
+#: src/config_dialog.py:60
+msgid "Sort"
+msgstr "排序"
+
+#: src/config_dialog.py:82
+msgid "Interestingness"
+msgstr "感興趣度"
+
+#: src/config_dialog.py:96
+#, python-format
+msgid "Collection directory %s does not exist. Would you like it to be created?"
+msgstr "收藏目錄 %s 不存在。您要建立它嗎？"
+
+#: src/config_dialog.py:106
+#, python-format
+msgid "%s is not a directory."
+msgstr "%s 並非目錄。"
+
+#: src/config_dialog.py:222
+msgid "Album Name"
+msgstr "相簿名稱"
+
+#: src/config_dialog.py:257
+msgid ""
+"\n"
+"        Getting started with flickr is easy.\n\n"
+"        Press the 'Add' button. Changing the tags to\n"
+"        <b>party,beach</b> (or anything that you want).\n"
+"        will bring you photos that are tagged with both\n"
+"        <b>party</b> and <b>beach</b>.\n\n"
+"        You can write: <b>party,beach;swimsuit</b>\n"
+"        if you want photos tagged with both \n"
+"        <b>party</b> and <b>beach</b>, or with <b>swimsuit</b>.\n"
+"        \n"
+"        If you want to get photos of a specific flickr user, \n"
+"        just write his username in the <i>User</i> column, \n"
+"       otherwise leave this column blank.\n\n"
+"        The album name can be anything meaningful to you, \n"
+"        for example \"Beach Parties\".\n\n"
+"        To get the best photos it is best to leave the sort\n"
+"        column with 'Interestingness'. This will download only\n"
+"        the most interesting photos. The other option 'Date',\n"
+"        will make Webilder to download most recent photos.\n"
+"        "
+msgstr ""
+"\n"
+"        flickr 很容易入門。\n\n"
+"        按下「加入」按鈕。變更標記到\n"
+"       <b>party,beach</b>(或任何您想要的東西)。\n"
+"        就會將您的照片同時附帶\n"
+"       <b>party</b>和<b>beach</b>的標記。\n\n"
+"        如果您想要照片同時附帶標記\n"
+"       <b>party</b>和<b>beach</b>，或者<b>swimsuit</b>\n"
+"        您也可以寫入：<b>party,beach;swimsuit</b>。\n"
+"       \n"
+"        如果您要取得特定 flickr 使用者的照片，\n"
+"        僅需在<i>使用者</i>欄中寫入他的使用者名稱，\n"
+"       否則就保持這個欄位空白。\n\n"
+"        相簿名稱可以是任何對您有意義的東西，\n"
+"        舉例來說「海灘派對」。\n\n"
+"        如果想要取得最好的照片，那麼最好將排序欄\n"
+"        保持為「感興趣度」。這將只會下載\n"
+"        最有趣的照片。另外的「日期」選項，\n"
+"        將會讓 Webilder 下載最近的照片。\n"
+"        "
+
+#: src/config_dialog.py:288
+msgid "Sending your recommendations..."
+msgstr "發送您的推薦項目…"
+
+#: src/config_dialog.py:302
+#, python-format
+msgid "Sending rule %d of %d"
+msgstr "發送規則 %d 之於 %d"
+
+#: src/config_dialog.py:309
+msgid "Thank you for recommending your albums!"
+msgstr "感謝推薦您的相簿！"
+
+#: src/config_dialog.py:318
+msgid "Could not open browser"
+msgstr "無法開啟瀏覽器"
+
+#: src/config_dialog.py:319
+#, python-format
+msgid ""
+"Webilder was unable to find a browser, please visit: \n"
+"%s"
+msgstr ""
+"Webilder 無法找到瀏覽器，請造訪：\n"
+" %s"
+
+#: src/config.py:24
+msgid "collection.dir is set to a non-directory, check your config file."
+msgstr "collection.dir 被設定到非目錄位置，請檢查您的組態檔案。"
+
+#: src/config.py:42 src/config.py:48
+#, python-format
+msgid "Error parsing line %d of config file %s"
+msgstr "剖析第 %d 列於組態檔案 %s 時發生錯誤"
+
+#: src/config.py:50
+#, python-format
+msgid "Unrecognized key in line %d of config file %s"
+msgstr "第 %d 列於組態檔案 %s 出現無法辨識的鍵值"
+
+#: src/DownloadDialog.py:9
+msgid ""
+"<b>Downloading photos</b>\n\n"
+"Downloading photos... Download times vary according to your connection speed.."
+msgstr ""
+"<b>下載照片</b>\n\n"
+"下載照片中… 下載次數會根據您的連線速度而不同…"
+
+#: src/DownloadDialog.py:28
+msgid ""
+"<b>Only Webshots Premium members can download wide or highest quality photos.</b>\n\n"
+"Go to the Preferences window, choose \"Regular Quality\" and try again."
+msgstr ""
+"<b>只有 Webshots 付費會員可以下載寬螢幕或最高品質照片。</b>\n\n"
+"在偏好設定視窗中選擇「標準品質」並再次嘗試。"
+
+#: src/DownloadDialog.py:33
+msgid ""
+"<b>Incorrect Webshots Username or Password</b>\n\n"
+"Please check your username and password in the preferences dialog."
+msgstr ""
+"<b>不正確的 Webshots 使用者名稱或密碼</b>\n\n"
+"請在偏好設定對話框中檢查您的使用者名稱和密碼。"
+
+#: src/DownloadDialog.py:37
+#, python-format
+msgid ""
+"<b>Error occured while downloading images</b>\n\n"
+"%s"
+msgstr ""
+"<b>下載圖像時發生錯誤</b>\n\n"
+" %s"
+
+#: src/downloader.py:56
+#, python-format
+msgid "Skipping already existing photo '%s'"
+msgstr "跳過已經存在的照片「%s」"
+
+#: src/downloader.py:59
+#, python-format
+msgid "Skipping banned photo '%s'."
+msgstr "跳過被排拒的照片「%s」。"
+
+#: src/downloader.py:67
+#, python-format
+msgid "Skipping previously filtered photo '%s'."
+msgstr "跳過之前篩選過的照片「%s」。"
+
+#: src/downloader.py:74
+#, python-format
+msgid "Skipping non-landscape photo '%s'"
+msgstr "跳過不是風景的照片「%s」"
+
+#: src/downloader.py:83
+#, python-format
+msgid "%s: Downloading '%s'"
+msgstr "%s：正在下載「%s」"
+
+#: src/downloader.py:133
+msgid "Downloading list of photos (may take some time)"
+msgstr "正在下載照片清單 (也許會花一點時間)"
+
+#: src/downloader.py:137
+msgid "Filtering photos (may take some time)"
+msgstr "正在篩選照片 (也許會花一點時間)"
+
+#: src/downloader.py:145
+#, python-format
+msgid "Downloading photo %d of %d from %s."
+msgstr "正在下載照片 %d / %d 自 %s。"
+
+#: src/downloader.py:146
+#, python-format
+msgid "Downloading <b><i>\"%s\"</i></b>"
+msgstr "正在下載<b><i>「%s」</i></b>"
+
+#: src/downloader.py:150
+msgid "   Photo is available only to premium members. Skipping."
+msgstr "   照片只提供給付費會員。跳過。"
+
+#: src/kwebilder.py:29
+msgid "&Browse Collection"
+msgstr "瀏覽收藏(&B)"
+
+#: src/kwebilder.py:32
+msgid "&Next Photo"
+msgstr "下一張照片(&N)"
+
+#: src/kwebilder.py:35
+msgid "&Download Photos"
+msgstr "下載照片(&D)"
+
+#: src/progress_dialog.py:41
+msgid "Thread done"
+msgstr "執行緒已完成"
+
+#: src/thumbs.py:73
+msgid "Invalid picture"
+msgstr "無效的圖片"
+
+#: src/uitricks.py:27
+#, python-format
+msgid "Widget %s not found when trying to register callback %s"
+msgstr "找不到視窗元件 %s 於嘗試暫存回呼 %s"
+
+#: src/wbz_handler.py:22
+msgid "Unable to find image's title"
+msgstr "無法找到圖像標題"
+
+#: src/wbz_handler.py:24
+msgid "Unable to find image's album"
+msgstr "無法找到圖像相簿"
+
+#: src/wbz_handler.py:31
+#, python-format
+msgid "Extracted: %s/%s"
+msgstr "已擷取：%s/%s"
+
+#: src/wbz_handler.py:48
+msgid "Unrecognized file type"
+msgstr "無法辨識的檔案類型"
+
+#: src/wbz_handler.py:52
+msgid ""
+"wbz_handler will extract webshots archives into your collection.\n\n"
+"Usage:\n\n"
+"    wbz_handler filename.wbz\n\n"
+"Where filename.wbz is a Webshots archive."
+msgstr ""
+"wbz_handler 將擷取 webshots 檔案到您的收藏。\n\n"
+"用法：\n\n"
+"    wbz_handler filename.wbz\n\n"
+"其中 filename.wbz 是 Webshots 存檔庫。"
+
+#: src/WebilderDesktop.py:67
+msgid "<b>Recent Photos</b>"
+msgstr "<b>最近照片</b>"
+
+#: src/WebilderDesktop.py:122
+msgid "Not available"
+msgstr "無法使用"
+
+#: src/WebilderDesktop.py:144
+#, python-format
+msgid "<b>*New* %s</b>"
+msgstr "<b>*新增* %s</b>"
+
+#: src/WebilderDesktop.py:286
+msgid "Choose files to import"
+msgstr "選擇檔案以匯入"
+
+#: src/WebilderDesktop.py:289
+msgid "_Import"
+msgstr "匯入(_I)"
+
+#: src/WebilderDesktop.py:289
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: src/WebilderDesktop.py:324
+#, python-format
+msgid "%.1f KB"
+msgstr "%.1f KB"
+
+#: src/WebilderDesktop.py:375
+msgid "Would you like to permanently delete the selected images?"
+msgstr "您想要永久刪除已選圖像？"
+
+#: src/WebilderDesktop.py:377
+msgid "Would you like to delete the selected images?"
+msgstr "您想要刪除已選圖像？"
+
+#: src/WebilderDesktop.py:436
+#, python-format
+msgid ""
+"\n"
+"Webilder is trying hard to make your desktop the coolest in town.\n\n"
+"Since you installed it on %(inst_date)s, it downloaded <b>%(downloads)d photos</b>\n"
+"for you and changed your wallpaper <b>%(rotations)d times</b>.\n\n"
+"It takes a lot of time and hard work to develop and maintain Webilder.\n\n"
+"If you'd like to see Webilder becomes even better, you can help us \n"
+"a lot by making a small donation. \n\n"
+"Any donation will be GREATLY appreciated. You can even donate $5.\n\n"
+"After clicking on the <i>Yes</i> button below you'll be taken to \n"
+"the donation page. If the page does not appear, please visit:\n"
+"%(url)s\n\n"
+"Would you like to donate to Webilder?\n"
+msgstr ""
+"\n"
+" Webilder 一直致力於讓您擁有最酷的桌面。\n\n"
+"自從您在 %(inst_date)s 安裝它之後，它已經下載了 <b>%(downloads)d 張照片</b>\n"
+"並且變更您的桌布 <b>%(rotations)d 次</b>。\n\n"
+"開發和維護 Webilder 需要很多的時間和努力工作。\n\n"
+"如果您希望看到 Webilder 變得更好，您可以經由小額捐款\n"
+"來幫助我們。\n\n"
+"我們十分感謝任何金額的捐款。您甚至可以只捐 5 美元。\n\n"
+"在以下的 <i>是</i> 按鈕上按一下，您將會被帶領到\n"
+"捐款頁面。如果頁面沒有出現，請造訪：\n"
+" %(url)s\n\n"
+"您想要捐款給 Webilder？\n"
+
+#: src/WebilderDesktop.py:470
+msgid "Thank You!"
+msgstr "謝謝您！"
+
+#: src/WebilderDesktop.py:471
+#, python-format
+msgid ""
+"<b>Thanks for your interest in supporting Webilder.</b>\n\n"
+"Please follow this link to send us a donation:\n\n"
+"%s"
+msgstr ""
+"<b>感謝您有興趣支持 Webilder。</b>\n\n"
+"請跟隨這個連結以發送捐款給我們：\n\n"
+"%s"
+
+#: src/webilder_gnome_applet.py:46
+#, python-format
+msgid ""
+"\n"
+"    <popup name=\"button3\">\n"
+"        <menuitem name=\"Item 1\" verb=\"Browse\" label=\"_Browse Collection\" pixtype=\"stock\" \n"
+"pixname=\"gtk-directory\"/>\n"
+"        <menuitem name=\"Item 2\" verb=\"NextPhoto\" label=\"_Next Photo\" pixtype=\"stock\" \n"
+"pixname=\"gtk-go-forward\"/>\n"
+"        <menuitem name=\"Item 3\" verb=\"Leech\" label=\"_Download Photos\" pixtype=\"filename\" \n"
+"pixname=\"%s\"/>\n"
+"        <menuitem name=\"Item 4\" verb=\"Pref\" label=\"_Preferences\" pixtype=\"stock\" \n"
+"pixname=\"gtk-preferences\"/>\n"
+"        <menuitem name=\"Item 5\" verb=\"About\" label=\"_About\" pixtype=\"stock\" pixname=\"gnome-stock-about\"/>\n"
+"        </popup>\n"
+"    "
+msgstr ""
+"\n"
+"   <popup name=\"button3\">\n"
+"       <menuitem name=\"項目 1\" verb=\"Browse\" label=\"瀏覽收藏(_B)\" pixtype=\"stock\" \n"
+" pixname=\"gtk-directory\"/>\n"
+"       <menuitem name=\"項目 2\" verb=\"NextPhoto\" label=\"下一張照片(_N)\" pixtype=\"stock\" \n"
+" pixname=\"gtk-go-forward\"/>\n"
+"       <menuitem name=\"項目 3\" verb=\"Leech\" label=\"下載照片(_D)\" pixtype=\"filename\" \n"
+" pixname=\"%s\"/>\n"
+"       <menuitem name=\"項目 4\" verb=\"Pref\" label=\"偏好設定(_P)\" pixtype=\"stock\" \n"
+" pixname=\"gtk-preferences\"/>\n"
+"       <menuitem name=\"項目 5\" verb=\"About\" label=\"關於(_A)\" pixtype=\"stock\" pixname=\"gnome-stock-about\"/>\n"
+"       </popup>\n"
+"    "
+
+#: src/webilder_gnome_applet.py:85
+msgid "Webilder Applet"
+msgstr "Webilder 小程式"
+
+#: src/webilder_gnome_applet.py:144
+msgid "Webilder Applet Window"
+msgstr "Webilder 小程式視窗"
+
+#: ui/config.glade:11
+msgid "Webilder Preferences"
+msgstr "Webilder 偏好設定"
+
+#: ui/config.glade:29
+msgid "Note: the following features work only if the Webilder panel applet is running."
+msgstr "註記：下列的功能只有當 Webilder 面板小程式正在執行時才有效。"
+
+#: ui/config.glade:60
+msgid "_Rotate wallpaper every"
+msgstr "輪換桌布週期(_R)"
+
+#: ui/config.glade:72
+msgid ""
+"1 minute\n"
+"2 minutes\n"
+"5 minutes\n"
+"10 minutes\n"
+"20 minutes\n"
+"30 minutes\n"
+"1 hour\n"
+"2 hours\n"
+"4 hours\n"
+"1 day"
+msgstr ""
+"1 分鐘\n"
+"2 分鐘\n"
+"5 分鐘\n"
+"10 分鐘\n"
+"20 分鐘\n"
+"30 分鐘\n"
+"1 小時\n"
+"2 小時\n"
+"4 小時\n"
+"1 天"
+
+#: ui/config.glade:97
+msgid ""
+"Rotation will choose a photo at random from the entire collection.\n\n"
+"Future versions will add more options here, such as selecting which collections to use, etc."
+msgstr ""
+"輪換將會隨機從整個收藏中選擇照片。\n\n"
+"未來版本將在此加入更多選項，像是選取哪一份收藏…等等。"
+
+#: ui/config.glade:115
+msgid "<b>Wallpaper Rotation Settings:</b>"
+msgstr "<b>桌布輪換設定值：</b>"
+
+#: ui/config.glade:153
+msgid "_Download new photos every"
+msgstr "下載新照片週期(_D)"
+
+#: ui/config.glade:179
+msgid "hours."
+msgstr "小時。"
+
+#: ui/config.glade:200
+msgid "<b>Auto-downloader:</b>"
+msgstr "<b>自動下載程式：</b>"
+
+#: ui/config.glade:221
+msgid "_General"
+msgstr "一般(_G)"
+
+#: ui/config.glade:238
+msgid "_Download images from Flickr"
+msgstr "從 Flickr 下載圖像(_D)"
+
+#: ui/config.glade:262
+msgid "Download _interesting photos"
+msgstr "下載有趣的照片(_I)"
+
+#: ui/config.glade:274
+msgid "<b>Interestingness</b>"
+msgstr "<b>感興趣度</b>"
+
+#: ui/config.glade:324
+msgid "A_dd"
+msgstr "加入(_D)"
+
+#: ui/config.glade:337
+msgid "_Remove"
+msgstr "移除(_R)"
+
+#: ui/config.glade:350
+msgid "_Tips..."
+msgstr "秘訣(_T)…"
+
+#: ui/config.glade:378
+msgid "_Recommend My Tags"
+msgstr "推薦我的標記(_R)"
+
+#: ui/config.glade:389
+msgid "_Get More Albums"
+msgstr "取得更多相簿(_G)"
+
+#: ui/config.glade:410
+msgid "<b>Tags</b>"
+msgstr "<b>標記</b>"
+
+#: ui/config.glade:431
+msgid "_Flickr"
+msgstr "_Flickr"
+
+#: ui/config.glade:448
+msgid "_Download images from Webshots"
+msgstr "從 Webshots 下載圖像(_D)"
+
+#: ui/config.glade:481 ui/webilder.glade:72
+msgid "_Username:"
+msgstr "使用者名稱(_U)："
+
+#: ui/config.glade:493 ui/webilder.glade:85
+msgid "_Password:"
+msgstr "密碼(_P)："
+
+#: ui/config.glade:538
+msgid ""
+"Don't have a Webshots account yet? \n"
+"Go to http://www.webshots.com and\n"
+"sign up for a free basic account. "
+msgstr ""
+"還沒有 Webshots 帳號嗎？\n"
+"前往 http://www.webshots.com 並且\n"
+"註冊以取得一個免費基本帳號。"
+
+#: ui/config.glade:558
+msgid "<b>Login Options:</b>"
+msgstr "<b>登入選項：</b>"
+
+#: ui/config.glade:602
+msgid "_High Quality (1600 x 1200)"
+msgstr "高品質 (1600 x 1200)(_H)"
+
+#: ui/config.glade:648
+msgid "_Wide Screen (16:9)"
+msgstr "寬螢幕(16:9)(_W)"
+
+#: ui/config.glade:681
+msgid "_Regular (800 x 600)"
+msgstr "標準 (800 x 600)(_R)"
+
+#: ui/config.glade:699
+msgid "<b>Image Type:</b>"
+msgstr "<b>圖像型式：</b>"
+
+#: ui/config.glade:723
+msgid "_Webshots"
+msgstr "_Webshots"
+
+#: ui/config.glade:759
+msgid "_Directory:"
+msgstr "目錄(_D)："
+
+#: ui/config.glade:781
+msgid "_Browse..."
+msgstr "瀏覽(_B)…"
+
+#: ui/config.glade:799
+msgid "<b>Collection Settings:</b>"
+msgstr "<b>收藏設定值：</b>"
+
+#: ui/config.glade:830
+msgid "Use _GNOME settings"
+msgstr "使用 _GNOME 設定值"
+
+#: ui/config.glade:843
+msgid "Use _KDE settings"
+msgstr "使用 _KDE 設定值"
+
+#: ui/config.glade:858
+msgid "Set a wallpaper by _running:"
+msgstr "設定桌布執行程式(_R)："
+
+#: ui/config.glade:894
+msgid "<b>Wallpaper Settings:</b>"
+msgstr "<b>桌布設定值：</b>"
+
+#: ui/config.glade:922
+msgid "Download only _Landscape photos."
+msgstr "只下載橫式照片(_L)。"
+
+#: ui/config.glade:932
+msgid "<b>Download Filters</b>"
+msgstr "<b>下載篩選器</b>"
+
+#: ui/config.glade:954
+msgid "_Advanced"
+msgstr "進階(_A)"
+
+#: ui/webilder_desktop.glade:13
+msgid "Webilder Desktop"
+msgstr "Webilder 桌面"
+
+#: ui/webilder_desktop.glade:24
+msgid "_File"
+msgstr "檔案(_F)"
+
+#: ui/webilder_desktop.glade:31
+msgid "Import webshots photos or collections."
+msgstr "匯入 webshots 照片或收藏。"
+
+#: ui/webilder_desktop.glade:32
+msgid "_Import Webshots Files..."
+msgstr "匯入 Webshots 檔案(_I)…"
+
+#: ui/webilder_desktop.glade:59
+msgid "_Photo"
+msgstr "照片(_P)"
+
+#: ui/webilder_desktop.glade:66
+msgid "Set the image as your wallpaper"
+msgstr "設定圖像做為您的桌布"
+
+#: ui/webilder_desktop.glade:67 ui/webilder_desktop.glade:470
+msgid "Set as _Wallpaper"
+msgstr "設為桌布(_W)"
+
+#: ui/webilder_desktop.glade:76
+msgid "View a fullscreen version of the image"
+msgstr "檢視圖像的全螢幕版本"
+
+#: ui/webilder_desktop.glade:77
+msgid "View _Fullscreen"
+msgstr "全螢幕檢視(_F)"
+
+#: ui/webilder_desktop.glade:91
+msgid "Delete photo"
+msgstr "刪除照片"
+
+#: ui/webilder_desktop.glade:92
+msgid "_Delete Photo"
+msgstr "刪除照片(_D)"
+
+#: ui/webilder_desktop.glade:106 ui/webilder_desktop.glade:512
+msgid "_Properties..."
+msgstr "屬性(_P)…"
+
+#: ui/webilder_desktop.glade:123
+msgid "_Tools"
+msgstr "工具(_T)"
+
+#: ui/webilder_desktop.glade:130
+msgid "_Download Photos"
+msgstr "下載照片(_D)"
+
+#: ui/webilder_desktop.glade:150
+msgid "_Preferences"
+msgstr "偏好設定(_P)"
+
+#: ui/webilder_desktop.glade:169
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: ui/webilder_desktop.glade:185
+msgid "_Donate to this project..."
+msgstr "捐款給這個計畫(_D)…"
+
+#: ui/webilder_desktop.glade:266
+msgid "Sort by:"
+msgstr "排序依據："
+
+#: ui/webilder_desktop.glade:276
+msgid ""
+"Title\n"
+"Date"
+msgstr ""
+"標題\n"
+"日期"
+
+#: ui/webilder_desktop.glade:316
+msgid "Credit:"
+msgstr "鳴謝："
+
+#: ui/webilder_desktop.glade:330 ui/webilder.glade:410
+msgid "Album:"
+msgstr "相簿："
+
+#: ui/webilder_desktop.glade:360 ui/webilder.glade:398
+msgid "Title:"
+msgstr "標題："
+
+#: ui/webilder_desktop.glade:402 ui/webilder.glade:438
+msgid "Tags:"
+msgstr "標記："
+
+#: ui/webilder_desktop.glade:434
+msgid "<b>Photo Information</b>"
+msgstr "<b>照片資訊</b>"
+
+#: ui/webilder_desktop.glade:478
+msgid "View _Full Screen"
+msgstr "全螢幕檢視(_F)"
+
+#: ui/webilder_desktop.glade:500
+msgid "De_lete Forever"
+msgstr "永遠刪除(_L)"
+
+#: ui/webilder.glade:12
+msgid "Login to Webshots"
+msgstr "登入 Webshots"
+
+#: ui/webilder.glade:47
+msgid ""
+"<span weight=\"bold\" size=\"larger\">Password required</span>\n\n"
+"Enter your username and password for Webshots. \n\n"
+"You can sign up for a free account at\n"
+"<tt>http://www.webshots.com</tt>"
+msgstr ""
+"<span weight=\"bold\" size=\"larger\">必須輸入密碼</span>\n\n"
+"輸入您的 Webshots 使用者名稱和密碼。\n\n"
+"您可以註冊取得一個免費帳號\n"
+"<tt>http://www.webshots.com</tt>"
+
+#: ui/webilder.glade:160
+msgid "_Login"
+msgstr "登入(_L)"
+
+#: ui/webilder.glade:284
+msgid "Webilder needs your help!"
+msgstr "Webilder 需要您的幫助！"
+
+#: ui/webilder.glade:326
+msgid "<b>You can help Webilder!</b>"
+msgstr "<b>您可以幫助 Webilder！</b>"
+
+#: ui/webilder.glade:371
+msgid "Photo Properties"
+msgstr "照片屬性"
+
+#: ui/webilder.glade:424
+msgid "File:"
+msgstr "檔案："
+
+#: ui/webilder.glade:516
+msgid "Size:"
+msgstr "大小："
+
+#: ui/webilder.glade:530
+msgid "Date:"
+msgstr "日期："
+
+#: ui/webilder.glade:574
+msgid "URL:"
+msgstr "網址："
+
+#: ui/webilder.glade:606
+msgid "<b>Photo Properties</b>"
+msgstr "<b>照片屬性</b>"
+
+#: setup.py:22
+#, python-format
+msgid "To install, run '%s'"
+msgstr "要安裝請執行「%s」"
+
+#: setup.py:56
+msgid "Builds the bonobo server file representing the applet."
+msgstr "建立 bonobo 伺服器檔案以表述該小程式。"
+
+#: setup.py:62
+msgid "Building Webilder global settings file."
+msgstr "建立 Webilder 全域設定檔案。"
+
+#: setup.py:92
+#, python-format
+msgid "Could not find module %s. Make sure all dependencies are installed."
+msgstr "找不到模組 %s。請確認已安裝所有相依模組。"
+
+#: setup.py:106
+msgid "Install with KDE support"
+msgstr "同時安裝 KDE 支援"
+
+#: setup.py:107
+msgid "Base directory of KDE installation"
+msgstr "KDE 支援的安裝基準目錄"
+
+#: setup.py:124
+msgid ""
+"\n"
+"Installation completed successfully.\n\n"
+"  GNOME Users: Right-click on the GNOME panel, choose \"Add to panel\", \n"
+"               and select \"Webilder Webshots Applet\".  If it\n"
+"               is not in the list - log off and log in again.\n\n"
+"  KDE Users:   From the graphics menu, start KWebilder.\n\n"
+"If you prefer the command line, you can run webilder_desktop\n"
+"to configure Webilder and manage your photos. It is also\n"
+"possible to start photo downloading from the command line by\n"
+"starting webilder_downloader.  \n\n"
+"Please report any problem to thesamet at gmail.com. \n"
+msgstr ""
+"\n"
+"安裝已完成。\n\n"
+"  GNOME 使用者：在 GNOME 面板上點選右鍵，選擇「加入到面板」，\n"
+"               並選取「Webilder Webshots 小程式」。 如果它\n"
+"               不在清單中，請登出並再次登入。\n\n"
+"  KDE 使用者：  從圖形選單啟動 KWebilder。\n\n"
+"如果您偏好使用命令列，您可以執行 webilder_desktop\n"
+"以組配 Webilder 並管理您的照片。也可以\n"
+"藉由從命令列執行 webilder_downloader\n"
+"來下載照片。\n\n"
+"請將任何問題回報給 thesamet at gmail.com。\n"
+
+#: setup.py:168
+msgid "Detecting KDE installation directory"
+msgstr "偵測 KDE 安裝目錄"
+
+#: setup.py:171
+msgid "Could not detect KDE installation directory. Please provide --kde-prefix argument"
+msgstr "無法偵測 KDE 安裝目錄。請提供 --kde-prefix 引數"
+
+#: setup.py:172
+#, python-format
+msgid "KDE installation directory is %s"
+msgstr "KDE 安裝目錄是 %s"
