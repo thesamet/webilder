@@ -1,3 +1,9 @@
+webilder (0.7.3-1) unstable; urgency=low
+
+  * Fix Flickr api to use https.
+
+ -- Nadav Samet <thesamet@gmail.com>  Sat, 12 Jul 2014 08:31:40 -0700
+
 webilder (0.7.2-1) unstable; urgency=low
 
   * New build for Ubuntu 11.10. Fixes problem with GnomeShell.
