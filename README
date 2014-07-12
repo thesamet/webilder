@@ -1,3 +1,19 @@
 Readme for Webilder!
+--------------------
 
 Please visit http://www.webilder.org/ for more information.
+
+Building a new release
+----------------------
+
+docker build -t docker .
+
+docker run -t -i /bin/bash -v $(pwd):/webilder webilder
+
+Inside the image:
+
+    cd /webilder
+    dpkg-buildpackge -b
+
+Move the generated file in the root directory to the host.
+
