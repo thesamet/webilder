@@ -27,7 +27,7 @@ class FlickrProxy(object):
         """Calls the given API method with the given arguments."""
         kwargs.update(dict(api_key=self.api_key, method=method))
         args = urllib.urlencode(kwargs)
-        url = 'http://api.flickr.com/services/rest/?' + args
+        url = 'https://api.flickr.com/services/rest/?' + args
         print "url = ", url
         resp = urllib2.urlopen(url)
         xml = parseString(resp.read())
